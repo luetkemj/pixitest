@@ -1,5 +1,6 @@
 import { createWorld, addEntity, addComponent, pipe } from "bitecs";
 import { Blocking, Position, Render, Velocity } from "./components";
+import { fovSystem } from "./systems/fov.system";
 import { movementSystem } from "./systems/movement.system";
 import { renderSystem } from "./systems/render.system";
 import { addSprite } from "./lib/canvas";
@@ -52,7 +53,8 @@ addSprite({
   eid: world.hero,
 });
 
-const pipeline = pipe(movementSystem, renderSystem);
+const pipeline = pipe(movementSystem, fovSystem, renderSystem);
+// const pipeline = pipe(movementSystem, renderSystem);
 
 function gameLoop() {
   pipeline(world);

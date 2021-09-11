@@ -4,7 +4,7 @@ import {
   hasComponent,
   removeComponent,
 } from "bitecs";
-import { Blocking, Position, Render, Velocity } from "../components";
+import { Blocking, Position, Render, Fov, Velocity } from "../components";
 import { updatePosition } from "../lib/ecsHelpers";
 
 const movementQuery = defineQuery([Position, Velocity]);
@@ -48,6 +48,9 @@ export const movementSystem = (world) => {
 
     if (canMove) {
       addComponent(world, Render, eid);
+      if (eid === world.hero) {
+        addComponent(world, Fov, eid);
+      }
     }
   }
   return world;

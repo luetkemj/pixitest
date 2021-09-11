@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { defineQuery, removeComponent } from "bitecs";
-import { Position, Render } from "../components";
+import { InFov, Position, Render, Revealed } from "../components";
 import { grid } from "../lib/grid";
 
 let cellWidth;
