@@ -4,6 +4,7 @@ import { movementSystem } from "./systems/movement.system";
 import { renderSystem } from "./systems/render.system";
 import { addSprite } from "./lib/canvas";
 import { buildDungeon } from "./lib/dungeon";
+import { updatePosition } from "./lib/ecsHelpers";
 
 const world = createWorld();
 world.sprites = [];
@@ -19,8 +20,7 @@ Object.values(dungeon.tiles).forEach((tile) => {
     addComponent(world, Blocking, eid);
   }
 
-  Position.x[eid] = tile.x;
-  Position.y[eid] = tile.y;
+  updatePosition({ world, newPos: { x: tile.x, y: tile.y, z: 0 }, eid });
 
   const textures = {
     FLOOR: "tiles/floor/floor_10.png",
@@ -39,8 +39,12 @@ world.hero = addEntity(world);
 addComponent(world, Position, world.hero);
 addComponent(world, Render, world.hero);
 
-Position.x[world.hero] = dungeon.rooms[0].center.x;
-Position.y[world.hero] = dungeon.rooms[0].center.y;
+const startPos = dungeon.rooms[0].center;
+updatePosition({
+  world,
+  newPos: { x: startPos.x, y: startPos.y, z: 0 },
+  eid: world.hero,
+});
 
 addSprite({
   texture: "heroes/knight/knight_idle_anim_f0.png",
