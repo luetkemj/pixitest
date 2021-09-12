@@ -18,6 +18,7 @@ export const addSprite = ({ texture, options = {}, world, eid }) => {
   world.sprites[eid] = _.merge(
     sprite,
     {
+      alpha: 0,
       anchor: {
         x: 0.5,
         y: 0.5,

@@ -1,5 +1,19 @@
-import { createWorld, addEntity, addComponent, pipe } from "bitecs";
-import { Blocking, Position, Render, Velocity } from "./components";
+import {
+  addComponent,
+  addEntity,
+  createWorld,
+  pipe,
+  removeComponent,
+} from "bitecs";
+import {
+  Blocking,
+  Opaque,
+  Position,
+  Render,
+  Velocity,
+  Z00,
+  Z100,
+} from "./components";
 import { fovSystem } from "./systems/fov.system";
 import { movementSystem } from "./systems/movement.system";
 import { renderSystem } from "./systems/render.system";
@@ -19,6 +33,7 @@ Object.values(dungeon.tiles).forEach((tile) => {
 
   if (tile.sprite === "WALL") {
     addComponent(world, Blocking, eid);
+    addComponent(world, Opaque, eid);
   }
 
   updatePosition({ world, newPos: { x: tile.x, y: tile.y, z: 0 }, eid });
@@ -54,10 +69,14 @@ addSprite({
 });
 
 const pipeline = pipe(movementSystem, fovSystem, renderSystem);
-// const pipeline = pipe(movementSystem, renderSystem);
+
+let pause = true;
 
 function gameLoop() {
-  pipeline(world);
+  if (!pause) {
+    pipeline(world);
+    pause = true;
+  }
   requestAnimationFrame(gameLoop);
 }
 
@@ -65,6 +84,7 @@ requestAnimationFrame(gameLoop);
 
 document.addEventListener("keydown", (ev) => {
   userInput = ev.key;
+  pause = false;
 
   if (userInput === "ArrowUp") {
     addComponent(world, Velocity, world.hero);

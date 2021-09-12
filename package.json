@@ -11,9 +11,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bitecs": "^0.3.19-1",
-    "lodash": "^4.17.21",
-    "pixi.js": "^6.1.2"
+    "bitecs": "0.3.20-2",
+    "lodash": "4.17.21",
+    "pixi.js": "6.1.2"
   },
   "devDependencies": {
     "parcel": "^2.0.0-rc.0",

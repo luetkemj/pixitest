@@ -3,6 +3,7 @@ import {
   addComponent,
   hasComponent,
   removeComponent,
+  getEntityComponents,
 } from "bitecs";
 import { Fov, InFov, Opaque, Position, Render, Revealed } from "../components";
 import { grid } from "../lib/grid";
@@ -23,13 +24,14 @@ export const fovSystem = (world) => {
     for (let i = 0; i < fovEnts.length; i++) {
       const eid = fovEnts[i];
       removeComponent(world, Fov, eid);
+      addComponent(world, Render, eid);
     }
   }
 
   // Create FOV schema
   const { width, height } = grid;
   const origin = { x: Position.x[world.hero], y: Position.y[world.hero] };
-  const radius = 10;
+  const radius = 4;
   const blockingLocations = new Set();
 
   const blockingEnts = opaqueQuery(world);
@@ -52,64 +54,25 @@ export const fovSystem = (world) => {
   for (let i = 0; i < inFovEnts.length; i++) {
     const eid = inFovEnts[i];
     removeComponent(world, InFov, eid);
+    addComponent(world, Render, eid);
   }
 
+  console.log(FOV.fov.size);
+
   FOV.fov.forEach((locId) => {
-    // add a z to the loc
     const eAtPos = world.eAtPos[`${locId},0`];
 
     if (eAtPos) {
-      eAtPos.forEach((eid) => {
-        addComponent(world, InFov, eid);
-        addComponent(world, Render, eid);
+      // console.log(locId);
+      eAtPos.forEach((eidAtPos) => {
+        addComponent(world, InFov, eidAtPos);
+        addComponent(world, Render, eidAtPos);
+        addComponent(world, Revealed, eidAtPos);
 
-        if (!hasComponent(world, Revealed, eid)) {
-          addComponent(world, Revealed, eid);
-        }
+        console.log(hasComponent(world, InFov, eidAtPos));
       });
     }
   });
 
   return world;
 };
-
-// import { readCacheSet } from "../state/cache";
-// import ecs from "../state/ecs";
-// import { grid } from "../lib/canvas";
-// import createFOV from "../lib/fov";
-// import { IsInFov, IsOpaque, IsRevealed } from "../state/components";
-
-// const inFovEntities = ecs.createQuery({
-//   all: [IsInFov],
-// });
-
-// const opaqueEntities = ecs.createQuery({
-//   all: [IsOpaque],
-// });
-
-// export const fov = (origin) => {
-//   const { width, height } = grid;
-
-//   const originX = origin.position.x;
-//   const originY = origin.position.y;
-
-//   const FOV = createFOV(opaqueEntities, width, height, originX, originY, 10);
-
-//   // clear out stale fov
-//   inFovEntities.get().forEach((x) => x.remove(IsInFov));
-
-//   FOV.fov.forEach((locId) => {
-//     const entitiesAtLoc = readCacheSet("entitiesAtLocation", locId);
-
-//     if (entitiesAtLoc) {
-//       entitiesAtLoc.forEach((eId) => {
-//         const entity = ecs.getEntity(eId);
-//         entity.add(IsInFov);
-
-//         if (!entity.has("IsRevealed")) {
-//           entity.add(IsRevealed);
-//         }
-//       });
-//     }
-//   });
-// };
