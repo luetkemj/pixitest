@@ -16,7 +16,7 @@ export const renderSystem = (world) => {
   for (let i = 0; i < revealedEnts.length; i++) {
     const eid = revealedEnts[i];
     world.sprites[eid].alpha = 1;
-    world.sprites[eid].tint = `0xff0077`;
+    world.sprites[eid].tint = `0x666666`;
   }
 
   for (let i = 0; i < inFovEnts.length; i++) {
