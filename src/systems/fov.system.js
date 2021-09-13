@@ -31,7 +31,7 @@ export const fovSystem = (world) => {
   // Create FOV schema
   const { width, height } = grid;
   const origin = { x: Position.x[world.hero], y: Position.y[world.hero] };
-  const radius = 4;
+  const radius = 10;
   const blockingLocations = new Set();
 
   const blockingEnts = opaqueQuery(world);
@@ -57,19 +57,14 @@ export const fovSystem = (world) => {
     addComponent(world, Render, eid);
   }
 
-  console.log(FOV.fov.size);
-
   FOV.fov.forEach((locId) => {
     const eAtPos = world.eAtPos[`${locId},0`];
 
     if (eAtPos) {
-      // console.log(locId);
       eAtPos.forEach((eidAtPos) => {
         addComponent(world, InFov, eidAtPos);
         addComponent(world, Render, eidAtPos);
         addComponent(world, Revealed, eidAtPos);
-
-        console.log(hasComponent(world, InFov, eidAtPos));
       });
     }
   });

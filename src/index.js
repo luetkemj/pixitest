@@ -1,18 +1,11 @@
-import {
-  addComponent,
-  addEntity,
-  createWorld,
-  pipe,
-  removeComponent,
-} from "bitecs";
+import { addComponent, addEntity, createWorld, pipe } from "bitecs";
 import {
   Blocking,
+  Fov,
   Opaque,
   Position,
   Render,
   Velocity,
-  Z00,
-  Z100,
 } from "./components";
 import { fovSystem } from "./systems/fov.system";
 import { movementSystem } from "./systems/movement.system";
@@ -54,6 +47,7 @@ world.hero = addEntity(world);
 
 addComponent(world, Position, world.hero);
 addComponent(world, Render, world.hero);
+addComponent(world, Fov, world.hero);
 
 const startPos = dungeon.rooms[0].center;
 updatePosition({
@@ -70,7 +64,7 @@ addSprite({
 
 const pipeline = pipe(movementSystem, fovSystem, renderSystem);
 
-let pause = true;
+let pause = false;
 
 function gameLoop() {
   if (!pause) {
@@ -80,7 +74,7 @@ function gameLoop() {
   requestAnimationFrame(gameLoop);
 }
 
-requestAnimationFrame(gameLoop);
+gameLoop();
 
 document.addEventListener("keydown", (ev) => {
   userInput = ev.key;

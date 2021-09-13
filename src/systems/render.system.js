@@ -11,10 +11,7 @@ const revealedQuery = defineQuery([Revealed]);
 
 export const renderSystem = (world) => {
   const inFovEnts = inFovQuery(world);
-  console.log(JSON.stringify({ inFovEnts: inFovEnts.length }));
-
   const revealedEnts = revealedQuery(world);
-  console.log(JSON.stringify({ revealedEnts: revealedEnts.length }));
 
   for (let i = 0; i < revealedEnts.length; i++) {
     const eid = revealedEnts[i];
