@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { addComponent, addEntity, createWorld, pipe } from "bitecs";
 import {
   Blocking,
@@ -5,6 +6,7 @@ import {
   Opaque,
   Position,
   Render,
+  Revealable,
   Velocity,
 } from "./components";
 import { fovSystem } from "./systems/fov.system";
@@ -14,15 +16,17 @@ import { addSprite } from "./lib/canvas";
 import { buildDungeon } from "./lib/dungeon";
 import { updatePosition } from "./lib/ecsHelpers";
 
+// create the world
 const world = createWorld();
 world.sprites = [];
 
+// create the dungeon
 const dungeon = buildDungeon({ x: 0, y: 0, width: 100, height: 34 });
-
 Object.values(dungeon.tiles).forEach((tile) => {
   const eid = addEntity(world);
   addComponent(world, Position, eid);
   addComponent(world, Render, eid);
+  addComponent(world, Revealable, eid);
 
   if (tile.sprite === "WALL") {
     addComponent(world, Blocking, eid);
@@ -43,8 +47,8 @@ Object.values(dungeon.tiles).forEach((tile) => {
   });
 });
 
+// create the hero
 world.hero = addEntity(world);
-
 addComponent(world, Position, world.hero);
 addComponent(world, Render, world.hero);
 addComponent(world, Fov, world.hero);
@@ -62,6 +66,30 @@ addSprite({
   eid: world.hero,
 });
 
+// spawn baddies
+const openTiles = _.filter(dungeon.tiles, (tile) => tile.sprite === "FLOOR");
+_.times(10, () => {
+  const eid = addEntity(world);
+  addComponent(world, Position, eid);
+  addComponent(world, Render, eid);
+  addComponent(world, Blocking, eid);
+
+  const { x, y } = _.sample(openTiles);
+
+  updatePosition({
+    world,
+    newPos: { x, y, z: 0 },
+    eid: eid,
+  });
+
+  addSprite({
+    texture: "enemies/goblin/goblin_idle_anim_f0.png",
+    world,
+    eid: eid,
+  });
+});
+
+// run the game
 const pipeline = pipe(movementSystem, fovSystem, renderSystem);
 
 let pause = false;

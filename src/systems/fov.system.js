@@ -5,7 +5,16 @@ import {
   removeComponent,
   getEntityComponents,
 } from "bitecs";
-import { Fov, InFov, Opaque, Position, Render, Revealed } from "../components";
+import {
+  Fov,
+  FovDistance,
+  InFov,
+  Opaque,
+  Position,
+  Render,
+  Revealed,
+  Revealable,
+} from "../components";
 import { grid } from "../lib/grid";
 import { createFOV } from "../lib/fov";
 
@@ -31,7 +40,7 @@ export const fovSystem = (world) => {
   // Create FOV schema
   const { width, height } = grid;
   const origin = { x: Position.x[world.hero], y: Position.y[world.hero] };
-  const radius = 10;
+  const radius = 11;
   const blockingLocations = new Set();
 
   const blockingEnts = opaqueQuery(world);
@@ -62,9 +71,13 @@ export const fovSystem = (world) => {
 
     if (eAtPos) {
       eAtPos.forEach((eidAtPos) => {
+        addComponent(world, FovDistance, eidAtPos);
         addComponent(world, InFov, eidAtPos);
         addComponent(world, Render, eidAtPos);
-        addComponent(world, Revealed, eidAtPos);
+        if (hasComponent(world, Revealable, eidAtPos)) {
+          addComponent(world, Revealed, eidAtPos);
+        }
+        FovDistance.dist[eidAtPos] = FOV.distance[locId];
       });
     }
   });

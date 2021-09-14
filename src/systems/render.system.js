@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { defineQuery, hasComponent, removeComponent, Not } from "bitecs";
-import { InFov, Position, Render, Revealed } from "../components";
+import { FovDistance, InFov, Position, Render, Revealed } from "../components";
 import { grid } from "../lib/grid";
 
 let cellWidth;
@@ -16,13 +16,29 @@ export const renderSystem = (world) => {
   for (let i = 0; i < revealedEnts.length; i++) {
     const eid = revealedEnts[i];
     world.sprites[eid].alpha = 1;
-    world.sprites[eid].tint = `0x666666`;
+    world.sprites[eid].tint = `0x555555`;
   }
 
   for (let i = 0; i < inFovEnts.length; i++) {
     const eid = inFovEnts[i];
     world.sprites[eid].alpha = 1;
-    world.sprites[eid].tint = `0xffffff`;
+    const tintMap = [
+      `0xffffff`,
+      `0xffffff`,
+      `0xeeeeee`,
+      `0xdddddd`,
+      `0xcccccc`,
+      `0xbbbbbb`,
+      `0xaaaaaa`,
+      `0x999999`,
+      `0x888888`,
+      `0x777777`,
+      `0x666666`,
+    ];
+    world.sprites[eid].tint = tintMap[FovDistance.dist[eid]] || `0x666666`;
+    if (world.hero === eid) {
+      world.sprites[eid].tint = 0xffffff;
+    }
   }
 
   const renderEnts = renderQuery(world);
