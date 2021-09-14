@@ -146,7 +146,11 @@ export const distance = (cell1, cell2) => {
 
 export const idToCell = (id) => {
   const coords = id.split(",");
-  return { x: parseInt(coords[0], 10), y: parseInt(coords[1], 10) };
+  return {
+    x: parseInt(coords[0], 10),
+    y: parseInt(coords[1], 10),
+    z: parseInt(coords[2], 10) || 0,
+  };
 };
 
 export const cellToId = ({ x, y }) => `${x},${y}`;
@@ -256,4 +260,16 @@ export const getDirection = (a, b) => {
   if (ax - bx === 0 && ay - by === 1) dir = "↓";
 
   return dir;
+};
+
+export const getVelocity = (a, b) => {
+  const cellA = toCell(a);
+  const cellB = toCell(b);
+
+  const { x: ax, y: ay } = cellA;
+  const { x: bx, y: by } = cellB;
+
+  const velocity = { x: ax - bx, y: ay - by };
+
+  return velocity;
 };

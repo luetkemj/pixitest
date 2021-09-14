@@ -1,17 +1,24 @@
 import _ from "lodash";
 import { addComponent, addEntity, createWorld, pipe } from "bitecs";
+
 import {
+  Ai,
   Blocking,
+  Brain,
   Forgettable,
   Fov,
   Health,
+  Intelligence,
   Opaque,
   Position,
   Render,
 } from "./components";
+
+import { aiSystem } from "./systems/ai.system";
 import { fovSystem } from "./systems/fov.system";
 import { movementSystem } from "./systems/movement.system";
 import { renderSystem } from "./systems/render.system";
+
 import { addSprite } from "./lib/canvas";
 import { buildDungeon } from "./lib/dungeon";
 import { updatePosition } from "./lib/ecsHelpers";
@@ -55,9 +62,14 @@ addComponent(world, Position, world.hero);
 addComponent(world, Render, world.hero);
 addComponent(world, Fov, world.hero);
 addComponent(world, Health, world.hero);
+addComponent(world, Brain, world.hero);
+addComponent(world, Blocking, world.hero);
+addComponent(world, Intelligence, world.hero);
 
 Health.max[world.hero] = 10;
 Health.current[world.hero] = 10;
+Intelligence.max[world.hero] = 10;
+Intelligence.current[world.hero] = 10;
 
 const startPos = dungeon.rooms[0].center;
 updatePosition({
@@ -81,9 +93,14 @@ _.times(10, () => {
   addComponent(world, Blocking, eid);
   addComponent(world, Forgettable, eid);
   addComponent(world, Health, eid);
+  addComponent(world, Ai, eid);
+  addComponent(world, Brain, eid);
+  addComponent(world, Intelligence, eid);
 
   Health.max[eid] = 10;
   Health.current[eid] = 10;
+  Intelligence.max[eid] = 5;
+  Intelligence.current[eid] = 5;
 
   const { x, y } = _.sample(openTiles);
 
@@ -102,6 +119,12 @@ _.times(10, () => {
 
 // run the game
 const pipelinePlayerTurn = pipe(movementSystem, fovSystem, renderSystem);
+const pipelineWorldTurn = pipe(
+  aiSystem,
+  movementSystem,
+  fovSystem,
+  renderSystem
+);
 
 function gameLoop() {
   if (world.userInput && world.turn === "PLAYER") {
@@ -111,7 +134,7 @@ function gameLoop() {
   }
 
   if (world.turn === "WORLD") {
-    pipelinePlayerTurn(world);
+    pipelineWorldTurn(world);
     world.turn = "PLAYER";
   }
 
