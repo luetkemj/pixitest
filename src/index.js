@@ -8,7 +8,6 @@ import {
   Opaque,
   Position,
   Render,
-  Velocity,
 } from "./components";
 import { fovSystem } from "./systems/fov.system";
 import { movementSystem } from "./systems/movement.system";
@@ -16,10 +15,13 @@ import { renderSystem } from "./systems/render.system";
 import { addSprite } from "./lib/canvas";
 import { buildDungeon } from "./lib/dungeon";
 import { updatePosition } from "./lib/ecsHelpers";
+import { processUserInput } from "./lib/userInput";
 
 // create the world
 const world = createWorld();
 world.sprites = [];
+world.gameState = "GAME";
+world.turn = "WORLD";
 
 // create the dungeon
 const dungeon = buildDungeon({ x: 0, y: 0, width: 100, height: 34 });
@@ -99,38 +101,25 @@ _.times(10, () => {
 });
 
 // run the game
-const pipeline = pipe(movementSystem, fovSystem, renderSystem);
-
-let pause = false;
+const pipelinePlayerTurn = pipe(movementSystem, fovSystem, renderSystem);
 
 function gameLoop() {
-  if (!pause) {
-    pipeline(world);
-    pause = true;
+  if (world.userInput && world.turn === "PLAYER") {
+    processUserInput(world);
+    pipelinePlayerTurn(world);
+    world.turn = "WORLD";
   }
+
+  if (world.turn === "WORLD") {
+    pipelinePlayerTurn(world);
+    world.turn = "PLAYER";
+  }
+
   requestAnimationFrame(gameLoop);
 }
 
 gameLoop();
 
 document.addEventListener("keydown", (ev) => {
-  userInput = ev.key;
-  pause = false;
-
-  if (userInput === "ArrowUp") {
-    addComponent(world, Velocity, world.hero);
-    Velocity.y[world.hero] -= 1;
-  }
-  if (userInput === "ArrowRight") {
-    addComponent(world, Velocity, world.hero);
-    Velocity.x[world.hero] += 1;
-  }
-  if (userInput === "ArrowDown") {
-    addComponent(world, Velocity, world.hero);
-    Velocity.y[world.hero] += 1;
-  }
-  if (userInput === "ArrowLeft") {
-    addComponent(world, Velocity, world.hero);
-    Velocity.x[world.hero] -= 1;
-  }
+  world.userInput = ev.key;
 });
