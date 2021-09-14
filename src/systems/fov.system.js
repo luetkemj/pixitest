@@ -74,9 +74,7 @@ export const fovSystem = (world) => {
         addComponent(world, FovDistance, eidAtPos);
         addComponent(world, InFov, eidAtPos);
         addComponent(world, Render, eidAtPos);
-        if (hasComponent(world, Revealable, eidAtPos)) {
-          addComponent(world, Revealed, eidAtPos);
-        }
+        addComponent(world, Revealed, eidAtPos);
         FovDistance.dist[eidAtPos] = FOV.distance[locId];
       });
     }

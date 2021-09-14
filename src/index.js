@@ -2,11 +2,11 @@ import _ from "lodash";
 import { addComponent, addEntity, createWorld, pipe } from "bitecs";
 import {
   Blocking,
+  Forgettable,
   Fov,
   Opaque,
   Position,
   Render,
-  Revealable,
   Velocity,
 } from "./components";
 import { fovSystem } from "./systems/fov.system";
@@ -26,7 +26,6 @@ Object.values(dungeon.tiles).forEach((tile) => {
   const eid = addEntity(world);
   addComponent(world, Position, eid);
   addComponent(world, Render, eid);
-  addComponent(world, Revealable, eid);
 
   if (tile.sprite === "WALL") {
     addComponent(world, Blocking, eid);
@@ -73,6 +72,7 @@ _.times(10, () => {
   addComponent(world, Position, eid);
   addComponent(world, Render, eid);
   addComponent(world, Blocking, eid);
+  addComponent(world, Forgettable, eid);
 
   const { x, y } = _.sample(openTiles);
 

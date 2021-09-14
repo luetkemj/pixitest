@@ -1,6 +1,13 @@
 import _ from "lodash";
 import { defineQuery, hasComponent, removeComponent, Not } from "bitecs";
-import { FovDistance, InFov, Position, Render, Revealed } from "../components";
+import {
+  Forgettable,
+  FovDistance,
+  InFov,
+  Position,
+  Render,
+  Revealed,
+} from "../components";
 import { grid } from "../lib/grid";
 
 let cellWidth;
@@ -8,15 +15,22 @@ let cellWidth;
 const renderQuery = defineQuery([Render]);
 const inFovQuery = defineQuery([InFov]);
 const revealedQuery = defineQuery([Revealed]);
+const forgettableQuery = defineQuery([Revealed, Not(InFov), Forgettable]);
 
 export const renderSystem = (world) => {
   const inFovEnts = inFovQuery(world);
   const revealedEnts = revealedQuery(world);
+  const forgettableEnts = forgettableQuery(world);
 
   for (let i = 0; i < revealedEnts.length; i++) {
     const eid = revealedEnts[i];
     world.sprites[eid].alpha = 1;
     world.sprites[eid].tint = `0x555555`;
+  }
+
+  for (let i = 0; i < forgettableEnts.length; i++) {
+    const eid = forgettableEnts[i];
+    world.sprites[eid].alpha = 0;
   }
 
   for (let i = 0; i < inFovEnts.length; i++) {
