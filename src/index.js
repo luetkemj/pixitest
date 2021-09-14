@@ -4,6 +4,7 @@ import {
   Blocking,
   Forgettable,
   Fov,
+  Health,
   Opaque,
   Position,
   Render,
@@ -51,6 +52,10 @@ world.hero = addEntity(world);
 addComponent(world, Position, world.hero);
 addComponent(world, Render, world.hero);
 addComponent(world, Fov, world.hero);
+addComponent(world, Health, world.hero);
+
+Health.max[world.hero] = 10;
+Health.current[world.hero] = 10;
 
 const startPos = dungeon.rooms[0].center;
 updatePosition({
@@ -73,6 +78,10 @@ _.times(10, () => {
   addComponent(world, Render, eid);
   addComponent(world, Blocking, eid);
   addComponent(world, Forgettable, eid);
+  addComponent(world, Health, eid);
+
+  Health.max[eid] = 10;
+  Health.current[eid] = 10;
 
   const { x, y } = _.sample(openTiles);
 

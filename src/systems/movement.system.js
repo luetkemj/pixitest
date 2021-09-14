@@ -4,7 +4,14 @@ import {
   hasComponent,
   removeComponent,
 } from "bitecs";
-import { Blocking, Position, Render, Fov, Velocity } from "../components";
+import {
+  Blocking,
+  Health,
+  Position,
+  Render,
+  Fov,
+  Velocity,
+} from "../components";
 import { updatePosition } from "../lib/ecsHelpers";
 
 const movementQuery = defineQuery([Position, Velocity]);
@@ -35,6 +42,12 @@ export const movementSystem = (world) => {
     // check if blocked
     world.eAtPos[`${newPos.x},${newPos.y},${newPos.z}`].forEach((e) => {
       if (hasComponent(world, Blocking, e)) {
+        if (hasComponent(world, Health, e)) {
+          console.log("You kick something healthy");
+        } else {
+          console.log("You kick something hard");
+        }
+
         canMove = false;
       }
     });
