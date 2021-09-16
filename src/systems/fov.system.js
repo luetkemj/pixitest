@@ -1,10 +1,4 @@
-import {
-  defineQuery,
-  addComponent,
-  hasComponent,
-  removeComponent,
-  getEntityComponents,
-} from "bitecs";
+import { defineQuery, addComponent, removeComponent } from "bitecs";
 import {
   Fov,
   FovDistance,
@@ -13,7 +7,6 @@ import {
   Position,
   Render,
   Revealed,
-  Revealable,
 } from "../components";
 import { grid } from "../lib/grid";
 import { createFOV } from "../lib/fov";

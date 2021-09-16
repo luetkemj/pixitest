@@ -6,7 +6,7 @@ export const updatePosition = ({ world, oldPos = {}, newPos, eid }) => {
   }
 
   const newLoc = `${newPos.x},${newPos.y},${newPos.z}`;
-  const oldLoc = `${oldPos.x},${oldPos.y},${oldPos.y}`;
+  const oldLoc = `${oldPos.x},${oldPos.y},${oldPos.z}`;
 
   // remove old pos
   if (world.eAtPos[oldLoc]) {

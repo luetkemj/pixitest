@@ -4,17 +4,10 @@ import {
   hasComponent,
   removeComponent,
 } from "bitecs";
-import {
-  Blocking,
-  Health,
-  Position,
-  Render,
-  Fov,
-  Velocity,
-} from "../components";
+import { Blocking, Position, Render, Fov, MoveTo } from "../components";
 import { updatePosition } from "../lib/ecsHelpers";
 
-const movementQuery = defineQuery([Position, Velocity]);
+const movementQuery = defineQuery([Position, MoveTo]);
 
 export const movementSystem = (world) => {
   const ents = movementQuery(world);
@@ -29,9 +22,9 @@ export const movementSystem = (world) => {
     };
 
     const newPos = {
-      x: Position.x[eid] + Velocity.x[eid],
-      y: Position.y[eid] + Velocity.y[eid],
-      z: Position.z[eid] + Velocity.z[eid],
+      x: MoveTo.x[eid],
+      y: MoveTo.y[eid],
+      z: MoveTo.z[eid],
     };
 
     // check if location is within bounds
@@ -42,13 +35,8 @@ export const movementSystem = (world) => {
     // check if blocked
     world.eAtPos[`${newPos.x},${newPos.y},${newPos.z}`].forEach((e) => {
       if (hasComponent(world, Blocking, e)) {
-        if (hasComponent(world, Health, e)) {
-          console.log("You kick something healthy");
-        } else {
-          console.log("You kick something hard");
-        }
-
         canMove = false;
+        console.log("Blocked");
       }
     });
 
@@ -57,7 +45,7 @@ export const movementSystem = (world) => {
       updatePosition({ world, oldPos, newPos, eid });
     }
 
-    removeComponent(world, Velocity, eid);
+    removeComponent(world, MoveTo, eid);
 
     if (canMove) {
       addComponent(world, Render, eid);

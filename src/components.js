@@ -20,3 +20,4 @@ export const Position = defineComponent(Vector3);
 export const Render = defineComponent();
 export const Revealed = defineComponent();
 export const Velocity = defineComponent(Vector3);
+export const MoveTo = defineComponent(Vector3);

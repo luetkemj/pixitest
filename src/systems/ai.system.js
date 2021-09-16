@@ -1,12 +1,6 @@
-import {
-  defineQuery,
-  addComponent,
-  hasComponent,
-  removeComponent,
-} from "bitecs";
-import { Ai, Brain, Intelligence, Position, Velocity } from "../components";
+import { defineQuery, addComponent } from "bitecs";
+import { Ai, Brain, Intelligence, Position, MoveTo } from "../components";
 import { aStar } from "../lib/pathfinding";
-import { getVelocity } from "../lib/grid";
 
 const aiQuery = defineQuery([Ai, Brain, Intelligence]);
 
@@ -18,13 +12,16 @@ const moveToTarget = (world, eid) => {
     z: 0,
   };
   const path = aStar(world, startPos, targetPos);
+  // console.log(path);
 
   const newLoc = path[1];
 
   if (newLoc) {
-    addComponent(world, Velocity, eid);
-    Position.x[eid] = newLoc[0];
-    Position.y[eid] = newLoc[1];
+    addComponent(world, MoveTo, eid);
+
+    MoveTo.x[eid] = newLoc[0];
+    MoveTo.y[eid] = newLoc[1];
+    MoveTo.z[eid] = Position.z[eid];
   }
 };
 

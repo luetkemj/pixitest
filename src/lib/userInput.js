@@ -1,25 +1,33 @@
 import { addComponent } from "bitecs";
-import { Velocity } from "../components";
+import { MoveTo, Position } from "../components";
 
 export const processUserInput = (world) => {
   const { gameState, userInput, hero } = world;
 
   if (gameState === "GAME") {
     if (userInput === "ArrowUp") {
-      addComponent(world, Velocity, hero);
-      Velocity.y[hero] -= 1;
+      addComponent(world, MoveTo, hero);
+      MoveTo.x[hero] = Position.x[hero];
+      MoveTo.y[hero] = Position.y[hero] - 1;
+      MoveTo.z[hero] = Position.z[hero];
     }
     if (userInput === "ArrowRight") {
-      addComponent(world, Velocity, hero);
-      Velocity.x[hero] += 1;
+      addComponent(world, MoveTo, hero);
+      MoveTo.x[hero] = Position.x[hero] + 1;
+      MoveTo.y[hero] = Position.y[hero];
+      MoveTo.z[hero] = Position.z[hero];
     }
     if (userInput === "ArrowDown") {
-      addComponent(world, Velocity, hero);
-      Velocity.y[hero] += 1;
+      addComponent(world, MoveTo, hero);
+      MoveTo.x[hero] = Position.x[hero];
+      MoveTo.y[hero] = Position.y[hero] + 1;
+      MoveTo.z[hero] = Position.z[hero];
     }
     if (userInput === "ArrowLeft") {
-      addComponent(world, Velocity, hero);
-      Velocity.x[hero] -= 1;
+      addComponent(world, MoveTo, hero);
+      MoveTo.x[hero] = Position.x[hero] - 1;
+      MoveTo.y[hero] = Position.y[hero];
+      MoveTo.z[hero] = Position.z[hero];
     }
   }
 
