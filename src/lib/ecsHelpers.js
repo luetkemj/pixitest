@@ -43,7 +43,10 @@ export const getEntityData = (world, eid) => {
   }, {});
 
   return {
+    eid,
+    name: world.meta[eid] && world.meta[eid].name,
     components,
     sprite: world.sprites[eid],
+    meta: world.meta[eid],
   };
 };
