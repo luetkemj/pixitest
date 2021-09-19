@@ -21,7 +21,7 @@ world.sprites = [];
 world.meta = [];
 world.gameState = "GAME";
 world.turn = "WORLD";
-world.debug = false;
+world.debug = process.env.DEBUG;
 
 // create the dungeon
 const dungeon = buildDungeon({ x: 0, y: 0, width: 100, height: 34 });
