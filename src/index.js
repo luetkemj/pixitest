@@ -83,3 +83,11 @@ gameLoop();
 document.addEventListener("keydown", (ev) => {
   world.userInput = ev.key;
 });
+
+document.querySelector("#debug").addEventListener("click", () => {
+  world.debug = !world.debug;
+
+  if (!world.debug) {
+    world.PROCESSING_DEBUG_OFF = true;
+  }
+});
