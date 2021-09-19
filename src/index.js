@@ -86,4 +86,8 @@ document.addEventListener("keydown", (ev) => {
 
 document.querySelector("#debug").addEventListener("click", () => {
   world.debug = !world.debug;
+
+  if (!world.debug) {
+    world.PROCESSING_DEBUG_OFF = true;
+  }
 });
