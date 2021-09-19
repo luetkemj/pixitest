@@ -12,7 +12,8 @@ const moveToTarget = (world, eid) => {
     z: 0,
   };
   const path = aStar(world, startPos, targetPos);
-  // console.log(path);
+  world.meta[eid].ai.path = path;
+  world.meta[eid].ai.pathAlgo = "aStar";
 
   const newLoc = path[1];
 

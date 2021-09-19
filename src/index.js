@@ -21,7 +21,7 @@ world.sprites = [];
 world.meta = [];
 world.gameState = "GAME";
 world.turn = "WORLD";
-world.debug = true;
+world.debug = false;
 
 // create the dungeon
 const dungeon = buildDungeon({ x: 0, y: 0, width: 100, height: 34 });
@@ -88,6 +88,6 @@ document.querySelector("#debug").addEventListener("click", () => {
   world.debug = !world.debug;
 
   if (!world.debug) {
-    world.PROCESSING_DEBUG_OFF = true;
+    world.RESETTING_DEBUG = true;
   }
 });

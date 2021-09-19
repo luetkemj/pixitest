@@ -16,6 +16,18 @@ const app = new PIXI.Application({
   resolution: window.devicePixelRatio || 1,
 });
 
+export const addDebugSprite = ({ texture, x, y }) => {
+  const sprite = new PIXI.Sprite.from(texture);
+  sprite.x = x;
+  sprite.y = y;
+  sprite.alpha = 1;
+  sprite.anchor.x = 0.5;
+  sprite.anchor.y = 0.5;
+
+  app.stage.addChild(sprite);
+  return sprite;
+};
+
 export const addSprite = ({ texture, options = {}, world, eid }) => {
   const sprite = new PIXI.Sprite.from(texture);
   world.sprites[eid] = _.merge(
