@@ -5,6 +5,7 @@ import { Position } from "../components";
 const positionQuery = defineQuery([Position]);
 
 export const debugSystem = (world) => {
+  console.log(world.debug);
   if (!world.debug) {
     return;
   }
