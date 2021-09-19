@@ -7,6 +7,7 @@ import { createFloor } from "./prefabs/floor";
 import { createWall } from "./prefabs/wall";
 
 import { aiSystem } from "./systems/ai.system";
+import { debugSystem } from "./systems/debug.system";
 import { fovSystem } from "./systems/fov.system";
 import { movementSystem } from "./systems/movement.system";
 import { renderSystem } from "./systems/render.system";
@@ -20,6 +21,7 @@ world.sprites = [];
 world.meta = [];
 world.gameState = "GAME";
 world.turn = "WORLD";
+world.debug = true;
 
 // create the dungeon
 const dungeon = buildDungeon({ x: 0, y: 0, width: 100, height: 34 });
@@ -57,16 +59,19 @@ const pipelineWorldTurn = pipe(
   fovSystem,
   renderSystem
 );
+const debugPipeline = pipe(debugSystem);
 
 function gameLoop() {
   if (world.userInput && world.turn === "PLAYER") {
     processUserInput(world);
     pipelinePlayerTurn(world);
+    debugPipeline(world);
     world.turn = "WORLD";
   }
 
   if (world.turn === "WORLD") {
     pipelineWorldTurn(world);
+    debugPipeline(world);
     world.turn = "PLAYER";
   }
 
