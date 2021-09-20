@@ -4,12 +4,12 @@ import { addComponent, addEntity } from "bitecs";
 import {
   Ai,
   Blocking,
-  Brain,
   Forgettable,
   Health,
   Intelligence,
   Position,
   Render,
+  Strength,
 } from "../components";
 
 import { addSprite } from "../lib/canvas";
@@ -25,13 +25,15 @@ export const createGoblin = (world, options) => {
   addComponent(world, Forgettable, eid);
   addComponent(world, Health, eid);
   addComponent(world, Ai, eid);
-  addComponent(world, Brain, eid);
   addComponent(world, Intelligence, eid);
+  addComponent(world, Strength, eid);
 
   Health.max[eid] = 10;
   Health.current[eid] = 10;
   Intelligence.max[eid] = 5;
   Intelligence.current[eid] = 5;
+  Strength.max[eid] = 1;
+  Strength.current[eid] = 1;
 
   updatePosition({
     world,

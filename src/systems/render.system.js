@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { defineQuery, hasComponent, removeComponent, Not } from "bitecs";
 import {
+  Dead,
   Forgettable,
   FovDistance,
   InFov,
@@ -9,6 +10,7 @@ import {
   Revealed,
 } from "../components";
 import { grid } from "../lib/grid";
+import { deadTexture } from "../lib/canvas";
 
 let cellWidth;
 
@@ -22,6 +24,7 @@ export const renderSystem = (world) => {
   const revealedEnts = revealedQuery(world);
   const forgettableEnts = forgettableQuery(world);
 
+  // DO FIELD OF VISION THINGS
   for (let i = 0; i < revealedEnts.length; i++) {
     const eid = revealedEnts[i];
     world.sprites[eid].alpha = 1;
@@ -55,6 +58,7 @@ export const renderSystem = (world) => {
     }
   }
 
+  // RENDER OTHER THINGS
   const renderEnts = renderQuery(world);
   if (renderEnts.length) {
     cellWidth = window.innerWidth / grid.width;
@@ -65,6 +69,10 @@ export const renderSystem = (world) => {
     world.sprites[eid].height = cellWidth;
     world.sprites[eid].x = Position.x[eid] * cellWidth;
     world.sprites[eid].y = Position.y[eid] * cellWidth;
+
+    if (hasComponent(world, Dead, eid)) {
+      world.sprites[eid].texture = deadTexture;
+    }
 
     removeComponent(world, Render, eid);
   }
