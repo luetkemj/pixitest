@@ -4,10 +4,42 @@ import {
   hasComponent,
   removeComponent,
 } from "bitecs";
-import { Blocking, Position, Render, Fov, MoveTo } from "../components";
+import {
+  Ai,
+  Blocking,
+  Dead,
+  Forgettable,
+  Health,
+  Position,
+  Render,
+  Strength,
+  Fov,
+  MoveTo,
+} from "../components";
 import { updatePosition } from "../lib/ecsHelpers";
 
 const movementQuery = defineQuery([Position, MoveTo]);
+
+const kill = (world, eid) => {
+  addComponent(world, Dead, eid);
+  addComponent(world, Render, eid);
+  removeComponent(world, MoveTo, eid);
+  removeComponent(world, Ai, eid);
+  removeComponent(world, Blocking, eid);
+  removeComponent(world, Forgettable, eid);
+
+  if (world.hero === eid) {
+    world.gameState = "GAMEOVER";
+  }
+};
+
+const attack = (world, aggressor, target) => {
+  const attackPower = Strength.current[aggressor];
+  Health.current[target] -= attackPower;
+  if (Health.current[target] <= 0) {
+    kill(world, target);
+  }
+};
 
 export const movementSystem = (world) => {
   const ents = movementQuery(world);
@@ -36,7 +68,14 @@ export const movementSystem = (world) => {
     world.eAtPos[`${newPos.x},${newPos.y},${newPos.z}`].forEach((e) => {
       if (hasComponent(world, Blocking, e)) {
         canMove = false;
-        console.log("Blocked");
+
+        // check if blocked by thing with health
+        if (hasComponent(world, Health, e)) {
+          // attack the thing!
+          attack(world, eid, e);
+        } else {
+          console.log("BUMP!");
+        }
       }
     });
 

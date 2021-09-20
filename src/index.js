@@ -21,7 +21,7 @@ world.sprites = [];
 world.meta = [];
 world.gameState = "GAME";
 world.turn = "WORLD";
-world.debug = process.env.DEBUG;
+world.debug = false;
 
 // create the dungeon
 const dungeon = buildDungeon({ x: 0, y: 0, width: 100, height: 34 });
@@ -62,6 +62,11 @@ const pipelineWorldTurn = pipe(
 const debugPipeline = pipe(debugSystem);
 
 function gameLoop() {
+  if (world.gameState === "GAMEOVER") {
+    console.log("GAME OVER");
+    return;
+  }
+
   if (world.userInput && world.turn === "PLAYER") {
     processUserInput(world);
     pipelinePlayerTurn(world);

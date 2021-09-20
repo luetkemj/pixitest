@@ -3,12 +3,12 @@ import { addComponent, addEntity } from "bitecs";
 
 import {
   Blocking,
-  Brain,
   Fov,
   Health,
   Intelligence,
   Position,
   Render,
+  Strength,
 } from "../components";
 
 import { addSprite } from "../lib/canvas";
@@ -22,14 +22,16 @@ export const createHero = (world, options) => {
   addComponent(world, Render, eid);
   addComponent(world, Fov, eid);
   addComponent(world, Health, eid);
-  addComponent(world, Brain, eid);
   addComponent(world, Blocking, eid);
   addComponent(world, Intelligence, eid);
+  addComponent(world, Strength, eid);
 
   Health.max[eid] = 10;
   Health.current[eid] = 10;
   Intelligence.max[eid] = 10;
   Intelligence.current[eid] = 10;
+  Strength.max[eid] = 5;
+  Strength.current[eid] = 5;
 
   updatePosition({
     world,

@@ -1,8 +1,8 @@
 import { defineQuery, addComponent } from "bitecs";
-import { Ai, Brain, Intelligence, Position, MoveTo } from "../components";
+import { Ai, Intelligence, Position, MoveTo } from "../components";
 import { aStar } from "../lib/pathfinding";
 
-const aiQuery = defineQuery([Ai, Brain, Intelligence]);
+const aiQuery = defineQuery([Ai, Intelligence]);
 
 const moveToTarget = (world, eid) => {
   const startPos = { x: Position.x[eid], y: Position.y[eid], z: 0 };
@@ -35,7 +35,6 @@ export const aiSystem = (world) => {
     moveToTarget(world, eid);
     // if (Intelligence.current
     // if has health
-    // if has brain
     // if has intelligence above x
     // do a smart thing
     // else do a dumb thing
