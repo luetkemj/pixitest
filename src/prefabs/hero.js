@@ -40,7 +40,7 @@ export const createHero = (world, options) => {
   });
 
   addSprite({
-    texture: "heroes/knight/knight_idle_anim_f0.png",
+    texture: "../../static/heroes/knight/knight_idle_anim_f0.png",
     world,
     eid: eid,
   });
