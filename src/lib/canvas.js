@@ -2,20 +2,40 @@ import _ from "lodash";
 import * as PIXI from "pixi.js";
 import { Position } from "../components";
 import { getEntityData } from "./ecsHelpers";
+import { grid } from "./grid";
 
 // add PIXI to the window so the devtools work
 window.PIXI = PIXI;
 
 const canvas = document.getElementById("pixi-canvas");
+
+const cellW = window.innerWidth / grid.width;
+const cellHfW = cellW / 2;
 const app = new PIXI.Application({
   view: canvas,
   width: window.innerWidth,
-  height: window.innerHeight,
+  height: cellW * grid.height,
   autoDensity: true,
   autoResize: true,
   resolution: window.devicePixelRatio || 1,
 });
 
+const containers = {};
+
+containers.map = new PIXI.Container();
+containers.map.width = grid.map.width * cellW;
+containers.map.height = grid.map.height * cellW;
+containers.map.x = grid.map.x * cellW + cellHfW;
+containers.map.y = grid.map.y * cellW + cellHfW;
+
+containers.log = new PIXI.Container();
+containers.log.width = grid.log.width * cellW;
+containers.log.height = grid.log.height * cellW;
+containers.log.x = grid.log.x * cellW + cellHfW;
+containers.log.y = grid.log.y * cellW + cellHfW;
+
+app.stage.addChild(containers.map);
+app.stage.addChild(containers.log);
 export const addDebugSprite = ({ texture, x, y }) => {
   const sprite = new PIXI.Sprite.from(texture);
   sprite.x = x;
@@ -28,7 +48,13 @@ export const addDebugSprite = ({ texture, x, y }) => {
   return sprite;
 };
 
-export const addSprite = ({ texture, options = {}, world, eid }) => {
+export const addSprite = ({
+  container = "map",
+  texture,
+  options = {},
+  world,
+  eid,
+}) => {
   const sprite = new PIXI.Sprite.from(texture);
   world.sprites[eid] = _.merge(
     sprite,
@@ -51,7 +77,7 @@ export const addSprite = ({ texture, options = {}, world, eid }) => {
     world.eAtPos[pos].forEach((e) => console.log(getEntityData(world, e)));
   });
 
-  app.stage.addChild(world.sprites[eid]);
+  containers[container].addChild(world.sprites[eid]);
 };
 
 export const deadTexture = PIXI.Texture.from(

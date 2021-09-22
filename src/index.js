@@ -1,5 +1,6 @@
 import _ from "lodash";
 import { createWorld, pipe } from "bitecs";
+import { grid } from "./lib/grid";
 
 import { createHero } from "./prefabs/hero";
 import { createGoblin } from "./prefabs/goblin";
@@ -24,7 +25,12 @@ world.turn = "WORLD";
 world.debug = false;
 
 // create the dungeon
-const dungeon = buildDungeon({ x: 0, y: 0, width: 100, height: 34 });
+const dungeon = buildDungeon({
+  x: 0,
+  y: 0,
+  width: grid.map.width,
+  height: grid.map.height,
+});
 
 Object.values(dungeon.tiles).forEach((tile) => {
   if (tile.sprite === "WALL") {
