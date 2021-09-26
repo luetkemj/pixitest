@@ -24,7 +24,7 @@ const app = new PIXI.Application({
 const loader = PIXI.Loader.shared;
 
 // load sprites
-export const loadSprites = (callback) => {
+export const loadSprites = (onLoaded) => {
   loader
     .add("static/fonts/courier-prime-regular.json")
     .add("floor", "static/tiles/floor/floor_10.png")
@@ -32,7 +32,7 @@ export const loadSprites = (callback) => {
     .add("hero", "static/heroes/knight/knight_idle_anim_f0.png")
     .add("goblin", "static/enemies/goblin/goblin_idle_anim_f0.png")
     .add("corpse", "static/effects/enemy_afterdead_explosion_anim_f2.png")
-    .load(callback);
+    .load(onLoaded);
   return loader;
 };
 
@@ -50,11 +50,19 @@ containers.log.height = grid.log.height * cellW;
 containers.log.x = grid.log.x * cellW;
 containers.log.y = grid.log.y * cellW;
 
+containers.playerHud = new PIXI.Container();
+containers.playerHud.width = grid.playerHud.width * cellW;
+containers.playerHud.height = grid.playerHud.height * cellW;
+containers.playerHud.x = grid.playerHud.x * cellW;
+containers.playerHud.y = grid.playerHud.y * cellW;
+
 app.stage.addChild(containers.map);
 app.stage.addChild(containers.log);
+app.stage.addChild(containers.playerHud);
 
 const uiSprites = {
-  log: [[], [], []],
+  log: Array.from(Array(grid.log.height), () => []),
+  playerHud: Array.from(Array(grid.playerHud.height), () => []),
 };
 
 export const addDebugSprite = ({ texture, x, y }) => {
@@ -110,7 +118,7 @@ const getFontTexture = ({ char }) => {
 };
 
 const initUiRow = ({ container, row }) => {
-  _.times(grid.log.width * 2, (i) => {
+  _.times(grid[container].width * 2, (i) => {
     const sprite = new PIXI.Sprite(getFontTexture({ char: "" }));
     sprite.width = cellHfW;
     sprite.height = cellW;
@@ -124,7 +132,13 @@ const initUiRow = ({ container, row }) => {
 
 export const initUi = () => {
   // init log
-  _.times(3, (i) => {
+  _.times(grid.log.height, (i) => {
     initUiRow({ container: "log", row: i });
   });
+
+  // init playerHud
+  _.times(grid.playerHud.height, (i) => {
+    initUiRow({ container: "playerHud", row: i });
+  });
+  printRow({ container: "playerHud", row: 0, str: "You are a hero." });
 };
