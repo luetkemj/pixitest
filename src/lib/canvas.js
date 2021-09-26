@@ -21,9 +21,10 @@ const app = new PIXI.Application({
   resolution: window.devicePixelRatio || 1,
 });
 
+const loader = PIXI.Loader.shared;
+
 // load sprites
 export const loadSprites = (callback) => {
-  const loader = PIXI.Loader.shared;
   loader
     .add("static/fonts/courier-prime-regular.json")
     .add("floor", "static/tiles/floor/floor_10.png")
@@ -73,7 +74,7 @@ export const addSprite = ({
   world,
   eid,
 }) => {
-  const sprite = new PIXI.Sprite.from(texture);
+  const sprite = new PIXI.Sprite.from(loader.resources[texture].texture);
   world.sprites[eid] = _.merge(
     sprite,
     {
@@ -94,24 +95,23 @@ export const addSprite = ({
   containers[container].addChild(world.sprites[eid]);
 };
 
-const printRow = ({ loader, container, row, str }) => {
+export const printRow = ({ container, row, str }) => {
   for (let i = 0; i < uiSprites[container][row].length; i++) {
     uiSprites[container][row][i].texture = getFontTexture({
-      loader,
       char: str[i],
     });
   }
 };
 
-const getFontTexture = ({ loader, char }) => {
+const getFontTexture = ({ char }) => {
   return loader.resources["static/fonts/courier-prime-regular.json"].textures[
     alphaMap[char]
   ];
 };
 
-const initUiRow = ({ loader, container, row }) => {
+const initUiRow = ({ container, row }) => {
   _.times(grid.log.width * 2, (i) => {
-    const sprite = new PIXI.Sprite(getFontTexture({ loader, char: "" }));
+    const sprite = new PIXI.Sprite(getFontTexture({ char: "" }));
     sprite.width = cellHfW;
     sprite.height = cellW;
     sprite.x = i * cellHfW;
@@ -122,9 +122,9 @@ const initUiRow = ({ loader, container, row }) => {
   });
 };
 
-export const initUi = (loader) => {
+export const initUi = () => {
   // init log
   _.times(3, (i) => {
-    initUiRow({ loader, container: "log", row: i });
+    initUiRow({ container: "log", row: i });
   });
 };

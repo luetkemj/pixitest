@@ -7,7 +7,7 @@ import { addSprite } from "../lib/canvas";
 import { updatePosition } from "../lib/ecsHelpers";
 
 export const createFloor = (world, options) => {
-  const { x, y, z, loader } = options;
+  const { x, y, z } = options;
 
   const eid = addEntity(world);
   addComponent(world, Position, eid);
@@ -20,7 +20,7 @@ export const createFloor = (world, options) => {
   });
 
   addSprite({
-    texture: loader.resources.floor.texture,
+    texture: "floor",
     world,
     eid: eid,
   });
