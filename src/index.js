@@ -1,11 +1,6 @@
+import * as PIXI from "pixi.js";
 import _ from "lodash";
-import { createWorld, pipe } from "bitecs";
-import { grid } from "./lib/grid";
-
-import { createHero } from "./prefabs/hero";
-import { createGoblin } from "./prefabs/goblin";
-import { createFloor } from "./prefabs/floor";
-import { createWall } from "./prefabs/wall";
+import { pipe } from "bitecs";
 
 import { aiSystem } from "./systems/ai.system";
 import { debugSystem } from "./systems/debug.system";
@@ -13,92 +8,68 @@ import { fovSystem } from "./systems/fov.system";
 import { movementSystem } from "./systems/movement.system";
 import { renderSystem } from "./systems/render.system";
 
-import { buildDungeon } from "./lib/dungeon";
 import { processUserInput } from "./lib/userInput";
 
-// create the world
-const world = createWorld();
-world.sprites = [];
-world.meta = [];
-world.gameState = "GAME";
-world.turn = "WORLD";
-world.debug = false;
+import { initWorld } from "./lib/initWorld";
 
-// create the dungeon
-const dungeon = buildDungeon({
-  x: 0,
-  y: 0,
-  width: grid.map.width,
-  height: grid.map.height,
-});
+// pixi loader load all the sprites and initialize game
+const loader = PIXI.Loader.shared; // PixiJS exposes a premade instance for you to use.
 
-Object.values(dungeon.tiles).forEach((tile) => {
-  if (tile.sprite === "WALL") {
-    const { x, y } = tile;
-    createWall(world, { x, y, z: 0 });
-  }
-  if (tile.sprite === "FLOOR") {
-    const { x, y } = tile;
-    createFloor(world, { x, y, z: 0 });
-  }
-});
+loader
+  .add("static/fonts/courier-prime-regular.json")
+  .add("floor", "static/tiles/floor/floor_10.png")
+  .add("wall", "static/tiles/wall/wall_1.png")
+  .add("hero", "static/heroes/knight/knight_idle_anim_f0.png")
+  .add("goblin", "static/enemies/goblin/goblin_idle_anim_f0.png")
+  .add("corpse", "static/effects/enemy_afterdead_explosion_anim_f2.png")
+  .load(setup);
 
-// create the hero
-createHero(world, {
-  x: dungeon.rooms[0].center.x,
-  y: dungeon.rooms[0].center.y,
-  z: 0,
-});
+function setup() {
+  const { world } = initWorld(loader);
+  world.loader = loader;
 
-// spawn baddies
-const openTiles = _.filter(dungeon.tiles, (tile) => tile.sprite === "FLOOR");
-_.times(10, () => {
-  const { x, y } = _.sample(openTiles);
-  createGoblin(world, { x, y, z: 0 });
-});
+  const pipelinePlayerTurn = pipe(movementSystem, fovSystem, renderSystem);
+  const pipelineWorldTurn = pipe(
+    aiSystem,
+    movementSystem,
+    fovSystem,
+    renderSystem
+  );
+  const debugPipeline = pipe(debugSystem);
 
-// run the game
-const pipelinePlayerTurn = pipe(movementSystem, fovSystem, renderSystem);
-const pipelineWorldTurn = pipe(
-  aiSystem,
-  movementSystem,
-  fovSystem,
-  renderSystem
-);
-const debugPipeline = pipe(debugSystem);
+  function gameLoop() {
+    if (world.gameState === "GAMEOVER") {
+      console.log("GAME OVER");
+      return;
+    }
 
-function gameLoop() {
-  if (world.gameState === "GAMEOVER") {
-    console.log("GAME OVER");
-    return;
+    if (world.userInput && world.turn === "PLAYER") {
+      processUserInput(world);
+      pipelinePlayerTurn(world);
+      debugPipeline(world);
+      world.turn = "WORLD";
+    }
+
+    if (world.turn === "WORLD") {
+      pipelineWorldTurn(world);
+      debugPipeline(world);
+      world.turn = "PLAYER";
+    }
+
+    requestAnimationFrame(gameLoop);
   }
 
-  if (world.userInput && world.turn === "PLAYER") {
-    processUserInput(world);
-    pipelinePlayerTurn(world);
-    debugPipeline(world);
-    world.turn = "WORLD";
-  }
+  gameLoop();
 
-  if (world.turn === "WORLD") {
-    pipelineWorldTurn(world);
-    debugPipeline(world);
-    world.turn = "PLAYER";
-  }
+  document.addEventListener("keydown", (ev) => {
+    world.userInput = ev.key;
+  });
 
-  requestAnimationFrame(gameLoop);
+  document.querySelector("#debug").addEventListener("click", () => {
+    world.debug = !world.debug;
+
+    if (!world.debug) {
+      world.RESETTING_DEBUG = true;
+    }
+  });
 }
-
-gameLoop();
-
-document.addEventListener("keydown", (ev) => {
-  world.userInput = ev.key;
-});
-
-document.querySelector("#debug").addEventListener("click", () => {
-  world.debug = !world.debug;
-
-  if (!world.debug) {
-    world.RESETTING_DEBUG = true;
-  }
-});

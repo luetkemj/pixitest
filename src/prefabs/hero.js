@@ -15,7 +15,7 @@ import { addSprite } from "../lib/canvas";
 import { updatePosition } from "../lib/ecsHelpers";
 
 export const createHero = (world, options) => {
-  const { x, y, z } = options;
+  const { x, y, z, loader } = options;
 
   const eid = addEntity(world);
   addComponent(world, Position, eid);
@@ -40,7 +40,7 @@ export const createHero = (world, options) => {
   });
 
   addSprite({
-    texture: "../../static/heroes/knight/knight_idle_anim_f0.png",
+    texture: loader.resources.hero.texture,
     world,
     eid: eid,
   });

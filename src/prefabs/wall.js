@@ -7,7 +7,7 @@ import { addSprite } from "../lib/canvas";
 import { updatePosition } from "../lib/ecsHelpers";
 
 export const createWall = (world, options) => {
-  const { x, y, z } = options;
+  const { x, y, z, loader } = options;
 
   const eid = addEntity(world);
   addComponent(world, Position, eid);
@@ -22,7 +22,7 @@ export const createWall = (world, options) => {
   });
 
   addSprite({
-    texture: "../../static/tiles/wall/wall_1.png",
+    texture: loader.resources.wall.texture,
     world,
     eid: eid,
   });

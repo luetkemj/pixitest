@@ -10,7 +10,6 @@ import {
   Revealed,
 } from "../components";
 import { grid } from "../lib/grid";
-import { deadTexture } from "../lib/canvas";
 
 let cellWidth;
 
@@ -71,7 +70,7 @@ export const renderSystem = (world) => {
     world.sprites[eid].y = Position.y[eid] * cellWidth;
 
     if (hasComponent(world, Dead, eid)) {
-      world.sprites[eid].texture = deadTexture;
+      world.sprites[eid].texture = world.loader.resources.corpse.texture;
     }
 
     removeComponent(world, Render, eid);

@@ -16,7 +16,7 @@ import { addSprite } from "../lib/canvas";
 import { updatePosition } from "../lib/ecsHelpers";
 
 export const createGoblin = (world, options) => {
-  const { x, y, z } = options;
+  const { x, y, z, loader } = options;
 
   const eid = addEntity(world);
   addComponent(world, Position, eid);
@@ -42,7 +42,7 @@ export const createGoblin = (world, options) => {
   });
 
   addSprite({
-    texture: "../../static/enemies/goblin/goblin_idle_anim_f0.png",
+    texture: loader.resources.goblin.texture,
     world,
     eid: eid,
   });
