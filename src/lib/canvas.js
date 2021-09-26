@@ -3,6 +3,7 @@ import * as PIXI from "pixi.js";
 import { Position } from "../components";
 import { getEntityData } from "./ecsHelpers";
 import { grid } from "./grid";
+import { alphaMap } from "../../static/fonts/courier-prime-regular.map";
 
 // add PIXI to the window so the devtools work
 window.PIXI = PIXI;
@@ -51,6 +52,10 @@ containers.log.y = grid.log.y * cellW;
 app.stage.addChild(containers.map);
 app.stage.addChild(containers.log);
 
+const uiSprites = {
+  log: [[], [], []],
+};
+
 export const addDebugSprite = ({ texture, x, y }) => {
   const sprite = new PIXI.Sprite.from(texture);
   sprite.x = x;
@@ -87,4 +92,39 @@ export const addSprite = ({
   });
 
   containers[container].addChild(world.sprites[eid]);
+};
+
+const printRow = ({ loader, container, row, str }) => {
+  for (let i = 0; i < uiSprites[container][row].length; i++) {
+    uiSprites[container][row][i].texture = getFontTexture({
+      loader,
+      char: str[i],
+    });
+  }
+};
+
+const getFontTexture = ({ loader, char }) => {
+  return loader.resources["static/fonts/courier-prime-regular.json"].textures[
+    alphaMap[char]
+  ];
+};
+
+const initUiRow = ({ loader, container, row }) => {
+  _.times(grid.log.width * 2, (i) => {
+    const sprite = new PIXI.Sprite(getFontTexture({ loader, char: "" }));
+    sprite.width = cellHfW;
+    sprite.height = cellW;
+    sprite.x = i * cellHfW;
+    sprite.y = row * cellW;
+
+    uiSprites[container][row][i] = sprite;
+    containers[container].addChild(sprite);
+  });
+};
+
+export const initUi = (loader) => {
+  // init log
+  _.times(3, (i) => {
+    initUiRow({ loader, container: "log", row: i });
+  });
 };

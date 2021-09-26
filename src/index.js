@@ -1,4 +1,3 @@
-import * as PIXI from "pixi.js";
 import _ from "lodash";
 import { pipe } from "bitecs";
 
@@ -11,7 +10,7 @@ import { renderSystem } from "./systems/render.system";
 import { processUserInput } from "./lib/userInput";
 
 import { initWorld } from "./lib/initWorld";
-import { loadSprites } from "./lib/canvas";
+import { loadSprites, initUi } from "./lib/canvas";
 
 // pixi loader load all the sprites and initialize game
 const loader = loadSprites(initGame);
@@ -19,6 +18,8 @@ const loader = loadSprites(initGame);
 function initGame() {
   const { world } = initWorld(loader);
   world.loader = loader;
+
+  initUi(loader);
 
   const pipelinePlayerTurn = pipe(movementSystem, fovSystem, renderSystem);
   const pipelineWorldTurn = pipe(
