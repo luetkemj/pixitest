@@ -10,6 +10,7 @@ import {
   Revealed,
 } from "../components";
 import { grid } from "../lib/grid";
+import { printRow } from "../lib/canvas";
 
 let cellWidth;
 
@@ -57,7 +58,7 @@ export const renderSystem = (world) => {
     }
   }
 
-  // RENDER OTHER THINGS
+  // RENDER OTHER MAP THINGS
   const renderEnts = renderQuery(world);
   if (renderEnts.length) {
     cellWidth = window.innerWidth / grid.width;
@@ -75,6 +76,14 @@ export const renderSystem = (world) => {
 
     removeComponent(world, Render, eid);
   }
+
+  // RENDER UI THINGS
+  _.times(3, (i) => {
+    const arr = world.log;
+    const log = arr.slice(Math.max(arr.length - 3, 0));
+    const str = _.reverse(log)[i];
+    printRow({ container: "log", row: i, str });
+  });
 
   return world;
 };
