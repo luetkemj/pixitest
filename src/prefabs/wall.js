@@ -22,7 +22,7 @@ export const createWall = (world, options) => {
   });
 
   addSprite({
-    texture: "../../static/tiles/wall/wall_1.png",
+    texture: "wall",
     world,
     eid: eid,
   });

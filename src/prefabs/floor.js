@@ -20,7 +20,7 @@ export const createFloor = (world, options) => {
   });
 
   addSprite({
-    texture: "../../static/tiles/floor/floor_10.png",
+    texture: "floor",
     world,
     eid: eid,
   });

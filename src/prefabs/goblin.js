@@ -42,7 +42,7 @@ export const createGoblin = (world, options) => {
   });
 
   addSprite({
-    texture: "../../static/enemies/goblin/goblin_idle_anim_f0.png",
+    texture: "goblin",
     world,
     eid: eid,
   });

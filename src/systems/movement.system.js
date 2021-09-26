@@ -73,8 +73,16 @@ export const movementSystem = (world) => {
         if (hasComponent(world, Health, e)) {
           // attack the thing!
           attack(world, eid, e);
+
+          if (eid === world.hero) {
+            const msg = `You attack a ${world.meta[e].name}!`;
+            world.log.push(msg);
+          } else {
+            const msg = `A ${world.meta[eid].name} attacks you!`;
+            world.log.push(msg);
+          }
         } else {
-          console.log("BUMP!");
+          world.log.push("BUMP!");
         }
       }
     });
