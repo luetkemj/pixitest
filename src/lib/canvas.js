@@ -20,6 +20,20 @@ const app = new PIXI.Application({
   resolution: window.devicePixelRatio || 1,
 });
 
+// load sprites
+export const loadSprites = (callback) => {
+  const loader = PIXI.Loader.shared;
+  loader
+    .add("static/fonts/courier-prime-regular.json")
+    .add("floor", "static/tiles/floor/floor_10.png")
+    .add("wall", "static/tiles/wall/wall_1.png")
+    .add("hero", "static/heroes/knight/knight_idle_anim_f0.png")
+    .add("goblin", "static/enemies/goblin/goblin_idle_anim_f0.png")
+    .add("corpse", "static/effects/enemy_afterdead_explosion_anim_f2.png")
+    .load(callback);
+  return loader;
+};
+
 const containers = {};
 
 containers.map = new PIXI.Container();
