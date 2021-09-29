@@ -6,6 +6,7 @@ import {
   Fov,
   Health,
   Intelligence,
+  Inventory,
   Position,
   Render,
   Strength,
@@ -24,6 +25,7 @@ export const createHero = (world, options) => {
   addComponent(world, Health, eid);
   addComponent(world, Blocking, eid);
   addComponent(world, Intelligence, eid);
+  addComponent(world, Inventory, eid);
   addComponent(world, Strength, eid);
 
   Health.max[eid] = 10;

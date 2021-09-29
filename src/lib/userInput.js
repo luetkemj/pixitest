@@ -1,5 +1,6 @@
 import { addComponent } from "bitecs";
 import { MoveTo, Position } from "../components";
+import * as actions from "../lib/actions";
 
 export const processUserInput = (world) => {
   const { gameState, userInput, hero } = world;
@@ -28,6 +29,9 @@ export const processUserInput = (world) => {
       MoveTo.x[hero] = Position.x[hero] - 1;
       MoveTo.y[hero] = Position.y[hero];
       MoveTo.z[hero] = Position.z[hero];
+    }
+    if (userInput === "g") {
+      actions.get(world, hero);
     }
   }
 

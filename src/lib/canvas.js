@@ -27,11 +27,14 @@ const loader = PIXI.Loader.shared;
 export const loadSprites = (onLoaded) => {
   loader
     .add("static/fonts/courier-prime-regular.json")
-    .add("floor", "static/tiles/floor/floor_10.png")
-    .add("wall", "static/tiles/wall/wall_1.png")
-    .add("hero", "static/heroes/knight/knight_idle_anim_f0.png")
-    .add("goblin", "static/enemies/goblin/goblin_idle_anim_f0.png")
+
     .add("corpse", "static/effects/enemy_afterdead_explosion_anim_f2.png")
+    .add("floor", "static/tiles/floor/floor_10.png")
+    .add("goblin", "static/enemies/goblin/goblin_idle_anim_f0.png")
+    .add("hero", "static/heroes/knight/knight_idle_anim_f0.png")
+    .add("sword", "static/heroes/knight/weapon_sword_1.png")
+    .add("wall", "static/tiles/wall/wall_1.png")
+
     .load(onLoaded);
   return loader;
 };
