@@ -31,7 +31,7 @@ export const get = (world, eid) => {
   );
 
   if (!pickupAtLoc) {
-    world.log.push("There is nothing to pickup.");
+    world.log.unshift("There is nothing to pickup.");
   } else {
     // find first open inventory slot and add the pickup eid
     const inventory = Inventory.slots[eid];
@@ -43,7 +43,7 @@ export const get = (world, eid) => {
       addComponent(world, Render, pickupAtLoc);
       addComponent(world, Hidden, pickupAtLoc);
 
-      world.log.push(`You pickup ${world.meta[pickupAtLoc].name}.`);
+      world.log.unshift(`You pickup ${world.meta[pickupAtLoc].name}.`);
 
       // TODO do this in response to an inventory UI input or AI action
       const isConsumable = hasComponent(world, Consumable, pickupAtLoc);
@@ -59,7 +59,7 @@ export const get = (world, eid) => {
         }
       }
     } else {
-      world.log.push("Your inventory is full.");
+      world.log.unshift("Your inventory is full.");
     }
   }
 
@@ -72,7 +72,7 @@ export const consume = (world, targetEid, itemEid) => {
   const isConsumable = hasComponent(world, Consumable, itemEid);
 
   if (!isConsumable) {
-    return world.log.push(`You can't consume that!`);
+    return world.log.unshift(`You can't consume that!`);
   }
 
   if (hasComponent(world, Health, targetEid)) {
@@ -91,7 +91,7 @@ export const consume = (world, targetEid, itemEid) => {
         : Strength.current[targetEid];
   }
 
-  return world.log.push(`You consume a ${world.meta[itemEid].name}!`);
+  return world.log.unshift(`You consume a ${world.meta[itemEid].name}!`);
 };
 
 export const equip = (world, targetEid, itemEid) => {
@@ -99,14 +99,14 @@ export const equip = (world, targetEid, itemEid) => {
   const isWieldable = hasComponent(world, Wieldable, itemEid);
 
   if (!isWieldable) {
-    return world.log.push(`You can't wield that!`);
+    return world.log.unshift(`You can't wield that!`);
   }
 
   if (alreadyWielding) {
-    return world.log.push(`You are already wielding something!`);
+    return world.log.unshift(`You are already wielding something!`);
   }
 
   addComponent(world, Wielding, targetEid);
   Wielding.slot[targetEid] = itemEid;
-  return world.log.push(`You are wielding a ${world.meta[itemEid].name}!`);
+  return world.log.unshift(`You are wielding a ${world.meta[itemEid].name}!`);
 };

@@ -41,33 +41,27 @@ export const loadSprites = (onLoaded) => {
 };
 
 const containers = {};
+const containerNames = ["legend", "map", "ambiance", "menuTabs", "menuTabItem"];
+containerNames.forEach((name) => {
+  containers[name] = new PIXI.Container();
+  containers[name].width = grid[name].width * cellW;
+  containers[name].height = grid[name].height * cellW;
+  containers[name].x = grid[name].x * cellW;
+  containers[name].y = grid[name].y * cellW;
+  app.stage.addChild(containers[name]);
+});
 
-containers.map = new PIXI.Container();
-containers.map.width = grid.map.width * cellW;
-containers.map.height = grid.map.height * cellW;
-containers.map.x = grid.map.x * cellW;
-containers.map.y = grid.map.y * cellW;
-
-containers.log = new PIXI.Container();
-containers.log.width = grid.log.width * cellW;
-containers.log.height = grid.log.height * cellW;
-containers.log.x = grid.log.x * cellW;
-containers.log.y = grid.log.y * cellW;
-
-containers.playerHud = new PIXI.Container();
-containers.playerHud.width = grid.playerHud.width * cellW;
-containers.playerHud.height = grid.playerHud.height * cellW;
-containers.playerHud.x = grid.playerHud.x * cellW;
-containers.playerHud.y = grid.playerHud.y * cellW;
-
-app.stage.addChild(containers.map);
-app.stage.addChild(containers.log);
-app.stage.addChild(containers.playerHud);
-
-const uiSprites = {
-  log: Array.from(Array(grid.log.height), () => []),
-  playerHud: Array.from(Array(grid.playerHud.height), () => []),
-};
+const uiSprites = {};
+const uiSpriteContainerNames = [
+  "legend",
+  "ambiance",
+  "menuTabs",
+  "menuTabItem",
+];
+uiSpriteContainerNames.forEach((name) => {
+  // create array structure for storing uiSprites for later use
+  uiSprites[name] = Array.from(Array(grid[name].height), () => []);
+});
 
 export const addDebugSprite = ({ texture, x, y }) => {
   const sprite = new PIXI.Sprite.from(texture);
@@ -121,28 +115,31 @@ const getFontTexture = ({ char }) => {
   ];
 };
 
-const initUiRow = ({ container, row }) => {
-  _.times(grid[container].width * 2, (i) => {
-    const sprite = new PIXI.Sprite(getFontTexture({ char: "" }));
-    sprite.width = cellHfW;
-    sprite.height = cellW;
-    sprite.x = i * cellHfW;
-    sprite.y = row * cellW;
+export const initUi = () => {
+  const initUiRow = ({ container, row }) => {
+    _.times(grid[container].width * 2, (i) => {
+      const sprite = new PIXI.Sprite(getFontTexture({ char: "" }));
+      sprite.width = cellHfW;
+      sprite.height = cellW;
+      sprite.x = i * cellHfW;
+      sprite.y = row * cellW;
 
-    uiSprites[container][row][i] = sprite;
-    containers[container].addChild(sprite);
+      uiSprites[container][row][i] = sprite;
+      containers[container].addChild(sprite);
+    });
+  };
+
+  uiSpriteContainerNames.forEach((name) => {
+    _.times(grid[name].height, (i) => {
+      initUiRow({ container: name, row: i });
+    });
   });
+  printRow({ container: "legend", row: 0, str: "You are a hero." });
 };
 
-export const initUi = () => {
-  // init log
-  _.times(grid.log.height, (i) => {
-    initUiRow({ container: "log", row: i });
+export const clearContainer = (container) => {
+  const str = new Array(grid[container].width).join(" ");
+  uiSprites[container].forEach((row, i) => {
+    printRow({ container, row: i, str });
   });
-
-  // init playerHud
-  _.times(grid.playerHud.height, (i) => {
-    initUiRow({ container: "playerHud", row: i });
-  });
-  printRow({ container: "playerHud", row: 0, str: "You are a hero." });
 };

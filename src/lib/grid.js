@@ -2,41 +2,48 @@ import { sample } from "lodash";
 
 export const grid = {
   width: 100,
-  height: 34,
+  height: 44,
 
-  map: {
-    width: 79,
-    height: 29,
-    x: 21,
-    y: 3,
-  },
-
-  log: {
-    width: 79,
-    height: 3,
-    x: 21,
-    y: 0,
-  },
-
-  playerHud: {
-    width: 20,
-    height: 34,
+  legend: {
+    width: 12,
+    height: 44,
     x: 0,
     y: 0,
   },
 
-  infoBar: {
-    width: 79,
-    height: 3,
-    x: 21,
-    y: 32,
+  map: {
+    width: 43,
+    height: 43,
+    x: 13,
+    y: 1,
   },
 
-  inventory: {
-    width: 37,
-    height: 28,
-    x: 21,
-    y: 4,
+  ambiance: {
+    width: 43,
+    height: 1,
+    x: 13,
+    y: 0,
+  },
+
+  menu: {
+    width: 45,
+    height: 44,
+    x: 55,
+    y: 0,
+  },
+
+  menuTabs: {
+    width: 45,
+    height: 2,
+    x: 55,
+    y: 0,
+  },
+
+  menuTabItem: {
+    width: 45,
+    height: 42,
+    x: 55,
+    y: 2,
   },
 };
 

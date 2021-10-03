@@ -5,6 +5,14 @@ import * as actions from "../lib/actions";
 export const processUserInput = (world) => {
   const { gameState, userInput, hero } = world;
 
+  if (userInput === "L") {
+    world.menuTab = "LOG";
+  }
+
+  if (userInput === "I") {
+    world.menuTab = "INVENTORY";
+  }
+
   if (gameState === "GAME") {
     if (userInput === "ArrowUp") {
       addComponent(world, MoveTo, hero);
@@ -33,6 +41,13 @@ export const processUserInput = (world) => {
     if (userInput === "g") {
       actions.get(world, hero);
     }
+  }
+
+  // update turn
+  if (["Shift", "L", "I"].includes(userInput)) {
+    world.turn = "PLAYER";
+  } else {
+    world.turn = "WORLD";
   }
 
   world.userInput = null;
