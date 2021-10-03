@@ -7,6 +7,7 @@ import {
   Health,
   Intelligence,
   Inventory,
+  PC,
   Position,
   Render,
   Strength,
@@ -19,6 +20,7 @@ export const createHero = (world, options) => {
   const { x, y, z } = options;
 
   const eid = addEntity(world);
+  addComponent(world, PC, eid);
   addComponent(world, Position, eid);
   addComponent(world, Render, eid);
   addComponent(world, Fov, eid);
@@ -47,7 +49,6 @@ export const createHero = (world, options) => {
     eid: eid,
   });
 
-  world.hero = eid;
   world.meta[eid] = {};
   world.meta[eid].name = "HERO";
 };

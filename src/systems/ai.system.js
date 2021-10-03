@@ -1,14 +1,15 @@
 import { defineQuery, addComponent } from "bitecs";
-import { Ai, Intelligence, Position, MoveTo } from "../components";
+import { Ai, Intelligence, MoveTo, PC, Position } from "../components";
 import { aStar } from "../lib/pathfinding";
 
 const aiQuery = defineQuery([Ai, Intelligence]);
+const pcQuery = defineQuery([PC]);
 
-const moveToTarget = (world, eid) => {
+const moveToTarget = (world, eid, targetEid) => {
   const startPos = { x: Position.x[eid], y: Position.y[eid], z: 0 };
   const targetPos = {
-    x: Position.x[world.hero],
-    y: Position.y[world.hero],
+    x: Position.x[targetEid],
+    y: Position.y[targetEid],
     z: 0,
   };
   const path = aStar(world, startPos, targetPos);
@@ -28,11 +29,12 @@ const moveToTarget = (world, eid) => {
 
 export const aiSystem = (world) => {
   const ents = aiQuery(world);
+  const pcEnts = pcQuery(world);
 
   for (let i = 0; i < ents.length; i++) {
     const eid = ents[i];
 
-    moveToTarget(world, eid);
+    moveToTarget(world, eid, pcEnts[0]);
     // if (Intelligence.current
     // if has health
     // if has intelligence above x
