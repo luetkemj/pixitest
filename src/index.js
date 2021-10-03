@@ -18,6 +18,7 @@ const loader = loadSprites(initGame);
 function initGame() {
   const { world } = initWorld(loader);
   world.loader = loader;
+  world.menuTab = "LOG";
 
   initUi(loader);
 
@@ -40,7 +41,6 @@ function initGame() {
       processUserInput(world);
       pipelinePlayerTurn(world);
       debugPipeline(world);
-      world.turn = "WORLD";
     }
 
     if (world.turn === "WORLD") {

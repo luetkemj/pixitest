@@ -12,11 +12,13 @@ import {
   Health,
 } from "../components";
 import { grid } from "../lib/grid";
+import { clearContainer } from "../lib/canvas";
 
 import { renderAmbiance } from "../ui/ambiance";
 import { renderLegend } from "../ui/legend";
 import { renderMenuTabs } from "../ui/menuTabs";
-import { renderLog } from "../ui/log";
+import { renderMenuTabItemLog } from "../ui/menuTabItemLog";
+import { renderMenuTabItemInventory } from "../ui/menuTabItemInventory";
 
 let cellWidth;
 
@@ -95,7 +97,19 @@ export const renderSystem = (world) => {
   renderAmbiance(world);
   renderLegend(world);
   renderMenuTabs(world);
-  renderLog(world);
+
+  // clear the menuTab before rendering
+  clearContainer("menuTabItem");
+  switch (world.menuTab) {
+    case "LOG":
+      renderMenuTabItemLog(world);
+      break;
+    case "INVENTORY":
+      renderMenuTabItemInventory(world);
+      break;
+    default:
+      renderMenuTabItemLog(world);
+  }
 
   return world;
 };

@@ -136,3 +136,10 @@ export const initUi = () => {
   });
   printRow({ container: "legend", row: 0, str: "You are a hero." });
 };
+
+export const clearContainer = (container) => {
+  const str = new Array(grid[container].width).join(" ");
+  uiSprites[container].forEach((row, i) => {
+    printRow({ container, row: i, str });
+  });
+};

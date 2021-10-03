@@ -41,8 +41,7 @@ export const grid = {
 
   menuTabItem: {
     width: 45,
-    height: 10,
-    // height: 42,
+    height: 42,
     x: 55,
     y: 2,
   },
