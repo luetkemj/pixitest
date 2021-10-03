@@ -6,8 +6,13 @@ const MaxCurrent = { max: Types.i16, current: Types.i16 };
 export const Ai = defineComponent();
 export const Attack = defineComponent(MaxCurrent);
 export const Blocking = defineComponent();
+export const Consumable = defineComponent();
 export const Damage = defineComponent(MaxCurrent);
 export const Dead = defineComponent();
+export const Effects = defineComponent({
+  health: Types.i16,
+  strength: Types.i16,
+});
 export const Forgettable = defineComponent();
 export const Fov = defineComponent();
 export const FovDistance = defineComponent({ dist: Types.ui8 });

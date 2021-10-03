@@ -4,6 +4,7 @@ import { grid } from "./grid";
 
 import { createFloor } from "../prefabs/floor";
 import { createGoblin } from "../prefabs/goblin";
+import { createHealthPotion } from "../prefabs/healthPotion";
 import { createHero } from "../prefabs/hero";
 import { createSword } from "../prefabs/sword";
 import { createWall } from "../prefabs/wall";
@@ -48,10 +49,16 @@ export const initWorld = (loader) => {
 
   const openTiles = _.filter(dungeon.tiles, (tile) => tile.sprite === "FLOOR");
 
-  // spawn items
+  // spawn weapons
   _.times(10, () => {
     const { x, y } = _.sample(openTiles);
     createSword(world, { x, y, z: 0 });
+  });
+
+  // spawn potions
+  _.times(10, () => {
+    const { x, y } = _.sample(openTiles);
+    createHealthPotion(world, { x, y, z: 0 });
   });
 
   // spawn baddies
