@@ -2,9 +2,11 @@ import _ from "lodash";
 import { createWorld } from "bitecs";
 import { grid } from "./grid";
 
-import { createHero } from "../prefabs/hero";
-import { createGoblin } from "../prefabs/goblin";
 import { createFloor } from "../prefabs/floor";
+import { createGoblin } from "../prefabs/goblin";
+import { createHealthPotion } from "../prefabs/healthPotion";
+import { createHero } from "../prefabs/hero";
+import { createSword } from "../prefabs/sword";
 import { createWall } from "../prefabs/wall";
 
 import { buildDungeon } from "./dungeon";
@@ -30,11 +32,11 @@ export const initWorld = (loader) => {
   Object.values(dungeon.tiles).forEach((tile) => {
     if (tile.sprite === "WALL") {
       const { x, y } = tile;
-      createWall(world, { x, y, z: 0, loader });
+      createWall(world, { x, y, z: 0 });
     }
     if (tile.sprite === "FLOOR") {
       const { x, y } = tile;
-      createFloor(world, { x, y, z: 0, loader });
+      createFloor(world, { x, y, z: 0 });
     }
   });
 
@@ -43,14 +45,26 @@ export const initWorld = (loader) => {
     x: dungeon.rooms[0].center.x,
     y: dungeon.rooms[0].center.y,
     z: 0,
-    loader,
+  });
+
+  const openTiles = _.filter(dungeon.tiles, (tile) => tile.sprite === "FLOOR");
+
+  // spawn weapons
+  _.times(10, () => {
+    const { x, y } = _.sample(openTiles);
+    createSword(world, { x, y, z: 0 });
+  });
+
+  // spawn potions
+  _.times(10, () => {
+    const { x, y } = _.sample(openTiles);
+    createHealthPotion(world, { x, y, z: 0 });
   });
 
   // spawn baddies
-  const openTiles = _.filter(dungeon.tiles, (tile) => tile.sprite === "FLOOR");
   _.times(10, () => {
     const { x, y } = _.sample(openTiles);
-    createGoblin(world, { x, y, z: 0, loader });
+    createGoblin(world, { x, y, z: 0 });
   });
 
   return { world };

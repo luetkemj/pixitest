@@ -4,6 +4,7 @@ import {
   Dead,
   Forgettable,
   FovDistance,
+  Hidden,
   InFov,
   Position,
   Render,
@@ -15,8 +16,9 @@ import { printRow } from "../lib/canvas";
 
 let cellWidth;
 
-const renderQuery = defineQuery([Render]);
+const hiddenQuery = defineQuery([Hidden]);
 const inFovQuery = defineQuery([InFov]);
+const renderQuery = defineQuery([Render]);
 const revealedQuery = defineQuery([Revealed]);
 const forgettableQuery = defineQuery([Revealed, Not(InFov), Forgettable]);
 
@@ -76,6 +78,13 @@ export const renderSystem = (world) => {
     }
 
     removeComponent(world, Render, eid);
+  }
+
+  // Hide the Hidden things
+  const hiddenEnts = hiddenQuery(world);
+  for (let i = 0; i < hiddenEnts.length; i++) {
+    const eid = hiddenEnts[i];
+    world.sprites[eid].alpha = 0;
   }
 
   // RENDER UI THINGS

@@ -7,6 +7,7 @@ import {
 import {
   Ai,
   Blocking,
+  Damage,
   Dead,
   Forgettable,
   Health,
@@ -15,6 +16,7 @@ import {
   Strength,
   Fov,
   MoveTo,
+  Wielding,
 } from "../components";
 import { updatePosition } from "../lib/ecsHelpers";
 
@@ -34,8 +36,17 @@ const kill = (world, eid) => {
 };
 
 const attack = (world, aggressor, target) => {
-  const attackPower = Strength.current[aggressor];
-  Health.current[target] -= attackPower;
+  let damage = Strength.current[aggressor];
+
+  const isWielding = hasComponent(world, Wielding, aggressor);
+  if (isWielding) {
+    const wieldable = Wielding.slot[aggressor];
+    if (hasComponent(world, Damage, wieldable)) {
+      damage += Damage.current[wieldable];
+    }
+  }
+
+  Health.current[target] -= damage;
   if (Health.current[target] <= 0) {
     kill(world, target);
   }
