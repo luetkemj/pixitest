@@ -19,6 +19,7 @@ import {
   Wielding,
 } from "../components";
 import { updatePosition } from "../lib/ecsHelpers";
+import { grid } from "../lib/grid";
 
 const movementQuery = defineQuery([Position, MoveTo]);
 
@@ -71,7 +72,12 @@ export const movementSystem = (world) => {
     };
 
     // check if location is within bounds
-    if (newPos.x >= 0 && newPos.x < 100 && newPos.y >= 0 && newPos.y < 34) {
+    if (
+      newPos.x >= 0 &&
+      newPos.x < grid.width &&
+      newPos.y >= 0 &&
+      newPos.y < grid.height
+    ) {
       canMove = true;
     }
 
@@ -87,13 +93,13 @@ export const movementSystem = (world) => {
 
           if (eid === world.hero) {
             const msg = `You attack a ${world.meta[e].name}!`;
-            world.log.push(msg);
+            world.log.unshift(msg);
           } else {
             const msg = `A ${world.meta[eid].name} attacks you!`;
-            world.log.push(msg);
+            world.log.unshift(msg);
           }
         } else {
-          world.log.push("BUMP!");
+          world.log.unshift("BUMP!");
         }
       }
     });

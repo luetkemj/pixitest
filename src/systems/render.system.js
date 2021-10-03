@@ -12,7 +12,11 @@ import {
   Health,
 } from "../components";
 import { grid } from "../lib/grid";
-import { printRow } from "../lib/canvas";
+
+import { renderAmbiance } from "../ui/ambiance";
+import { renderLegend } from "../ui/legend";
+import { renderMenuTabs } from "../ui/menuTabs";
+import { renderLog } from "../ui/log";
 
 let cellWidth;
 
@@ -88,26 +92,10 @@ export const renderSystem = (world) => {
   }
 
   // RENDER UI THINGS
-  // Update adventure Log
-  _.times(3, (i) => {
-    const arr = world.log;
-    // get the last 3 messages in the log
-    const log = arr.slice(Math.max(arr.length - 3, 0));
-    const str = log[i];
-    printRow({ container: "log", row: i, str });
-  });
-
-  // Update Player stats:
-  const playerHealthMax = Health.max[world.hero];
-  const playerHealthCurrent = Health.current[world.hero];
-  if (playerHealthCurrent < 1) {
-    printRow({ container: "playerHud", row: 0, str: "You are a dead hero." });
-  }
-  printRow({
-    container: "playerHud",
-    row: 1,
-    str: `HP: ${playerHealthCurrent}/${playerHealthMax}`,
-  });
+  renderAmbiance(world);
+  renderLegend(world);
+  renderMenuTabs(world);
+  renderLog(world);
 
   return world;
 };

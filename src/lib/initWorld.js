@@ -19,7 +19,7 @@ export const initWorld = (loader) => {
   world.gameState = "GAME";
   world.turn = "WORLD";
   world.debug = false;
-  world.log = ["", "", "Welcome, Adventurer!"];
+  world.log = ["Welcome, Adventurer!"];
 
   // create the dungeon
   const dungeon = buildDungeon({
