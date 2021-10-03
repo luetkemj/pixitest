@@ -1,11 +1,12 @@
 import _ from "lodash";
-import { createWorld } from "bitecs";
+import { addComponent, createWorld } from "bitecs";
 import { grid } from "./grid";
+import { PC } from "../components";
 
 import { createFloor } from "../prefabs/floor";
 import { createGoblin } from "../prefabs/goblin";
 import { createHealthPotion } from "../prefabs/healthPotion";
-import { createHero } from "../prefabs/hero";
+import { createKnight } from "../prefabs/knight";
 import { createSword } from "../prefabs/sword";
 import { createWall } from "../prefabs/wall";
 
@@ -40,12 +41,14 @@ export const initWorld = (loader) => {
     }
   });
 
-  // create the hero
-  createHero(world, {
+  // create the knight
+  const knightEid = createKnight(world, {
     x: dungeon.rooms[0].center.x,
     y: dungeon.rooms[0].center.y,
     z: 0,
   });
+  // player is the knight
+  addComponent(world, PC, knightEid);
 
   const openTiles = _.filter(dungeon.tiles, (tile) => tile.sprite === "FLOOR");
 

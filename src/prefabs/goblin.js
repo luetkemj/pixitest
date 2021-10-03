@@ -51,4 +51,6 @@ export const createGoblin = (world, options) => {
   world.meta[eid].name = "GOBLIN";
   world.meta[eid].debugSprites = [];
   world.meta[eid].ai = { pathAlgo: "", path: [] };
+
+  return eid;
 };

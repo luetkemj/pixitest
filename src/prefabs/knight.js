@@ -7,7 +7,6 @@ import {
   Health,
   Intelligence,
   Inventory,
-  PC,
   Position,
   Render,
   Strength,
@@ -16,11 +15,10 @@ import {
 import { addSprite } from "../lib/canvas";
 import { updatePosition } from "../lib/ecsHelpers";
 
-export const createHero = (world, options) => {
+export const createKnight = (world, options) => {
   const { x, y, z } = options;
 
   const eid = addEntity(world);
-  addComponent(world, PC, eid);
   addComponent(world, Position, eid);
   addComponent(world, Render, eid);
   addComponent(world, Fov, eid);
@@ -44,11 +42,13 @@ export const createHero = (world, options) => {
   });
 
   addSprite({
-    texture: "hero",
+    texture: "knight",
     world,
     eid: eid,
   });
 
   world.meta[eid] = {};
-  world.meta[eid].name = "HERO";
+  world.meta[eid].name = "Knight";
+
+  return eid;
 };

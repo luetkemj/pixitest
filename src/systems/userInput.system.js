@@ -1,5 +1,6 @@
 import { defineQuery, addComponent } from "bitecs";
 import { PC, Position, MoveTo } from "../components";
+import * as actions from "../lib/actions";
 
 const pcQuery = defineQuery([PC]);
 
@@ -38,6 +39,9 @@ export const userInputSystem = (world) => {
       MoveTo.x[eid] = Position.x[eid] - 1;
       MoveTo.y[eid] = Position.y[eid];
       MoveTo.z[eid] = Position.z[eid];
+    }
+    if (userInput === "g") {
+      actions.get(world, eid);
     }
   }
 

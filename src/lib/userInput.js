@@ -1,5 +1,3 @@
-import * as actions from "../lib/actions";
-
 const gameplayControls = [
   "ArrowUp",
   "ArrowRight",
@@ -11,23 +9,19 @@ const gameplayControls = [
 const uiControls = ["I", "L", "Shift"];
 
 export const processUserInput = (world) => {
-  const { gameState, userInput, hero } = world;
-
-  if (userInput === "L") {
-    world.menuTab = "LOG";
-  }
+  const { gameState, userInput } = world;
 
   if (userInput === "I") {
     world.menuTab = "INVENTORY";
   }
 
+  if (userInput === "L") {
+    world.menuTab = "LOG";
+  }
+
   if (gameState === "GAME") {
     if (gameplayControls.includes(userInput)) {
       world.userInput = userInput;
-    }
-
-    if (userInput === "g") {
-      actions.get(world, hero);
     }
   }
 
