@@ -1,54 +1,34 @@
-import { addComponent } from "bitecs";
-import { MoveTo, Position } from "../components";
-import * as actions from "../lib/actions";
+const gameplayControls = [
+  "ArrowUp",
+  "ArrowRight",
+  "ArrowDown",
+  "ArrowLeft",
+  "g",
+];
+
+const uiControls = ["I", "L", "Shift"];
 
 export const processUserInput = (world) => {
-  const { gameState, userInput, hero } = world;
-
-  if (userInput === "L") {
-    world.menuTab = "LOG";
-  }
+  const { gameState, userInput } = world;
 
   if (userInput === "I") {
     world.menuTab = "INVENTORY";
   }
 
+  if (userInput === "L") {
+    world.menuTab = "LOG";
+  }
+
   if (gameState === "GAME") {
-    if (userInput === "ArrowUp") {
-      addComponent(world, MoveTo, hero);
-      MoveTo.x[hero] = Position.x[hero];
-      MoveTo.y[hero] = Position.y[hero] - 1;
-      MoveTo.z[hero] = Position.z[hero];
-    }
-    if (userInput === "ArrowRight") {
-      addComponent(world, MoveTo, hero);
-      MoveTo.x[hero] = Position.x[hero] + 1;
-      MoveTo.y[hero] = Position.y[hero];
-      MoveTo.z[hero] = Position.z[hero];
-    }
-    if (userInput === "ArrowDown") {
-      addComponent(world, MoveTo, hero);
-      MoveTo.x[hero] = Position.x[hero];
-      MoveTo.y[hero] = Position.y[hero] + 1;
-      MoveTo.z[hero] = Position.z[hero];
-    }
-    if (userInput === "ArrowLeft") {
-      addComponent(world, MoveTo, hero);
-      MoveTo.x[hero] = Position.x[hero] - 1;
-      MoveTo.y[hero] = Position.y[hero];
-      MoveTo.z[hero] = Position.z[hero];
-    }
-    if (userInput === "g") {
-      actions.get(world, hero);
+    if (gameplayControls.includes(userInput)) {
+      world.userInput = userInput;
     }
   }
 
   // update turn
-  if (["Shift", "L", "I"].includes(userInput)) {
+  if (uiControls.includes(userInput)) {
     world.turn = "PLAYER";
   } else {
     world.turn = "WORLD";
   }
-
-  world.userInput = null;
 };

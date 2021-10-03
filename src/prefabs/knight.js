@@ -15,7 +15,7 @@ import {
 import { addSprite } from "../lib/canvas";
 import { updatePosition } from "../lib/ecsHelpers";
 
-export const createHero = (world, options) => {
+export const createKnight = (world, options) => {
   const { x, y, z } = options;
 
   const eid = addEntity(world);
@@ -42,12 +42,13 @@ export const createHero = (world, options) => {
   });
 
   addSprite({
-    texture: "hero",
+    texture: "knight",
     world,
     eid: eid,
   });
 
-  world.hero = eid;
   world.meta[eid] = {};
-  world.meta[eid].name = "HERO";
+  world.meta[eid].name = "Knight";
+
+  return eid;
 };

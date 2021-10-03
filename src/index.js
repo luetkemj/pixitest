@@ -4,8 +4,10 @@ import { pipe } from "bitecs";
 import { aiSystem } from "./systems/ai.system";
 import { debugSystem } from "./systems/debug.system";
 import { fovSystem } from "./systems/fov.system";
+import { gameOverSystem } from "./systems/gameOver.system";
 import { movementSystem } from "./systems/movement.system";
 import { renderSystem } from "./systems/render.system";
+import { userInputSystem } from "./systems/userInput.system";
 
 import { processUserInput } from "./lib/userInput";
 
@@ -22,7 +24,13 @@ function initGame() {
 
   initUi(loader);
 
-  const pipelinePlayerTurn = pipe(movementSystem, fovSystem, renderSystem);
+  const pipelinePlayerTurn = pipe(
+    gameOverSystem,
+    userInputSystem,
+    movementSystem,
+    fovSystem,
+    renderSystem
+  );
   const pipelineWorldTurn = pipe(
     aiSystem,
     movementSystem,

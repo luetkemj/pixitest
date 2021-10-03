@@ -32,7 +32,7 @@ export const loadSprites = (onLoaded) => {
     .add("floor", "static/tiles/floor/floor_10.png")
     .add("goblin", "static/enemies/goblin/goblin_idle_anim_f0.png")
     .add("healthPotion", "static/props_items/potion_red.png")
-    .add("hero", "static/heroes/knight/knight_idle_anim_f0.png")
+    .add("knight", "static/heroes/knight/knight_idle_anim_f0.png")
     .add("sword", "static/heroes/knight/weapon_sword_1.png")
     .add("wall", "static/tiles/wall/wall_1.png")
 
@@ -134,7 +134,7 @@ export const initUi = () => {
       initUiRow({ container: name, row: i });
     });
   });
-  printRow({ container: "legend", row: 0, str: "You are a hero." });
+  printRow({ container: "legend", row: 0, str: "You are a Knight." });
 };
 
 export const clearContainer = (container) => {

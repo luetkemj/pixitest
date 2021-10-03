@@ -6,6 +6,7 @@ import {
   FovDistance,
   Hidden,
   InFov,
+  PC,
   Position,
   Render,
   Revealed,
@@ -27,11 +28,13 @@ const inFovQuery = defineQuery([InFov]);
 const renderQuery = defineQuery([Render]);
 const revealedQuery = defineQuery([Revealed]);
 const forgettableQuery = defineQuery([Revealed, Not(InFov), Forgettable]);
+const pcQuery = defineQuery([PC]);
 
 export const renderSystem = (world) => {
   const inFovEnts = inFovQuery(world);
   const revealedEnts = revealedQuery(world);
   const forgettableEnts = forgettableQuery(world);
+  const pcEnts = pcQuery(world);
 
   // DO FIELD OF VISION THINGS
   for (let i = 0; i < revealedEnts.length; i++) {
@@ -62,7 +65,7 @@ export const renderSystem = (world) => {
       `0x666666`,
     ];
     world.sprites[eid].tint = tintMap[FovDistance.dist[eid]] || `0x666666`;
-    if (world.hero === eid) {
+    if (pcEnts.includes(eid)) {
       world.sprites[eid].tint = 0xffffff;
     }
   }
@@ -95,7 +98,7 @@ export const renderSystem = (world) => {
 
   // RENDER UI THINGS
   renderAmbiance(world);
-  renderLegend(world);
+  renderLegend(world, pcEnts[0]);
   renderMenuTabs(world);
 
   // clear the menuTab before rendering
@@ -105,7 +108,7 @@ export const renderSystem = (world) => {
       renderMenuTabItemLog(world);
       break;
     case "INVENTORY":
-      renderMenuTabItemInventory(world);
+      renderMenuTabItemInventory(world, pcEnts[0]);
       break;
     default:
       renderMenuTabItemLog(world);

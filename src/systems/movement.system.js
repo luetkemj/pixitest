@@ -11,6 +11,7 @@ import {
   Dead,
   Forgettable,
   Health,
+  PC,
   Position,
   Render,
   Strength,
@@ -22,6 +23,7 @@ import { updatePosition } from "../lib/ecsHelpers";
 import { grid } from "../lib/grid";
 
 const movementQuery = defineQuery([Position, MoveTo]);
+const pcQuery = defineQuery([PC]);
 
 const kill = (world, eid) => {
   addComponent(world, Dead, eid);
@@ -30,10 +32,6 @@ const kill = (world, eid) => {
   removeComponent(world, Ai, eid);
   removeComponent(world, Blocking, eid);
   removeComponent(world, Forgettable, eid);
-
-  if (world.hero === eid) {
-    world.gameState = "GAMEOVER";
-  }
 };
 
 const attack = (world, aggressor, target) => {
@@ -55,6 +53,8 @@ const attack = (world, aggressor, target) => {
 
 export const movementSystem = (world) => {
   const ents = movementQuery(world);
+  const pcEnts = pcQuery(world);
+
   for (let i = 0; i < ents.length; i++) {
     const eid = ents[i];
     let canMove = false;
@@ -91,7 +91,7 @@ export const movementSystem = (world) => {
           // attack the thing!
           attack(world, eid, e);
 
-          if (eid === world.hero) {
+          if (pcEnts.includes(eid)) {
             const msg = `You attack a ${world.meta[e].name}!`;
             world.log.unshift(msg);
           } else {
@@ -113,7 +113,7 @@ export const movementSystem = (world) => {
 
     if (canMove) {
       addComponent(world, Render, eid);
-      if (eid === world.hero) {
+      if (pcEnts.includes(eid)) {
         addComponent(world, Fov, eid);
       }
     }

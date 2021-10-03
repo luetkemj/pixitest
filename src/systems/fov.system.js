@@ -4,6 +4,7 @@ import {
   FovDistance,
   InFov,
   Opaque,
+  PC,
   Position,
   Render,
   Revealed,
@@ -14,9 +15,11 @@ import { createFOV } from "../lib/fov";
 const FovQuery = defineQuery([Fov]);
 const inFovQuery = defineQuery([InFov]);
 const opaqueQuery = defineQuery([Opaque]);
+const pcQuery = defineQuery([PC]);
 
 export const fovSystem = (world) => {
   const fovEnts = FovQuery(world);
+  const pcEnts = pcQuery(world);
 
   // return if we don't need to recalc FOV
   if (!fovEnts.length) {
@@ -32,7 +35,7 @@ export const fovSystem = (world) => {
 
   // Create FOV schema
   const { width, height } = grid;
-  const origin = { x: Position.x[world.hero], y: Position.y[world.hero] };
+  const origin = { x: Position.x[pcEnts[0]], y: Position.y[pcEnts[0]] };
   const radius = 11;
   const blockingLocations = new Set();
 
