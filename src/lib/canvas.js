@@ -28,6 +28,8 @@ export const loadSprites = (onLoaded) => {
   loader
     .add("static/fonts/courier-prime-regular.json")
 
+    .add("tile", "static/tile.png")
+
     .add("corpse", "static/effects/enemy_afterdead_explosion_anim_f2.png")
     .add("floor", "static/tiles/floor/floor_10.png")
     .add("goblin", "static/enemies/goblin/goblin_idle_anim_f0.png")
