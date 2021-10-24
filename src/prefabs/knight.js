@@ -3,7 +3,6 @@ import { addComponent, addEntity } from "bitecs";
 
 import {
   Blocking,
-  Fov,
   Health,
   Intelligence,
   Inventory,
@@ -20,7 +19,6 @@ export const createKnight = (world, options) => {
 
   const eid = addEntity(world);
   addComponent(world, Position, eid);
-  addComponent(world, Fov, eid);
   addComponent(world, Health, eid);
   addComponent(world, Blocking, eid);
   addComponent(world, Intelligence, eid);

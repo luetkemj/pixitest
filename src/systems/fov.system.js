@@ -1,6 +1,5 @@
 import { defineQuery, addComponent, removeComponent } from "bitecs";
 import {
-  Fov,
   FovDistance,
   InFov,
   Opaque,
@@ -11,25 +10,12 @@ import {
 import { grid } from "../lib/grid";
 import { createFOV } from "../lib/fov";
 
-const FovQuery = defineQuery([Fov]);
 const inFovQuery = defineQuery([InFov]);
 const opaqueQuery = defineQuery([Opaque]);
 const pcQuery = defineQuery([PC]);
 
 export const fovSystem = (world) => {
-  const fovEnts = FovQuery(world);
   const pcEnts = pcQuery(world);
-
-  // return if we don't need to recalc FOV
-  if (!fovEnts.length) {
-    return world;
-  } else {
-    // clear out Fov components so we don't recalc FOV again
-    for (let i = 0; i < fovEnts.length; i++) {
-      const eid = fovEnts[i];
-      removeComponent(world, Fov, eid);
-    }
-  }
 
   // Create FOV schema
   const { width, height } = grid;

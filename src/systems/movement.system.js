@@ -14,7 +14,6 @@ import {
   PC,
   Position,
   Strength,
-  Fov,
   MoveTo,
   Wielding,
 } from "../components";
@@ -108,12 +107,6 @@ export const movementSystem = (world) => {
     }
 
     removeComponent(world, MoveTo, eid);
-
-    if (canMove) {
-      if (pcEnts.includes(eid)) {
-        addComponent(world, Fov, eid);
-      }
-    }
   }
   return world;
 };

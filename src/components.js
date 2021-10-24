@@ -14,7 +14,6 @@ export const Effects = defineComponent({
   strength: Types.i16,
 });
 export const Forgettable = defineComponent();
-export const Fov = defineComponent();
 export const FovDistance = defineComponent({ dist: Types.ui8 });
 export const Health = defineComponent(MaxCurrent);
 export const Intelligence = defineComponent(MaxCurrent);
