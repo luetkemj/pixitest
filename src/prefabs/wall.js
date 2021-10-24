@@ -26,6 +26,9 @@ export const createWall = (world, options) => {
     texture: "#",
     world,
     eid: eid,
+    options: {
+      tint: 0xaaaaaa,
+    },
   });
 
   world.meta[eid] = {};

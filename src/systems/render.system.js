@@ -35,7 +35,7 @@ export const renderSystem = (world) => {
   for (let i = 0; i < revealedEnts.length; i++) {
     const eid = revealedEnts[i];
     world.sprites[eid].renderable = true;
-    world.sprites[eid].tint = `0x555555`;
+    world.sprites[eid].alpha = 0.1;
   }
 
   for (let i = 0; i < forgettableEnts.length; i++) {
@@ -46,22 +46,10 @@ export const renderSystem = (world) => {
   for (let i = 0; i < inFovEnts.length; i++) {
     const eid = inFovEnts[i];
     world.sprites[eid].renderable = true;
-    const tintMap = [
-      `0xffffff`,
-      `0xffffff`,
-      `0xeeeeee`,
-      `0xdddddd`,
-      `0xcccccc`,
-      `0xbbbbbb`,
-      `0xaaaaaa`,
-      `0x999999`,
-      `0x888888`,
-      `0x777777`,
-      `0x666666`,
-    ];
-    world.sprites[eid].tint = tintMap[FovDistance.dist[eid]] || `0x666666`;
+    const alphaMap = [1, 1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.25, 0.25];
+    world.sprites[eid].alpha = alphaMap[FovDistance.dist[eid]] || 0.55;
     if (pcEnts.includes(eid)) {
-      world.sprites[eid].tint = 0xffffff;
+      world.sprites[eid].alpha = 1;
     }
   }
 
