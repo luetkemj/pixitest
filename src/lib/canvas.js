@@ -4,6 +4,7 @@ import { Position } from "../components";
 import { getEntityData } from "./ecsHelpers";
 import { grid } from "./grid";
 import { alphaMap } from "../../static/fonts/courier-prime-regular.map";
+import { asciMap } from "../../static/asci/asci.map";
 
 // add PIXI to the window so the devtools work
 window.PIXI = PIXI;
@@ -27,19 +28,21 @@ const loader = PIXI.Loader.shared;
 export const loadSprites = (onLoaded) => {
   loader
     .add("static/fonts/courier-prime-regular.json")
-
-    .add("tile", "static/tile.png")
-
-    .add("corpse", "static/effects/enemy_afterdead_explosion_anim_f2.png")
-    .add("floor", "static/tiles/floor/floor_10.png")
-    .add("goblin", "static/enemies/goblin/goblin_idle_anim_f0.png")
-    .add("healthPotion", "static/props_items/potion_red.png")
-    .add("knight", "static/heroes/knight/knight_idle_anim_f0.png")
-    .add("sword", "static/heroes/knight/weapon_sword_1.png")
-    .add("wall", "static/tiles/wall/wall_1.png")
-
+    .add("static/asci/asci-sprites.json")
     .load(onLoaded);
   return loader;
+};
+
+const getFontTexture = ({ char }) => {
+  return loader.resources["static/fonts/courier-prime-regular.json"].textures[
+    alphaMap[char]
+  ];
+};
+
+export const getAsciTexture = ({ char }) => {
+  return loader.resources["static/asci/asci-sprites.json"].textures[
+    asciMap[char]
+  ];
 };
 
 const containers = {};
@@ -77,16 +80,16 @@ export const addDebugSprite = ({ texture, x, y }) => {
 
 export const addSprite = ({
   container = "map",
-  texture,
+  texture = "?",
   options = {},
   world,
   eid,
 }) => {
-  const sprite = new PIXI.Sprite.from(loader.resources[texture].texture);
+  const sprite = new PIXI.Sprite(getAsciTexture({ char: texture }));
   world.sprites[eid] = _.merge(
     sprite,
     {
-      alpha: 0,
+      renderable: false,
       interactive: true,
     },
     options
@@ -109,12 +112,6 @@ export const printRow = ({ container, row, str }) => {
       char: str[i],
     });
   }
-};
-
-const getFontTexture = ({ char }) => {
-  return loader.resources["static/fonts/courier-prime-regular.json"].textures[
-    alphaMap[char]
-  ];
 };
 
 export const initUi = () => {

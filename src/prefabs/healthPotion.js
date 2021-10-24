@@ -6,7 +6,7 @@ import {
   Effects,
   Pickupable,
   Position,
-  Render,
+  Zindex,
 } from "../components";
 
 import { addSprite } from "../lib/canvas";
@@ -20,7 +20,8 @@ export const createHealthPotion = (world, options) => {
   addComponent(world, Effects, eid);
   addComponent(world, Pickupable, eid);
   addComponent(world, Position, eid);
-  addComponent(world, Render, eid);
+  addComponent(world, Zindex, eid);
+  Zindex.zIndex[eid] = 20;
 
   Effects.health[eid] = 5;
   Effects.strength[eid] = 0;
@@ -32,7 +33,7 @@ export const createHealthPotion = (world, options) => {
   });
 
   addSprite({
-    texture: "healthPotion",
+    texture: "!",
     world,
     eid: eid,
   });

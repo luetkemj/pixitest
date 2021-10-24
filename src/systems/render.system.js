@@ -1,20 +1,17 @@
 import _ from "lodash";
-import { defineQuery, hasComponent, removeComponent, Not } from "bitecs";
+import { defineQuery, hasComponent, Not } from "bitecs";
 import {
   Dead,
   Forgettable,
   FovDistance,
-  Hidden,
   InFov,
   PC,
   Position,
-  Render,
   Revealed,
-  Health,
+  Zindex,
 } from "../components";
 import { grid } from "../lib/grid";
-import { clearContainer } from "../lib/canvas";
-
+import { clearContainer, getAsciTexture } from "../lib/canvas";
 import { renderAmbiance } from "../ui/ambiance";
 import { renderLegend } from "../ui/legend";
 import { renderMenuTabs } from "../ui/menuTabs";
@@ -23,10 +20,8 @@ import { renderMenuTabItemInventory } from "../ui/menuTabItemInventory";
 
 let cellWidth;
 
-const hiddenQuery = defineQuery([Hidden]);
-const inFovQuery = defineQuery([InFov]);
-const renderQuery = defineQuery([Render]);
-const revealedQuery = defineQuery([Revealed]);
+const inFovQuery = defineQuery([InFov, Position]);
+const revealedQuery = defineQuery([Revealed, Position]);
 const forgettableQuery = defineQuery([Revealed, Not(InFov), Forgettable]);
 const pcQuery = defineQuery([PC]);
 
@@ -39,18 +34,18 @@ export const renderSystem = (world) => {
   // DO FIELD OF VISION THINGS
   for (let i = 0; i < revealedEnts.length; i++) {
     const eid = revealedEnts[i];
-    world.sprites[eid].alpha = 1;
+    world.sprites[eid].renderable = true;
     world.sprites[eid].tint = `0x555555`;
   }
 
   for (let i = 0; i < forgettableEnts.length; i++) {
     const eid = forgettableEnts[i];
-    world.sprites[eid].alpha = 0;
+    world.sprites[eid].renderable = false;
   }
 
   for (let i = 0; i < inFovEnts.length; i++) {
     const eid = inFovEnts[i];
-    world.sprites[eid].alpha = 1;
+    world.sprites[eid].renderable = true;
     const tintMap = [
       `0xffffff`,
       `0xffffff`,
@@ -70,30 +65,51 @@ export const renderSystem = (world) => {
     }
   }
 
-  // RENDER OTHER MAP THINGS
-  const renderEnts = renderQuery(world);
-  if (renderEnts.length) {
-    cellWidth = window.innerWidth / grid.width;
-  }
-  for (let i = 0; i < renderEnts.length; i++) {
-    const eid = renderEnts[i];
-    world.sprites[eid].width = cellWidth;
-    world.sprites[eid].height = cellWidth;
+  const renderEid = (eid) => {
     world.sprites[eid].x = Position.x[eid] * cellWidth;
     world.sprites[eid].y = Position.y[eid] * cellWidth;
 
     if (hasComponent(world, Dead, eid)) {
-      world.sprites[eid].texture = world.loader.resources.corpse.texture;
+      world.sprites[eid].texture = getAsciTexture({ char: "%" });
     }
+  };
 
-    removeComponent(world, Render, eid);
+  const isOnTop = (eid, eAtPos) => {
+    let zIndex = 0;
+    let eidOnTop = eid;
+    eAtPos.forEach((id) => {
+      if (Zindex.zIndex[id] > zIndex) {
+        eidOnTop = id;
+      }
+    });
+    return eidOnTop === eid;
+  };
+
+  // RENDER OTHER MAP THINGS
+  if (inFovEnts.length) {
+    cellWidth = window.innerWidth / grid.width;
   }
+  for (let i = 0; i < inFovEnts.length; i++) {
+    const eid = inFovEnts[i];
+    world.sprites[eid].width = cellWidth;
+    world.sprites[eid].height = cellWidth;
 
-  // Hide the Hidden things
-  const hiddenEnts = hiddenQuery(world);
-  for (let i = 0; i < hiddenEnts.length; i++) {
-    const eid = hiddenEnts[i];
-    world.sprites[eid].alpha = 0;
+    const locId = `${Position.x[eid]},${Position.y[eid]},0`;
+    const eAtPos = world.eAtPos[locId];
+
+    // If only one item at location - render it
+    if (eAtPos.size === 1) {
+      renderEid(eid);
+    } else {
+      // if more than one item at location
+      // render if current eid is on top
+      // else hide it
+      if (isOnTop(eid, eAtPos)) {
+        renderEid(eid);
+      } else {
+        world.sprites[eid].renderable = false;
+      }
+    }
   }
 
   // RENDER UI THINGS

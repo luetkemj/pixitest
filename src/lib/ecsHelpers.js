@@ -1,8 +1,14 @@
 import * as Components from "../components";
 import { Position } from "../components";
-import { hasComponent } from "bitecs";
+import { hasComponent, removeComponent } from "bitecs";
 
-export const updatePosition = ({ world, oldPos = {}, newPos, eid }) => {
+export const updatePosition = ({
+  world,
+  oldPos = {},
+  newPos = {},
+  eid,
+  remove = false,
+}) => {
   if (!world.eAtPos) {
     world.eAtPos = {};
   }
@@ -13,6 +19,11 @@ export const updatePosition = ({ world, oldPos = {}, newPos, eid }) => {
   // remove old pos
   if (world.eAtPos[oldLoc]) {
     world.eAtPos[oldLoc].delete(eid);
+  }
+
+  if (remove) {
+    removeComponent(world, Position, eid);
+    return;
   }
 
   // add / update new position

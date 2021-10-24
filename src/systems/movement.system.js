@@ -13,7 +13,6 @@ import {
   Health,
   PC,
   Position,
-  Render,
   Strength,
   Fov,
   MoveTo,
@@ -27,7 +26,6 @@ const pcQuery = defineQuery([PC]);
 
 const kill = (world, eid) => {
   addComponent(world, Dead, eid);
-  addComponent(world, Render, eid);
   removeComponent(world, MoveTo, eid);
   removeComponent(world, Ai, eid);
   removeComponent(world, Blocking, eid);
@@ -112,7 +110,6 @@ export const movementSystem = (world) => {
     removeComponent(world, MoveTo, eid);
 
     if (canMove) {
-      addComponent(world, Render, eid);
       if (pcEnts.includes(eid)) {
         addComponent(world, Fov, eid);
       }

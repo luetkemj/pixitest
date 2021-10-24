@@ -8,8 +8,8 @@ import {
   Health,
   Intelligence,
   Position,
-  Render,
   Strength,
+  Zindex,
 } from "../components";
 
 import { addSprite } from "../lib/canvas";
@@ -20,13 +20,14 @@ export const createGoblin = (world, options) => {
 
   const eid = addEntity(world);
   addComponent(world, Position, eid);
-  addComponent(world, Render, eid);
   addComponent(world, Blocking, eid);
   addComponent(world, Forgettable, eid);
   addComponent(world, Health, eid);
   addComponent(world, Ai, eid);
   addComponent(world, Intelligence, eid);
   addComponent(world, Strength, eid);
+  addComponent(world, Zindex, eid);
+  Zindex.zIndex[eid] = 30;
 
   Health.max[eid] = 10;
   Health.current[eid] = 10;
@@ -42,7 +43,7 @@ export const createGoblin = (world, options) => {
   });
 
   addSprite({
-    texture: "goblin",
+    texture: "g",
     world,
     eid: eid,
   });
