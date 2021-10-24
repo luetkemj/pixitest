@@ -6,6 +6,9 @@ Written in Javascript with Pixi.js and bitecs.
 
 Very much a work in progress hobby project. Just like all the others.
 
+FPS:
+~30fps at start of dev
+
 zIndex:
 10: ground
 20: items/props
