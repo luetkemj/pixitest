@@ -50,7 +50,7 @@ export const debugSystem = (world) => {
           const x = posX * cellWidth;
           const y = posY * cellWidth;
           const sprite = addDebugSprite({
-            texture: "effects/explosion_anim_f0.png",
+            texture: "%",
             x,
             y,
           });

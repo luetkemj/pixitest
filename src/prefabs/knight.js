@@ -8,8 +8,8 @@ import {
   Intelligence,
   Inventory,
   Position,
-  Render,
   Strength,
+  Zindex,
 } from "../components";
 
 import { addSprite } from "../lib/canvas";
@@ -20,13 +20,14 @@ export const createKnight = (world, options) => {
 
   const eid = addEntity(world);
   addComponent(world, Position, eid);
-  addComponent(world, Render, eid);
   addComponent(world, Fov, eid);
   addComponent(world, Health, eid);
   addComponent(world, Blocking, eid);
   addComponent(world, Intelligence, eid);
   addComponent(world, Inventory, eid);
   addComponent(world, Strength, eid);
+  addComponent(world, Zindex, eid);
+  Zindex.zIndex[eid] = 30;
 
   Health.max[eid] = 10;
   Health.current[eid] = 10;
@@ -42,7 +43,7 @@ export const createKnight = (world, options) => {
   });
 
   addSprite({
-    texture: "knight",
+    texture: "@",
     world,
     eid: eid,
   });

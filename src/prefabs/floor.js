@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { addComponent, addEntity } from "bitecs";
 
-import { Position, Render } from "../components";
+import { Position, Zindex } from "../components";
 
 import { addSprite } from "../lib/canvas";
 import { updatePosition } from "../lib/ecsHelpers";
@@ -11,7 +11,9 @@ export const createFloor = (world, options) => {
 
   const eid = addEntity(world);
   addComponent(world, Position, eid);
-  addComponent(world, Render, eid);
+
+  addComponent(world, Zindex, eid);
+  Zindex.zIndex[eid] = 10;
 
   updatePosition({
     world,
@@ -20,7 +22,7 @@ export const createFloor = (world, options) => {
   });
 
   addSprite({
-    texture: "floor",
+    texture: "•",
     world,
     eid: eid,
   });

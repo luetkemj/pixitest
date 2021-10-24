@@ -6,7 +6,6 @@ import {
   Opaque,
   PC,
   Position,
-  Render,
   Revealed,
 } from "../components";
 import { grid } from "../lib/grid";
@@ -29,7 +28,6 @@ export const fovSystem = (world) => {
     for (let i = 0; i < fovEnts.length; i++) {
       const eid = fovEnts[i];
       removeComponent(world, Fov, eid);
-      addComponent(world, Render, eid);
     }
   }
 
@@ -59,7 +57,6 @@ export const fovSystem = (world) => {
   for (let i = 0; i < inFovEnts.length; i++) {
     const eid = inFovEnts[i];
     removeComponent(world, InFov, eid);
-    addComponent(world, Render, eid);
   }
 
   FOV.fov.forEach((locId) => {
@@ -69,7 +66,6 @@ export const fovSystem = (world) => {
       eAtPos.forEach((eidAtPos) => {
         addComponent(world, FovDistance, eidAtPos);
         addComponent(world, InFov, eidAtPos);
-        addComponent(world, Render, eidAtPos);
         addComponent(world, Revealed, eidAtPos);
         FovDistance.dist[eidAtPos] = FOV.distance[locId];
       });

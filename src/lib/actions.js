@@ -1,14 +1,13 @@
 import _ from "lodash";
 import { addComponent, hasComponent, removeComponent } from "bitecs";
+import { updatePosition } from "./ecsHelpers";
 import {
   Consumable,
   Effects,
   Health,
-  Hidden,
   Inventory,
   Pickupable,
   Position,
-  Render,
   Strength,
   Wieldable,
   Wielding,
@@ -39,9 +38,16 @@ export const get = (world, eid) => {
     if (openSlot > -1) {
       Inventory.slots[eid][openSlot] = pickupAtLoc;
 
-      removeComponent(world, Position, pickupAtLoc);
-      addComponent(world, Render, pickupAtLoc);
-      addComponent(world, Hidden, pickupAtLoc);
+      updatePosition({
+        world,
+        oldPos: {
+          x: Position.x[pickupAtLoc],
+          y: Position.y[pickupAtLoc],
+          z: Position.z[pickupAtLoc],
+        },
+        eid: pickupAtLoc,
+        remove: true,
+      });
 
       world.log.unshift(`You pickup ${world.meta[pickupAtLoc].name}.`);
 
@@ -62,10 +68,6 @@ export const get = (world, eid) => {
       world.log.unshift("Your inventory is full.");
     }
   }
-
-  // check for pickup at location
-  // add pickup to entity inventory
-  // remove pickup position and render components
 };
 
 export const consume = (world, targetEid, itemEid) => {
