@@ -25,6 +25,9 @@ export const createFloor = (world, options) => {
     texture: "•",
     world,
     eid: eid,
+    options: {
+      tint: 0x555555,
+    },
   });
 
   world.meta[eid] = {};

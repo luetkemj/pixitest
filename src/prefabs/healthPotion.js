@@ -36,6 +36,9 @@ export const createHealthPotion = (world, options) => {
     texture: "!",
     world,
     eid: eid,
+    options: {
+      tint: 0xdaa520,
+    },
   });
 
   world.meta[eid] = {};

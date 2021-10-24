@@ -46,6 +46,9 @@ export const createGoblin = (world, options) => {
     texture: "g",
     world,
     eid: eid,
+    options: {
+      tint: 0x81a842,
+    },
   });
 
   world.meta[eid] = {};
