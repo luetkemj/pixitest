@@ -39,6 +39,12 @@ function initGame() {
   );
   const debugPipeline = pipe(debugSystem);
 
+  // set up for FPS
+  let fps = 0;
+  let now = null;
+  let fpsSamples = [];
+  const fpsEl = document.querySelector("#fps");
+
   function gameLoop() {
     if (world.gameState === "GAMEOVER") {
       console.log("GAME OVER");
@@ -58,6 +64,22 @@ function initGame() {
     }
 
     requestAnimationFrame(gameLoop);
+
+    // calculate frames/second
+    if (!now) {
+      now = Date.now();
+    }
+    if (Date.now() - now > 1000) {
+      fpsSamples.unshift(fps);
+      if (fpsSamples.length > 3) {
+        fpsSamples.pop();
+      }
+      fpsEl.innerHTML = Math.round(_.mean(fpsSamples));
+
+      now = Date.now();
+      fps = 0;
+    }
+    fps++;
   }
 
   gameLoop();
