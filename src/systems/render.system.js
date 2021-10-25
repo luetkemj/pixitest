@@ -4,6 +4,7 @@ import {
   Dead,
   Forgettable,
   FovDistance,
+  FovRange,
   InFov,
   PC,
   Position,
@@ -25,6 +26,15 @@ const revealedQuery = defineQuery([Revealed, Position]);
 const forgettableQuery = defineQuery([Revealed, Not(InFov), Forgettable]);
 const pcQuery = defineQuery([PC]);
 
+const fovAlphaMap = ({ range, max = 1, min = 0.3 }) => {
+  const step = (max - min) / range;
+  const alphaMap = [1];
+  for (let index = 0; index < range; index++) {
+    alphaMap.push(alphaMap[alphaMap.length - 1] - step);
+  }
+  return alphaMap;
+};
+
 export const renderSystem = (world) => {
   const inFovEnts = inFovQuery(world);
   const revealedEnts = revealedQuery(world);
@@ -35,7 +45,7 @@ export const renderSystem = (world) => {
   for (let i = 0; i < revealedEnts.length; i++) {
     const eid = revealedEnts[i];
     world.sprites[eid].renderable = true;
-    world.sprites[eid].alpha = 0.1;
+    world.sprites[eid].alpha = 0.23;
   }
 
   for (let i = 0; i < forgettableEnts.length; i++) {
@@ -43,11 +53,16 @@ export const renderSystem = (world) => {
     world.sprites[eid].renderable = false;
   }
 
+  const alphaMap = fovAlphaMap({
+    range: FovRange.dist[pcEnts[0]],
+    max: 1,
+    min: 0.3,
+  });
+
   for (let i = 0; i < inFovEnts.length; i++) {
     const eid = inFovEnts[i];
     world.sprites[eid].renderable = true;
-    const alphaMap = [1, 1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.25, 0.25];
-    world.sprites[eid].alpha = alphaMap[FovDistance.dist[eid]] || 0.55;
+    world.sprites[eid].alpha = alphaMap[FovDistance.dist[eid]] || 0.23;
     if (pcEnts.includes(eid)) {
       world.sprites[eid].alpha = 1;
     }
