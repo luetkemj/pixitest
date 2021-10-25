@@ -15,6 +15,7 @@ export const Effects = defineComponent({
 });
 export const Forgettable = defineComponent();
 export const FovDistance = defineComponent({ dist: Types.ui8 });
+export const FovRange = defineComponent({ dist: Types.ui8 });
 export const Health = defineComponent(MaxCurrent);
 export const Intelligence = defineComponent(MaxCurrent);
 export const InFov = defineComponent();

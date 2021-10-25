@@ -1,6 +1,7 @@
 import { defineQuery, addComponent, removeComponent } from "bitecs";
 import {
   FovDistance,
+  FovRange,
   InFov,
   Opaque,
   PC,
@@ -20,7 +21,7 @@ export const fovSystem = (world) => {
   // Create FOV schema
   const { width, height } = grid;
   const origin = { x: Position.x[pcEnts[0]], y: Position.y[pcEnts[0]] };
-  const radius = 11;
+  const radius = FovRange.dist[pcEnts[0]];
   const blockingLocations = new Set();
 
   const blockingEnts = opaqueQuery(world);
