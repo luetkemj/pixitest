@@ -17,10 +17,17 @@ import { loadSprites, initUi } from "./lib/canvas";
 // pixi loader load all the sprites and initialize game
 const loader = loadSprites(initGame);
 
+let mode = "GAME";
+const setMode = (str) => (mode = str);
+const getMode = () => mode;
+
 function initGame() {
   const { world } = initWorld(loader);
   world.loader = loader;
   world.menuTab = "LOG";
+  world.mode = mode;
+  world.getMode = getMode;
+  world.setMode = setMode;
 
   initUi(loader);
 
@@ -37,6 +44,9 @@ function initGame() {
     fovSystem,
     renderSystem
   );
+
+  const uiPipeline = pipe(userInputSystem, renderSystem);
+
   const debugPipeline = pipe(debugSystem);
 
   // set up for FPS
@@ -46,21 +56,29 @@ function initGame() {
   const fpsEl = document.querySelector("#fps");
 
   function gameLoop() {
-    if (world.gameState === "GAMEOVER") {
+    if (mode === "GAMEOVER") {
       console.log("GAME OVER");
       return;
     }
 
-    if (world.userInput && world.turn === "PLAYER") {
+    if (world.userInput && ["INVENTORY", "LOG"].includes(mode)) {
+      console.log("UI UI UI");
       processUserInput(world);
-      pipelinePlayerTurn(world);
-      debugPipeline(world);
+      uiPipeline(world);
     }
 
-    if (world.turn === "WORLD") {
-      pipelineWorldTurn(world);
-      debugPipeline(world);
-      world.turn = "PLAYER";
+    if (mode === "GAME") {
+      if (world.userInput && world.turn === "PLAYER") {
+        processUserInput(world);
+        pipelinePlayerTurn(world);
+        debugPipeline(world);
+      }
+
+      if (world.turn === "WORLD") {
+        pipelineWorldTurn(world);
+        debugPipeline(world);
+        world.turn = "PLAYER";
+      }
     }
 
     requestAnimationFrame(gameLoop);

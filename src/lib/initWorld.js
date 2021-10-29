@@ -17,7 +17,6 @@ export const initWorld = (loader) => {
   const world = createWorld();
   world.sprites = [];
   world.meta = [];
-  world.gameState = "GAME";
   world.turn = "WORLD";
   world.debug = false;
   world.log = ["Welcome, Adventurer!"];

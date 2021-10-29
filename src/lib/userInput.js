@@ -6,20 +6,30 @@ const gameplayControls = [
   "g",
 ];
 
-const uiControls = ["I", "L", "Shift"];
+const uiControls = ["Escape", "i", "k", "l", "Shift"];
 
 export const processUserInput = (world) => {
-  const { gameState, userInput } = world;
+  const { userInput } = world;
 
-  if (userInput === "I") {
+  if (userInput === "Escape") {
+    world.setMode("GAME");
+  }
+
+  if (userInput === "i") {
     world.menuTab = "INVENTORY";
+    world.setMode("INVENTORY");
   }
 
-  if (userInput === "L") {
+  if (userInput === "k") {
+    world.setMode("LOOKING");
+  }
+
+  if (userInput === "l") {
     world.menuTab = "LOG";
+    world.setMode("LOG");
   }
 
-  if (gameState === "GAME") {
+  if (world.getMode() === "GAME") {
     if (gameplayControls.includes(userInput)) {
       world.userInput = userInput;
     }

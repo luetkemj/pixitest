@@ -7,7 +7,7 @@ export const gameOverSystem = (world) => {
   const ents = deadPCQuery(world);
 
   if (ents.length) {
-    world.gameState = "GAMEOVER";
+    world.setMode("GAMEOVER");
   }
 
   return world;
