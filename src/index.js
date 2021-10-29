@@ -24,7 +24,6 @@ const getMode = () => mode;
 function initGame() {
   const { world } = initWorld(loader);
   world.loader = loader;
-  world.menuTab = "LOG";
   world.mode = mode;
   world.getMode = getMode;
   world.setMode = setMode;

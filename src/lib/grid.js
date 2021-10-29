@@ -12,7 +12,7 @@ export const grid = {
   },
 
   map: {
-    width: 43,
+    width: 87,
     height: 43,
     x: 13,
     y: 1,

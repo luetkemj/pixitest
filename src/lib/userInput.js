@@ -16,7 +16,6 @@ export const processUserInput = (world) => {
   }
 
   if (userInput === "i") {
-    world.menuTab = "INVENTORY";
     world.setMode("INVENTORY");
   }
 
@@ -25,7 +24,6 @@ export const processUserInput = (world) => {
   }
 
   if (userInput === "l") {
-    world.menuTab = "LOG";
     world.setMode("LOG");
   }
 

@@ -122,15 +122,13 @@ export const renderSystem = (world) => {
 
   // clear the menuTab before rendering
   clearContainer("menuTabItem");
-  switch (world.menuTab) {
+  switch (world.getMode()) {
     case "LOG":
       renderMenuTabItemLog(world);
       break;
     case "INVENTORY":
       renderMenuTabItemInventory(world, pcEnts[0]);
       break;
-    default:
-      renderMenuTabItemLog(world);
   }
 
   return world;
