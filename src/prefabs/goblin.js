@@ -7,8 +7,10 @@ import {
   Forgettable,
   Health,
   Intelligence,
+  Pickupable,
   Position,
   Strength,
+  Wieldable,
   Zindex,
 } from "../components";
 
@@ -25,7 +27,9 @@ export const createGoblin = (world, options) => {
   addComponent(world, Health, eid);
   addComponent(world, Ai, eid);
   addComponent(world, Intelligence, eid);
+  addComponent(world, Pickupable, eid);
   addComponent(world, Strength, eid);
+  addComponent(world, Wieldable, eid);
   addComponent(world, Zindex, eid);
   Zindex.zIndex[eid] = 30;
 

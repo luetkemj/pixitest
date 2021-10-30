@@ -61,7 +61,6 @@ function initGame() {
     }
 
     if (world.userInput && ["INVENTORY", "LOG"].includes(mode)) {
-      console.log("UI UI UI");
       processUserInput(world);
       uiPipeline(world);
     }
