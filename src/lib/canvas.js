@@ -53,10 +53,14 @@ containerNames.forEach((name) => {
   const x = grid[name].x * cellW;
   const y = grid[name].y * cellW;
 
-  const graphics = new PIXI.Graphics();
-  graphics.beginFill(0x000000);
-  graphics.drawRect(0, 0, width, height);
-  graphics.endFill();
+  let graphics;
+
+  if (name === "menu") {
+    graphics = new PIXI.Graphics();
+    graphics.beginFill(0x000000);
+    graphics.drawRect(0, 0, width, height);
+    graphics.endFill();
+  }
 
   containers[name] = new PIXI.Container();
   containers[name].width = width;
@@ -65,7 +69,7 @@ containerNames.forEach((name) => {
   containers[name].y = y;
 
   app.stage.addChild(containers[name]);
-  containers[name].addChild(graphics);
+  graphics && containers[name].addChild(graphics);
 });
 
 const uiSprites = {};

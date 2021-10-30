@@ -27,9 +27,9 @@ export const grid = {
 
   menu: {
     width: 87,
-    height: 43,
+    height: 44,
     x: 13,
-    y: 1,
+    y: 0,
   },
 };
 
