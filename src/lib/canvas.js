@@ -46,7 +46,7 @@ export const getAsciTexture = ({ char }) => {
 };
 
 const containers = {};
-const containerNames = ["legend", "map", "ambiance", "menuTabs", "menuTabItem"];
+const containerNames = ["legend", "map", "ambiance", "menu"];
 containerNames.forEach((name) => {
   containers[name] = new PIXI.Container();
   containers[name].width = grid[name].width * cellW;
@@ -57,12 +57,7 @@ containerNames.forEach((name) => {
 });
 
 const uiSprites = {};
-const uiSpriteContainerNames = [
-  "legend",
-  "ambiance",
-  "menuTabs",
-  "menuTabItem",
-];
+const uiSpriteContainerNames = ["legend", "ambiance", "menu"];
 uiSpriteContainerNames.forEach((name) => {
   // create array structure for storing uiSprites for later use
   uiSprites[name] = Array.from(Array(grid[name].height), () => []);

@@ -15,9 +15,8 @@ import { grid } from "../lib/grid";
 import { clearContainer, getAsciTexture } from "../lib/canvas";
 import { renderAmbiance } from "../ui/ambiance";
 import { renderLegend } from "../ui/legend";
-import { renderMenuTabs } from "../ui/menuTabs";
-import { renderMenuTabItemLog } from "../ui/menuTabItemLog";
-import { renderMenuTabItemInventory } from "../ui/menuTabItemInventory";
+import { renderMenuLog } from "../ui/menuLog";
+import { renderMenuInventory } from "../ui/menuInventory";
 
 let cellWidth;
 
@@ -118,16 +117,15 @@ export const renderSystem = (world) => {
   // RENDER UI THINGS
   renderAmbiance(world);
   renderLegend(world, pcEnts[0]);
-  renderMenuTabs(world);
 
   // clear the menuTab before rendering
-  clearContainer("menuTabItem");
+  clearContainer("menu");
   switch (world.getMode()) {
     case "LOG":
-      renderMenuTabItemLog(world);
+      renderMenuLog(world);
       break;
     case "INVENTORY":
-      renderMenuTabItemInventory(world, pcEnts[0]);
+      renderMenuInventory(world, pcEnts[0]);
       break;
   }
 
