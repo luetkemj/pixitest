@@ -12,7 +12,12 @@ import {
   Zindex,
 } from "../components";
 import { grid } from "../lib/grid";
-import { clearContainer, getAsciTexture } from "../lib/canvas";
+import {
+  clearContainer,
+  hideContainer,
+  showContainer,
+  getAsciTexture,
+} from "../lib/canvas";
 import { renderAmbiance } from "../ui/ambiance";
 import { renderLegend } from "../ui/legend";
 import { renderMenuLog } from "../ui/menuLog";
@@ -122,11 +127,15 @@ export const renderSystem = (world) => {
   clearContainer("menu");
   switch (world.getMode()) {
     case "LOG":
+      showContainer("menu");
       renderMenuLog(world);
       break;
     case "INVENTORY":
+      showContainer("menu");
       renderMenuInventory(world, pcEnts[0]);
       break;
+    default:
+      hideContainer("menu");
   }
 
   return world;

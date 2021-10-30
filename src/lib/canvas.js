@@ -48,12 +48,24 @@ export const getAsciTexture = ({ char }) => {
 const containers = {};
 const containerNames = ["legend", "map", "ambiance", "menu"];
 containerNames.forEach((name) => {
+  const width = grid[name].width * cellW;
+  const height = grid[name].height * cellW;
+  const x = grid[name].x * cellW;
+  const y = grid[name].y * cellW;
+
+  const graphics = new PIXI.Graphics();
+  graphics.beginFill(0x000000);
+  graphics.drawRect(0, 0, width, height);
+  graphics.endFill();
+
   containers[name] = new PIXI.Container();
-  containers[name].width = grid[name].width * cellW;
-  containers[name].height = grid[name].height * cellW;
-  containers[name].x = grid[name].x * cellW;
-  containers[name].y = grid[name].y * cellW;
+  containers[name].width = width;
+  containers[name].height = height;
+  containers[name].x = x;
+  containers[name].y = y;
+
   app.stage.addChild(containers[name]);
+  containers[name].addChild(graphics);
 });
 
 const uiSprites = {};
@@ -136,4 +148,12 @@ export const clearContainer = (container) => {
   uiSprites[container].forEach((row, i) => {
     printRow({ container, row: i, str });
   });
+};
+
+export const hideContainer = (container) => {
+  containers[container].visible = false;
+};
+
+export const showContainer = (container) => {
+  containers[container].visible = true;
 };
