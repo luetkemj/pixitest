@@ -57,24 +57,31 @@ export const updatePosition = ({
   Position.z[eid] = newPos.z;
 };
 
+export const walkInventoryTree = (world, eid, inventoryComponent, callBack) => {
+  if (!hasComponent(world, inventoryComponent, eid)) return;
+
+  const walkTree = (eid) => {
+    const branch = inventoryComponent.slots[eid];
+    _.each(branch, (partEid) => {
+      if (partEid) {
+        callBack(eid, partEid);
+        if (hasComponent(world, inventoryComponent, partEid)) {
+          walkTree(partEid);
+        }
+      }
+    });
+  };
+  walkTree(eid);
+};
+
 export const getEntityAnatomy = (world, eid) => {
   if (!hasComponent(world, Body, eid)) return;
   const anatomy = [];
 
   // recursivley build anatomy
-  const getParts = (eid) => {
-    const parts = Body.slots[eid];
-    parts.forEach((partEid) => {
-      if (partEid) {
-        anatomy.push(partEid);
-        if (hasComponent(world, Body, partEid)) {
-          getParts(partEid);
-        }
-      }
-    });
-  };
-
-  getParts(eid);
+  walkInventoryTree(world, eid, Body, (rootEid, currentEid) => {
+    anatomy.push(currentEid);
+  });
   return anatomy.map((partEid) => world.meta[partEid].name);
 };
 

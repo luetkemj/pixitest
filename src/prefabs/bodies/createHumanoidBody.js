@@ -50,6 +50,7 @@ export const createHumanoidBody = (world, parentEid) => {
     addComponent(world, Pickupable, partEid);
     addComponent(world, Wieldable, partEid);
     addComponent(world, Zindex, partEid);
+    Zindex.zIndex[partEid] = 20;
   });
 
   // Torso
