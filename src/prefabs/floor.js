@@ -31,5 +31,5 @@ export const createFloor = (world, options) => {
   });
 
   world.meta[eid] = {};
-  world.meta[eid].name = "WALL";
+  world.meta[eid].name = "FLOOR";
 };

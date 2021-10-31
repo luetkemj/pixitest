@@ -27,6 +27,7 @@ function initGame() {
   world.mode = mode;
   world.getMode = getMode;
   world.setMode = setMode;
+  world.looking = null;
 
   initUi(loader);
 
@@ -60,7 +61,7 @@ function initGame() {
       return;
     }
 
-    if (world.userInput && ["INVENTORY", "LOG"].includes(mode)) {
+    if (world.userInput && ["INVENTORY", "LOG", "LOOKING"].includes(mode)) {
       processUserInput(world);
       uiPipeline(world);
     }
@@ -101,7 +102,7 @@ function initGame() {
   gameLoop();
 
   document.addEventListener("keydown", (ev) => {
-    world.userInput = ev.key;
+    world.userInput = ev;
   });
 
   document.querySelector("#debug").addEventListener("click", () => {

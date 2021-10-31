@@ -22,6 +22,7 @@ import { renderAmbiance } from "../ui/ambiance";
 import { renderLegend } from "../ui/legend";
 import { renderMenuLog } from "../ui/menuLog";
 import { renderMenuInventory } from "../ui/menuInventory";
+import { renderLooking } from "../ui/looking";
 
 let cellWidth;
 
@@ -123,19 +124,43 @@ export const renderSystem = (world) => {
   renderAmbiance(world);
   renderLegend(world, pcEnts[0]);
 
-  // clear the menuTab before rendering
-  clearContainer("menu");
-  switch (world.getMode()) {
-    case "LOG":
-      showContainer("menu");
-      renderMenuLog(world);
-      break;
-    case "INVENTORY":
-      showContainer("menu");
-      renderMenuInventory(world, pcEnts[0]);
-      break;
-    default:
-      hideContainer("menu");
+  // hide menu and overlay
+  hideContainer("menu");
+  hideContainer("overlay");
+
+  // do overlay things
+  if (["LOOKING"].includes(world.getMode())) {
+    // clear the menuTab before rendering
+    clearContainer("overlay");
+
+    switch (world.getMode()) {
+      case "LOOKING":
+        showContainer("overlay");
+        renderLooking(world, pcEnts[0]);
+        break;
+    }
+  }
+
+  // reset lookingAt if not in LOOKING mode
+  if (!["LOOKING"].includes(world.getMode())) {
+    world.lookingAt = null;
+  }
+
+  // do menu things
+  if (["LOG", "INVENTORY"].includes(world.getMode())) {
+    // clear the menuTab before rendering
+    clearContainer("menu");
+
+    switch (world.getMode()) {
+      case "LOG":
+        showContainer("menu");
+        renderMenuLog(world);
+        break;
+      case "INVENTORY":
+        showContainer("menu");
+        renderMenuInventory(world, pcEnts[0]);
+        break;
+    }
   }
 
   return world;

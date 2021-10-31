@@ -18,6 +18,13 @@ export const grid = {
     y: 1,
   },
 
+  overlay: {
+    width: 87,
+    height: 43,
+    x: 13,
+    y: 1,
+  },
+
   ambiance: {
     width: 87,
     height: 1,
