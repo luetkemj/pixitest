@@ -12,12 +12,17 @@ import {
   Zindex,
 } from "../components";
 import { grid } from "../lib/grid";
-import { clearContainer, getAsciTexture } from "../lib/canvas";
+import {
+  clearContainer,
+  hideContainer,
+  showContainer,
+  getAsciTexture,
+} from "../lib/canvas";
 import { renderAmbiance } from "../ui/ambiance";
 import { renderLegend } from "../ui/legend";
-import { renderMenuTabs } from "../ui/menuTabs";
-import { renderMenuTabItemLog } from "../ui/menuTabItemLog";
-import { renderMenuTabItemInventory } from "../ui/menuTabItemInventory";
+import { renderMenuLog } from "../ui/menuLog";
+import { renderMenuInventory } from "../ui/menuInventory";
+import { renderLooking } from "../ui/looking";
 
 let cellWidth;
 
@@ -118,19 +123,44 @@ export const renderSystem = (world) => {
   // RENDER UI THINGS
   renderAmbiance(world);
   renderLegend(world, pcEnts[0]);
-  renderMenuTabs(world);
 
-  // clear the menuTab before rendering
-  clearContainer("menuTabItem");
-  switch (world.menuTab) {
-    case "LOG":
-      renderMenuTabItemLog(world);
-      break;
-    case "INVENTORY":
-      renderMenuTabItemInventory(world, pcEnts[0]);
-      break;
-    default:
-      renderMenuTabItemLog(world);
+  // hide menu and overlay
+  hideContainer("menu");
+  hideContainer("overlay");
+
+  // do overlay things
+  if (["LOOKING"].includes(world.getMode())) {
+    // clear the menuTab before rendering
+    clearContainer("overlay");
+
+    switch (world.getMode()) {
+      case "LOOKING":
+        showContainer("overlay");
+        renderLooking(world, pcEnts[0]);
+        break;
+    }
+  }
+
+  // reset lookingAt if not in LOOKING mode
+  if (!["LOOKING"].includes(world.getMode())) {
+    world.lookingAt = null;
+  }
+
+  // do menu things
+  if (["LOG", "INVENTORY"].includes(world.getMode())) {
+    // clear the menuTab before rendering
+    clearContainer("menu");
+
+    switch (world.getMode()) {
+      case "LOG":
+        showContainer("menu");
+        renderMenuLog(world);
+        break;
+      case "INVENTORY":
+        showContainer("menu");
+        renderMenuInventory(world, pcEnts[0]);
+        break;
+    }
   }
 
   return world;

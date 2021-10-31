@@ -46,23 +46,34 @@ export const getAsciTexture = ({ char }) => {
 };
 
 const containers = {};
-const containerNames = ["legend", "map", "ambiance", "menuTabs", "menuTabItem"];
+const containerNames = ["legend", "map", "ambiance", "menu", "overlay"];
 containerNames.forEach((name) => {
+  const width = grid[name].width * cellW;
+  const height = grid[name].height * cellW;
+  const x = grid[name].x * cellW;
+  const y = grid[name].y * cellW;
+
+  let graphics;
+
+  if (name === "menu") {
+    graphics = new PIXI.Graphics();
+    graphics.beginFill(0x000000);
+    graphics.drawRect(0, 0, width, height);
+    graphics.endFill();
+  }
+
   containers[name] = new PIXI.Container();
-  containers[name].width = grid[name].width * cellW;
-  containers[name].height = grid[name].height * cellW;
-  containers[name].x = grid[name].x * cellW;
-  containers[name].y = grid[name].y * cellW;
+  containers[name].width = width;
+  containers[name].height = height;
+  containers[name].x = x;
+  containers[name].y = y;
+
   app.stage.addChild(containers[name]);
+  graphics && containers[name].addChild(graphics);
 });
 
 const uiSprites = {};
-const uiSpriteContainerNames = [
-  "legend",
-  "ambiance",
-  "menuTabs",
-  "menuTabItem",
-];
+const uiSpriteContainerNames = ["legend", "ambiance", "menu", "overlay"];
 uiSpriteContainerNames.forEach((name) => {
   // create array structure for storing uiSprites for later use
   uiSprites[name] = Array.from(Array(grid[name].height), () => []);
@@ -106,21 +117,38 @@ export const addSprite = ({
   containers[container].addChild(world.sprites[eid]);
 };
 
-export const printRow = ({ container, row, str }) => {
-  for (let i = 0; i < uiSprites[container][row].length; i++) {
-    uiSprites[container][row][i].texture = getFontTexture({
-      char: str[i],
-    });
+export const printRow = ({
+  container,
+  row,
+  col = 0,
+  str,
+  color = 0xffffff,
+  halfWidth = true,
+}) => {
+  for (let i = 0; i < uiSprites[container][row].length - col; i++) {
+    uiSprites[container][row][i + col].tint = color;
+
+    if (halfWidth) {
+      uiSprites[container][row][i + col].texture = getFontTexture({
+        char: str[i],
+      });
+    } else {
+      uiSprites[container][row][i + col].texture = getAsciTexture({
+        char: str[i],
+      });
+    }
   }
 };
 
 export const initUi = () => {
-  const initUiRow = ({ container, row }) => {
+  const initUiRow = ({ container, row, halfWidth = true }) => {
     _.times(grid[container].width * 2, (i) => {
       const sprite = new PIXI.Sprite(getFontTexture({ char: "" }));
-      sprite.width = cellHfW;
+      const width = halfWidth ? cellHfW : cellW;
+
+      sprite.width = width;
       sprite.height = cellW;
-      sprite.x = i * cellHfW;
+      sprite.x = i * width;
       sprite.y = row * cellW;
 
       uiSprites[container][row][i] = sprite;
@@ -130,7 +158,11 @@ export const initUi = () => {
 
   uiSpriteContainerNames.forEach((name) => {
     _.times(grid[name].height, (i) => {
-      initUiRow({ container: name, row: i });
+      if (name === "overlay") {
+        initUiRow({ container: name, row: i, halfWidth: false });
+      } else {
+        initUiRow({ container: name, row: i });
+      }
     });
   });
   printRow({ container: "legend", row: 0, str: "You are a Knight." });
@@ -141,4 +173,12 @@ export const clearContainer = (container) => {
   uiSprites[container].forEach((row, i) => {
     printRow({ container, row: i, str });
   });
+};
+
+export const hideContainer = (container) => {
+  containers[container].visible = false;
+};
+
+export const showContainer = (container) => {
+  containers[container].visible = true;
 };

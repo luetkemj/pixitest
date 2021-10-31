@@ -12,38 +12,31 @@ export const grid = {
   },
 
   map: {
-    width: 43,
+    width: 87,
+    height: 43,
+    x: 13,
+    y: 1,
+  },
+
+  overlay: {
+    width: 87,
     height: 43,
     x: 13,
     y: 1,
   },
 
   ambiance: {
-    width: 43,
+    width: 87,
     height: 1,
     x: 13,
     y: 0,
   },
 
   menu: {
-    width: 45,
+    width: 87,
     height: 44,
-    x: 55,
+    x: 13,
     y: 0,
-  },
-
-  menuTabs: {
-    width: 45,
-    height: 2,
-    x: 55,
-    y: 0,
-  },
-
-  menuTabItem: {
-    width: 45,
-    height: 42,
-    x: 55,
-    y: 2,
   },
 };
 
