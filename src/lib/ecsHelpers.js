@@ -1,6 +1,24 @@
+import _ from "lodash";
 import * as Components from "../components";
-import { Position } from "../components";
+import { Body, Position } from "../components";
 import { hasComponent, removeComponent } from "bitecs";
+
+export const findEmptySlot = ({ component, containerEid }) => {
+  const slots = component.slots[containerEid];
+  const openSlot = _.findIndex(slots, (slot) => slot === 0);
+  return openSlot;
+};
+
+export const fillFirstEmptySlot = ({ component, containerEid, itemEid }) => {
+  const emptySlot = findEmptySlot({ component, containerEid });
+
+  if (emptySlot > -1) {
+    component.slots[containerEid][emptySlot] = itemEid;
+    return true;
+  } else {
+    return false;
+  }
+};
 
 export const updatePosition = ({
   world,
@@ -39,6 +57,27 @@ export const updatePosition = ({
   Position.z[eid] = newPos.z;
 };
 
+export const getEntityAnatomy = (world, eid) => {
+  if (!hasComponent(world, Body, eid)) return;
+  const anatomy = [];
+
+  // recursivley build anatomy
+  const getParts = (eid) => {
+    const parts = Body.slots[eid];
+    parts.forEach((partEid) => {
+      if (partEid) {
+        anatomy.push(partEid);
+        if (hasComponent(world, Body, partEid)) {
+          getParts(partEid);
+        }
+      }
+    });
+  };
+
+  getParts(eid);
+  return anatomy.map((partEid) => world.meta[partEid].name);
+};
+
 export const getEntityData = (world, eid) => {
   const components = Object.keys(Components).reduce((acc, key) => {
     const component = Components[key];
@@ -58,6 +97,7 @@ export const getEntityData = (world, eid) => {
     name: world.meta[eid] && world.meta[eid].name,
     components,
     sprite: world.sprites[eid],
+    body: getEntityAnatomy(world, eid),
     meta: world.meta[eid],
   };
 };

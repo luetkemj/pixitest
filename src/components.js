@@ -6,6 +6,7 @@ const MaxCurrent = { max: Types.i16, current: Types.i16 };
 export const Ai = defineComponent();
 export const Attack = defineComponent(MaxCurrent);
 export const Blocking = defineComponent();
+export const Body = defineComponent({ slots: [Types.eid, 5] });
 export const Consumable = defineComponent();
 export const Damage = defineComponent(MaxCurrent);
 export const Dead = defineComponent();

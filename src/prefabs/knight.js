@@ -3,6 +3,7 @@ import { addComponent, addEntity } from "bitecs";
 
 import {
   Blocking,
+  Body,
   FovRange,
   Health,
   Intelligence,
@@ -11,6 +12,8 @@ import {
   Strength,
   Zindex,
 } from "../components";
+
+import { createHumanoidBody } from "./bodies/createHumanoidBody";
 
 import { addSprite } from "../lib/canvas";
 import { updatePosition } from "../lib/ecsHelpers";
@@ -21,6 +24,7 @@ export const createKnight = (world, options) => {
   const eid = addEntity(world);
   addComponent(world, Position, eid);
   addComponent(world, Health, eid);
+  addComponent(world, Body, eid);
   addComponent(world, Blocking, eid);
   addComponent(world, FovRange, eid);
   addComponent(world, Intelligence, eid);
@@ -36,6 +40,8 @@ export const createKnight = (world, options) => {
   Strength.max[eid] = 5;
   Strength.current[eid] = 5;
   Zindex.zIndex[eid] = 30;
+
+  createHumanoidBody(world, eid);
 
   updatePosition({
     world,
