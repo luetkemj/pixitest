@@ -87,6 +87,7 @@ export const renderSystem = (world) => {
     let eidOnTop = eid;
     eAtPos.forEach((id) => {
       if (Zindex.zIndex[id] > zIndex) {
+        zIndex = Zindex.zIndex[id];
         eidOnTop = id;
       }
     });

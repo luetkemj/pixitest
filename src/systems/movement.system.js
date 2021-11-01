@@ -1,3 +1,4 @@
+import _ from "lodash";
 import {
   defineQuery,
   addComponent,
@@ -7,6 +8,7 @@ import {
 import {
   Ai,
   Blocking,
+  Body,
   Damage,
   Dead,
   Forgettable,
@@ -16,8 +18,10 @@ import {
   Strength,
   MoveTo,
   Wielding,
+  Zindex,
 } from "../components";
-import { updatePosition } from "../lib/ecsHelpers";
+import { walkInventoryTree, updatePosition } from "../lib/ecsHelpers";
+import { addSprite } from "../lib/canvas";
 import { grid } from "../lib/grid";
 
 const movementQuery = defineQuery([Position, MoveTo]);
@@ -29,6 +33,7 @@ const kill = (world, eid) => {
   removeComponent(world, Ai, eid);
   removeComponent(world, Blocking, eid);
   removeComponent(world, Forgettable, eid);
+  Zindex.zIndex[eid] = 20;
 };
 
 const attack = (world, aggressor, target) => {
@@ -41,6 +46,37 @@ const attack = (world, aggressor, target) => {
       damage += Damage.current[wieldable];
     }
   }
+
+  // TESTING
+  walkInventoryTree(world, target, Body, (rootEid, currentEid) => {
+    if (world.meta[currentEid].name === "Right Leg") {
+      const slot = _.findIndex(
+        Body.slots[rootEid],
+        (eid) => eid === currentEid
+      );
+
+      Body.slots[rootEid][slot] = 0;
+
+      const newPos = {
+        x: Position.x[target],
+        y: Position.y[target],
+        z: Position.z[target],
+      };
+      updatePosition({ world, newPos, eid: currentEid });
+
+      if (!world.sprites[currentEid]) {
+        addSprite({
+          texture: "~",
+          world,
+          eid: currentEid,
+          options: {
+            tint: 0xd0212d,
+          },
+        });
+      }
+    }
+  });
+  // TESTING
 
   Health.current[target] -= damage;
   if (Health.current[target] <= 0) {
