@@ -3,8 +3,8 @@ import * as PIXI from "pixi.js";
 import { Position } from "../components";
 import { getEntityData } from "./ecsHelpers";
 import { grid } from "./grid";
-import { alphaMap } from "../../static/fonts/courier-prime-regular.map";
-import { asciMap } from "../../static/asci/asci.map";
+import { menloBoldAlphaMap } from "../../static/fonts/menlo-bold.map";
+import { menloBoldHalfAlphaMap } from "../../static/fonts/menlo-bold-half.map";
 
 // add PIXI to the window so the devtools work
 window.PIXI = PIXI;
@@ -27,21 +27,23 @@ const loader = PIXI.Loader.shared;
 // load sprites
 export const loadSprites = (onLoaded) => {
   loader
-    .add("static/fonts/courier-prime-regular.json")
-    .add("static/asci/asci-sprites.json")
+    .add("static/fonts/menlo-bold.json")
+    .add("static/fonts/menlo-reg.json")
+    .add("static/fonts/menlo-reg-half.json")
+    .add("static/fonts/menlo-bold-half.json")
     .load(onLoaded);
   return loader;
 };
 
 const getFontTexture = ({ char }) => {
-  return loader.resources["static/fonts/courier-prime-regular.json"].textures[
-    alphaMap[char]
+  return loader.resources["static/fonts/menlo-bold-half.json"].textures[
+    menloBoldHalfAlphaMap[char]
   ];
 };
 
 export const getAsciTexture = ({ char }) => {
-  return loader.resources["static/asci/asci-sprites.json"].textures[
-    asciMap[char]
+  return loader.resources["static/fonts/menlo-bold.json"].textures[
+    menloBoldAlphaMap[char]
   ];
 };
 
