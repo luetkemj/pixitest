@@ -32,5 +32,7 @@ export const createWall = (world, options) => {
   });
 
   world.meta[eid] = {};
-  world.meta[eid].name = "WALL";
+  world.meta[eid].name = "wall";
+  world.meta[eid].description =
+    "One of the sides of a room or building connecting floor and ceiling or foundation and roof";
 };

@@ -36,5 +36,7 @@ export const createSword = (world, options) => {
   });
 
   world.meta[eid] = {};
-  world.meta[eid].name = "Sword";
+  world.meta[eid].name = "sword";
+  world.meta[eid].description =
+    "A weapon with a long blade for cutting or thrusting that is often used as a symbol of honor or authority";
 };

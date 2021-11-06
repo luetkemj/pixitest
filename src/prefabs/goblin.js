@@ -62,7 +62,10 @@ export const createGoblin = (world, options) => {
   });
 
   world.meta[eid] = {};
-  world.meta[eid].name = "GOBLIN";
+  world.meta[eid].name = "goblin";
+  world.meta[eid].description =
+    "An ugly or grotesque sprite that is usually mischievous and sometimes evil and malicious";
+
   world.meta[eid].debugSprites = [];
   world.meta[eid].ai = { pathAlgo: "", path: [] };
 

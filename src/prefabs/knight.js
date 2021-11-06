@@ -56,7 +56,9 @@ export const createKnight = (world, options) => {
   });
 
   world.meta[eid] = {};
-  world.meta[eid].name = "Knight";
+  world.meta[eid].name = "knight";
+  world.meta[eid].description =
+    "A shiny pompous tin can of a creature with a comically large red feather plume potruding from it's head";
 
   return eid;
 };

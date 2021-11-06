@@ -42,5 +42,7 @@ export const createHealthPotion = (world, options) => {
   });
 
   world.meta[eid] = {};
-  world.meta[eid].name = "Health Potion";
+  world.meta[eid].name = "health potion";
+  world.meta[eid].description =
+    "A shimmering red liquid in a small glass vial.";
 };
