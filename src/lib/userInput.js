@@ -1,3 +1,6 @@
+import { Inventory } from "../components";
+import { walkInventoryTree } from "./ecsHelpers";
+
 const gameplayControls = [
   "ArrowUp",
   "ArrowRight",
@@ -9,6 +12,8 @@ const gameplayControls = [
 const uiControls = ["Escape", "i", "k", "l", "Shift"];
 
 const lookingControls = ["ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft"];
+
+const inventoryControls = ["ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft"];
 
 export const processUserInput = (world) => {
   const { userInput } = world;
@@ -39,6 +44,35 @@ export const processUserInput = (world) => {
     }
   }
 
+  if (["INVENTORY"].includes(world.getMode())) {
+    if (inventoryControls.includes(key)) {
+      world.userInput = userInput;
+
+      // count items in inventory
+      const pcEid = world.pcEnts[0];
+      let nItems = 0;
+      walkInventoryTree(world, pcEid, Inventory, () => {
+        nItems++;
+      });
+
+      if (key === "ArrowUp") {
+        if (world.inventory.inventoryListIndex === 0) {
+          world.inventory.inventoryListIndex = nItems - 1;
+        } else {
+          world.inventory.inventoryListIndex--;
+        }
+      }
+
+      if (key === "ArrowDown") {
+        if (world.inventory.inventoryListIndex === nItems - 1) {
+          world.inventory.inventoryListIndex = 0;
+        } else {
+          world.inventory.inventoryListIndex++;
+        }
+      }
+    }
+  }
+
   if (["GAME"].includes(world.getMode())) {
     if (gameplayControls.includes(key)) {
       world.userInput = userInput;
@@ -48,6 +82,8 @@ export const processUserInput = (world) => {
   // update turn
   if (uiControls.includes(key)) {
     world.turn = "PLAYER";
+  } else if (uiControls.includes(userInput)) {
+    world.turn = "UI";
   } else {
     world.turn = "WORLD";
   }

@@ -121,21 +121,24 @@ export const addSprite = ({
 
 export const printRow = ({
   container,
-  row,
-  col = 0,
+  x = 0,
+  y = 0,
+  length = null,
   str,
   color = 0xffffff,
   halfWidth = true,
 }) => {
-  for (let i = 0; i < uiSprites[container][row].length - col; i++) {
-    uiSprites[container][row][i + col].tint = color;
+  const len = length || uiSprites[container][y].length;
+
+  for (let i = 0; i < len - x; i++) {
+    uiSprites[container][y][i + x].tint = color;
 
     if (halfWidth) {
-      uiSprites[container][row][i + col].texture = getFontTexture({
+      uiSprites[container][y][i + x].texture = getFontTexture({
         char: str[i],
       });
     } else {
-      uiSprites[container][row][i + col].texture = getAsciTexture({
+      uiSprites[container][y][i + x].texture = getAsciTexture({
         char: str[i],
       });
     }
@@ -167,13 +170,13 @@ export const initUi = () => {
       }
     });
   });
-  printRow({ container: "legend", row: 0, str: "You are a Knight." });
+  printRow({ container: "legend", str: "You are a Knight." });
 };
 
 export const clearContainer = (container) => {
   const str = new Array(grid[container].width).join(" ");
   uiSprites[container].forEach((row, i) => {
-    printRow({ container, row: i, str });
+    printRow({ container, y: i, str });
   });
 };
 

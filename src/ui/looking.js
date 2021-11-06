@@ -21,8 +21,8 @@ export const renderLooking = (world, pcEid) => {
 
   printRow({
     container: "overlay",
-    row: y,
-    col: x,
+    x,
+    y,
     str: "_",
     color: 0xffe800,
     halfWidth: false,
@@ -47,7 +47,7 @@ export const renderLooking = (world, pcEid) => {
       return (str += `You remember seeing ${entityData.name}`);
     }
 
-    str += `${entityData.name} `;
+    str += `${entityData.name} - ${entityData.meta.description} `;
   });
 
   clearContainer("ambiance");

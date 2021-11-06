@@ -23,6 +23,7 @@ export const InFov = defineComponent();
 export const Inventory = defineComponent({ slots: [Types.eid, 24] });
 export const MoveTo = defineComponent(Vector3);
 export const Opaque = defineComponent();
+export const BelongsTo = defineComponent({ eid: Types.eid });
 export const Pickupable = defineComponent();
 export const PC = defineComponent();
 export const Position = defineComponent(Vector3);

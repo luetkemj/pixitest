@@ -1,5 +1,6 @@
 import _ from "lodash";
-import { pipe } from "bitecs";
+import { defineQuery, pipe } from "bitecs";
+import { PC } from "./components";
 
 import { aiSystem } from "./systems/ai.system";
 import { debugSystem } from "./systems/debug.system";
@@ -28,6 +29,9 @@ function initGame() {
   world.getMode = getMode;
   world.setMode = setMode;
   world.looking = null;
+  world.inventory = {
+    inventoryListIndex: 0,
+  };
 
   initUi(loader);
 
@@ -55,6 +59,8 @@ function initGame() {
   let fpsSamples = [];
   const fpsEl = document.querySelector("#fps");
 
+  const pcQuery = defineQuery([PC]);
+
   function gameLoop() {
     if (mode === "GAMEOVER") {
       console.log("GAME OVER");
@@ -62,6 +68,9 @@ function initGame() {
     }
 
     if (world.userInput && ["INVENTORY", "LOG", "LOOKING"].includes(mode)) {
+      const pcEnts = pcQuery(world);
+      world.pcEnts = pcEnts;
+
       processUserInput(world);
       uiPipeline(world);
     }

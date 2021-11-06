@@ -8,6 +8,6 @@ export const renderMenuLog = (world) => {
 
   _.times(log.length, (i) => {
     const str = log[i];
-    printRow({ container: "menu", row: i, str });
+    printRow({ container: "menu", y: i, str });
   });
 };
