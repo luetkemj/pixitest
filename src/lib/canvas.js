@@ -28,8 +28,6 @@ const loader = PIXI.Loader.shared;
 export const loadSprites = (onLoaded) => {
   loader
     .add("static/fonts/menlo-bold.json")
-    .add("static/fonts/menlo-reg.json")
-    .add("static/fonts/menlo-reg-half.json")
     .add("static/fonts/menlo-bold-half.json")
     .load(onLoaded);
   return loader;
@@ -123,25 +121,18 @@ export const printRow = ({
   container,
   x = 0,
   y = 0,
-  length = null,
+  width = null,
   str,
   color = 0xffffff,
   halfWidth = true,
 }) => {
-  const len = length || uiSprites[container][y].length;
+  const len = width || uiSprites[container][y].length;
 
-  for (let i = 0; i < len - x; i++) {
+  for (let i = 0; i < len; i++) {
     uiSprites[container][y][i + x].tint = color;
 
-    if (halfWidth) {
-      uiSprites[container][y][i + x].texture = getFontTexture({
-        char: str[i],
-      });
-    } else {
-      uiSprites[container][y][i + x].texture = getAsciTexture({
-        char: str[i],
-      });
-    }
+    const func = halfWidth ? getFontTexture : getAsciTexture;
+    uiSprites[container][y][i + x].texture = func({ char: str[i] });
   }
 };
 
