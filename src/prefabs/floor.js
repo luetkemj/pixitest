@@ -31,5 +31,7 @@ export const createFloor = (world, options) => {
   });
 
   world.meta[eid] = {};
-  world.meta[eid].name = "FLOOR";
+  world.meta[eid].name = "floor";
+  world.meta[eid].description =
+    "The floor of the cave is flat hard and covered in dust.";
 };

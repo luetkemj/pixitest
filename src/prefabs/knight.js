@@ -4,6 +4,7 @@ import { addComponent, addEntity } from "bitecs";
 import {
   Blocking,
   Body,
+  Droppable,
   FovRange,
   Health,
   Intelligence,
@@ -26,6 +27,7 @@ export const createKnight = (world, options) => {
   addComponent(world, Health, eid);
   addComponent(world, Body, eid);
   addComponent(world, Blocking, eid);
+  addComponent(world, Droppable, eid);
   addComponent(world, FovRange, eid);
   addComponent(world, Intelligence, eid);
   addComponent(world, Inventory, eid);
@@ -56,7 +58,9 @@ export const createKnight = (world, options) => {
   });
 
   world.meta[eid] = {};
-  world.meta[eid].name = "Knight";
+  world.meta[eid].name = "knight";
+  world.meta[eid].description =
+    "A shiny pompous tin can of a creature with a comically large red feather plume potruding from it's head";
 
   return eid;
 };

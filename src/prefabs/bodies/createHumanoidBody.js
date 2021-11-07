@@ -1,7 +1,9 @@
 import { addComponent, addEntity } from "bitecs";
 import { fillFirstEmptySlot } from "../../lib/ecsHelpers";
 import {
+  BelongsTo,
   Body,
+  Droppable,
   Inventory,
   Pickupable,
   Position,
@@ -9,25 +11,26 @@ import {
   Zindex,
 } from "../../components";
 
-const createEntity = (world, name) => {
+const createEntity = (world, name, description) => {
   const eid = addEntity(world);
   world.meta[eid] = {};
   world.meta[eid].name = name;
+  world.meta[eid].description = description;
   return eid;
 };
 
 export const createHumanoidBody = (world, parentEid) => {
   // create part entities
-  const torsoEid = createEntity(world, "Torso");
-  const headEid = createEntity(world, "Head");
-  const armLeftEid = createEntity(world, "Left Arm");
-  const armRightEid = createEntity(world, "Right Arm");
-  const legLeftEid = createEntity(world, "Left Leg");
-  const legRightEid = createEntity(world, "Right Leg");
-  const handLeftEid = createEntity(world, "Left Hand");
-  const handRightEid = createEntity(world, "Right Hand");
-  const footLeftEid = createEntity(world, "Left Foot");
-  const footRightEid = createEntity(world, "Right Foot");
+  const torsoEid = createEntity(world, "Torso", "A torso");
+  const headEid = createEntity(world, "Head", "A head");
+  const armLeftEid = createEntity(world, "Left Arm", "A left arm");
+  const armRightEid = createEntity(world, "Right Arm", "A right arm");
+  const legLeftEid = createEntity(world, "Left Leg", "A left leg");
+  const legRightEid = createEntity(world, "Right Leg", "A right leg");
+  const handLeftEid = createEntity(world, "Left Hand", "A left hand");
+  const handRightEid = createEntity(world, "Right Hand", "A right hand");
+  const footLeftEid = createEntity(world, "Left Foot", "A left foot");
+  const footRightEid = createEntity(world, "Right Foot", "A right foot");
 
   // add components to each part
   const bodyParts = [
@@ -44,13 +47,16 @@ export const createHumanoidBody = (world, parentEid) => {
   ];
 
   bodyParts.forEach((partEid) => {
+    addComponent(world, BelongsTo, partEid);
     addComponent(world, Body, partEid);
+    addComponent(world, Droppable, partEid);
     addComponent(world, Inventory, partEid);
     addComponent(world, Position, partEid);
     addComponent(world, Pickupable, partEid);
     addComponent(world, Wieldable, partEid);
     addComponent(world, Zindex, partEid);
     Zindex.zIndex[partEid] = 20;
+    BelongsTo.eid[partEid] = parentEid;
   });
 
   // Torso

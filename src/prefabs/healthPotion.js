@@ -3,6 +3,7 @@ import { addComponent, addEntity } from "bitecs";
 
 import {
   Consumable,
+  Droppable,
   Effects,
   Pickupable,
   Position,
@@ -17,6 +18,7 @@ export const createHealthPotion = (world, options) => {
 
   const eid = addEntity(world);
   addComponent(world, Consumable, eid);
+  addComponent(world, Droppable, eid);
   addComponent(world, Effects, eid);
   addComponent(world, Pickupable, eid);
   addComponent(world, Position, eid);
@@ -42,5 +44,7 @@ export const createHealthPotion = (world, options) => {
   });
 
   world.meta[eid] = {};
-  world.meta[eid].name = "Health Potion";
+  world.meta[eid].name = "health potion";
+  world.meta[eid].description =
+    "A shimmering red liquid in a small glass vial.";
 };

@@ -1,8 +1,12 @@
 import _ from "lodash";
+import { pipelineFovRender } from "../pipelines";
 import { addComponent, hasComponent, removeComponent } from "bitecs";
 import { updatePosition } from "./ecsHelpers";
+import { idToCell, getNeighborIds } from "./grid";
 import {
+  Blocking,
   Consumable,
+  Droppable,
   Effects,
   Health,
   Inventory,
@@ -68,6 +72,40 @@ export const get = (world, eid) => {
       world.log.unshift("Your inventory is full.");
     }
   }
+};
+
+export const drop = (world, eid, itemEid, dir) => {
+  const isDroppable = hasComponent(world, Droppable, itemEid);
+
+  if (!isDroppable) {
+    return world.log.unshift(`You can't drop that!`);
+  }
+
+  const currentLocId = `${Position.x[eid]},${Position.y[eid]},${Position.z[eid]}`;
+
+  const neighbors = getNeighborIds(currentLocId, "ALL");
+  const openNeighbors = neighbors.map((neighbor) => {
+    const nEids = [...world.eAtPos[neighbor]];
+    const isBlocked = _.some(nEids, (e) => hasComponent(world, Blocking, e));
+    if (!isBlocked) {
+      return neighbor;
+    }
+  });
+
+  const newLoc = _.sample(_.compact(openNeighbors));
+
+  // findSlot index for item
+  const slotIndex = _.findIndex(Inventory.slots[eid], (x) => x === itemEid);
+  // remove item from inventory
+  Inventory.slots[eid][slotIndex] = 0;
+  // add position component
+  addComponent(world, Position, itemEid);
+  // update position with new location
+  updatePosition({ world, newPos: idToCell(newLoc), eid: itemEid });
+  // remove selectedItemId
+  world.inventory.selectedItemEid = null;
+  // somehow make sure to call FOV system again.
+  pipelineFovRender(world);
 };
 
 export const consume = (world, targetEid, itemEid) => {

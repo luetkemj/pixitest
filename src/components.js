@@ -10,6 +10,7 @@ export const Body = defineComponent({ slots: [Types.eid, 5] });
 export const Consumable = defineComponent();
 export const Damage = defineComponent(MaxCurrent);
 export const Dead = defineComponent();
+export const Droppable = defineComponent();
 export const Effects = defineComponent({
   health: Types.i16,
   strength: Types.i16,
@@ -23,6 +24,7 @@ export const InFov = defineComponent();
 export const Inventory = defineComponent({ slots: [Types.eid, 24] });
 export const MoveTo = defineComponent(Vector3);
 export const Opaque = defineComponent();
+export const BelongsTo = defineComponent({ eid: Types.eid });
 export const Pickupable = defineComponent();
 export const PC = defineComponent();
 export const Position = defineComponent(Vector3);

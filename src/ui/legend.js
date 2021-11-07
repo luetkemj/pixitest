@@ -9,11 +9,11 @@ export const renderLegend = (world, pcEid) => {
   const pcHealthMax = Health.max[pcEid];
   const pcHealthCurrent = Health.current[pcEid];
   if (pcHealthCurrent < 1) {
-    printRow({ container: "legend", row: 0, str: "You are dead." });
+    printRow({ container: "legend", str: "You are dead." });
   }
   printRow({
     container: "legend",
-    row: 1,
+    y: 1,
     str: `HP: ${pcHealthCurrent}/${pcHealthMax}`,
   });
 };

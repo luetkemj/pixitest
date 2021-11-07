@@ -5,6 +5,7 @@ import {
   Ai,
   Blocking,
   Body,
+  Droppable,
   Forgettable,
   Health,
   Intelligence,
@@ -27,6 +28,7 @@ export const createGoblin = (world, options) => {
   addComponent(world, Position, eid);
   addComponent(world, Blocking, eid);
   addComponent(world, Body, eid);
+  addComponent(world, Droppable, eid);
   addComponent(world, Forgettable, eid);
   addComponent(world, Health, eid);
   addComponent(world, Ai, eid);
@@ -62,7 +64,10 @@ export const createGoblin = (world, options) => {
   });
 
   world.meta[eid] = {};
-  world.meta[eid].name = "GOBLIN";
+  world.meta[eid].name = "goblin";
+  world.meta[eid].description =
+    "An ugly or grotesque sprite that is usually mischievous and sometimes evil and malicious";
+
   world.meta[eid].debugSprites = [];
   world.meta[eid].ai = { pathAlgo: "", path: [] };
 

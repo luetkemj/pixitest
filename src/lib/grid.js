@@ -153,7 +153,7 @@ export const idToCell = (id) => {
   };
 };
 
-export const cellToId = ({ x, y }) => `${x},${y}`;
+export const cellToId = ({ x, y, z }) => `${x},${y},${z || 0}`;
 
 export const isOnMapEdge = (x, y) => {
   const { width, height, x: mapX, y: mapY } = grid.map;

@@ -28,8 +28,6 @@ const loader = PIXI.Loader.shared;
 export const loadSprites = (onLoaded) => {
   loader
     .add("static/fonts/menlo-bold.json")
-    .add("static/fonts/menlo-reg.json")
-    .add("static/fonts/menlo-reg-half.json")
     .add("static/fonts/menlo-bold-half.json")
     .load(onLoaded);
   return loader;
@@ -121,24 +119,20 @@ export const addSprite = ({
 
 export const printRow = ({
   container,
-  row,
-  col = 0,
+  x = 0,
+  y = 0,
+  width = null,
   str,
   color = 0xffffff,
   halfWidth = true,
 }) => {
-  for (let i = 0; i < uiSprites[container][row].length - col; i++) {
-    uiSprites[container][row][i + col].tint = color;
+  const len = width || uiSprites[container][y].length;
 
-    if (halfWidth) {
-      uiSprites[container][row][i + col].texture = getFontTexture({
-        char: str[i],
-      });
-    } else {
-      uiSprites[container][row][i + col].texture = getAsciTexture({
-        char: str[i],
-      });
-    }
+  for (let i = 0; i < len; i++) {
+    uiSprites[container][y][i + x].tint = color;
+
+    const func = halfWidth ? getFontTexture : getAsciTexture;
+    uiSprites[container][y][i + x].texture = func({ char: str[i] });
   }
 };
 
@@ -167,13 +161,13 @@ export const initUi = () => {
       }
     });
   });
-  printRow({ container: "legend", row: 0, str: "You are a Knight." });
+  printRow({ container: "legend", str: "You are a Knight." });
 };
 
 export const clearContainer = (container) => {
   const str = new Array(grid[container].width).join(" ");
   uiSprites[container].forEach((row, i) => {
-    printRow({ container, row: i, str });
+    printRow({ container, y: i, str });
   });
 };
 

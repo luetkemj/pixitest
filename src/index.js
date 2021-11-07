@@ -1,13 +1,12 @@
 import _ from "lodash";
-import { pipe } from "bitecs";
-
-import { aiSystem } from "./systems/ai.system";
-import { debugSystem } from "./systems/debug.system";
-import { fovSystem } from "./systems/fov.system";
-import { gameOverSystem } from "./systems/gameOver.system";
-import { movementSystem } from "./systems/movement.system";
-import { renderSystem } from "./systems/render.system";
-import { userInputSystem } from "./systems/userInput.system";
+import { defineQuery, pipe } from "bitecs";
+import { PC } from "./components";
+import {
+  pipelinePlayerTurn,
+  pipelineWorldTurn,
+  uiPipeline,
+  debugPipeline,
+} from "./pipelines";
 
 import { processUserInput } from "./lib/userInput";
 
@@ -28,32 +27,20 @@ function initGame() {
   world.getMode = getMode;
   world.setMode = setMode;
   world.looking = null;
+  world.inventory = {
+    inventoryListIndex: 0,
+    selectedItemEid: "",
+  };
 
   initUi(loader);
-
-  const pipelinePlayerTurn = pipe(
-    gameOverSystem,
-    userInputSystem,
-    movementSystem,
-    fovSystem,
-    renderSystem
-  );
-  const pipelineWorldTurn = pipe(
-    aiSystem,
-    movementSystem,
-    fovSystem,
-    renderSystem
-  );
-
-  const uiPipeline = pipe(userInputSystem, renderSystem);
-
-  const debugPipeline = pipe(debugSystem);
 
   // set up for FPS
   let fps = 0;
   let now = null;
   let fpsSamples = [];
   const fpsEl = document.querySelector("#fps");
+
+  const pcQuery = defineQuery([PC]);
 
   function gameLoop() {
     if (mode === "GAMEOVER") {
@@ -62,6 +49,9 @@ function initGame() {
     }
 
     if (world.userInput && ["INVENTORY", "LOG", "LOOKING"].includes(mode)) {
+      const pcEnts = pcQuery(world);
+      world.pcEnts = pcEnts;
+
       processUserInput(world);
       uiPipeline(world);
     }
