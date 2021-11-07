@@ -3,6 +3,7 @@ import { fillFirstEmptySlot } from "../../lib/ecsHelpers";
 import {
   BelongsTo,
   Body,
+  Droppable,
   Inventory,
   Pickupable,
   Position,
@@ -48,6 +49,7 @@ export const createHumanoidBody = (world, parentEid) => {
   bodyParts.forEach((partEid) => {
     addComponent(world, BelongsTo, partEid);
     addComponent(world, Body, partEid);
+    addComponent(world, Droppable, partEid);
     addComponent(world, Inventory, partEid);
     addComponent(world, Position, partEid);
     addComponent(world, Pickupable, partEid);

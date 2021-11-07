@@ -1,5 +1,6 @@
 import { Inventory } from "../components";
 import { walkInventoryTree } from "./ecsHelpers";
+import { drop } from "./actions";
 
 const gameplayControls = [
   "ArrowUp",
@@ -13,7 +14,13 @@ const uiControls = ["Escape", "i", "k", "l", "Shift"];
 
 const lookingControls = ["ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft"];
 
-const inventoryControls = ["ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft"];
+const inventoryControls = [
+  "ArrowUp",
+  "ArrowRight",
+  "ArrowDown",
+  "ArrowLeft",
+  "d",
+];
 
 export const processUserInput = (world) => {
   const { userInput } = world;
@@ -69,6 +76,10 @@ export const processUserInput = (world) => {
         } else {
           world.inventory.inventoryListIndex++;
         }
+      }
+
+      if (key === "d") {
+        drop(world, pcEid, world.inventory.selectedItemEid);
       }
     }
   }

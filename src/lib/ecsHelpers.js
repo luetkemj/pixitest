@@ -57,14 +57,14 @@ export const updatePosition = ({
   Position.z[eid] = newPos.z;
 };
 
-export const walkInventoryTree = (world, eid, inventoryComponent, callBack) => {
+export const walkInventoryTree = (world, eid, inventoryComponent, func) => {
   if (!hasComponent(world, inventoryComponent, eid)) return;
 
   const walkTree = (eid) => {
     const branch = inventoryComponent.slots[eid];
     _.each(branch, (partEid) => {
       if (partEid) {
-        callBack(eid, partEid);
+        func(eid, partEid);
         if (hasComponent(world, inventoryComponent, partEid)) {
           walkTree(partEid);
         }

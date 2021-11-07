@@ -23,6 +23,7 @@ export const renderLooking = (world, pcEid) => {
     container: "overlay",
     x,
     y,
+    width: 1,
     str: "_",
     color: 0xffe800,
     halfWidth: false,

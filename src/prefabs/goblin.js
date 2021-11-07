@@ -5,6 +5,7 @@ import {
   Ai,
   Blocking,
   Body,
+  Droppable,
   Forgettable,
   Health,
   Intelligence,
@@ -27,6 +28,7 @@ export const createGoblin = (world, options) => {
   addComponent(world, Position, eid);
   addComponent(world, Blocking, eid);
   addComponent(world, Body, eid);
+  addComponent(world, Droppable, eid);
   addComponent(world, Forgettable, eid);
   addComponent(world, Health, eid);
   addComponent(world, Ai, eid);

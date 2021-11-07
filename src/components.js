@@ -10,6 +10,7 @@ export const Body = defineComponent({ slots: [Types.eid, 5] });
 export const Consumable = defineComponent();
 export const Damage = defineComponent(MaxCurrent);
 export const Dead = defineComponent();
+export const Droppable = defineComponent();
 export const Effects = defineComponent({
   health: Types.i16,
   strength: Types.i16,

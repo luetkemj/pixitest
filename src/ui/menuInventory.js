@@ -1,7 +1,8 @@
 import _ from "lodash";
 import wrapAnsi from "wrap-ansi";
+import { hasComponent } from "bitecs";
 import { printRow } from "../lib/canvas";
-import { BelongsTo, Inventory } from "../components";
+import { BelongsTo, Droppable, Inventory } from "../components";
 
 export const renderMenuInventory = (world, pcEid) => {
   {
@@ -15,11 +16,15 @@ export const renderMenuInventory = (world, pcEid) => {
       width,
     });
 
-    const items = Inventory.slots[pcEid];
+    const items = _.compact(Inventory.slots[pcEid]);
     items.forEach((eid, i) => {
       if (eid) {
         const itemName = world.meta[eid].name;
         const isSelected = world.inventory.inventoryListIndex === i;
+        if (isSelected) {
+          world.inventory.selectedItemEid = eid;
+        }
+
         let str = isSelected ? "  * " : "    ";
         str = `${str}${itemName}`;
 
@@ -63,7 +68,21 @@ export const renderMenuInventory = (world, pcEid) => {
 
     y = 3;
     content.forEach((row, i) => {
-      printRow({ ...options, y: y + i, str: `    ${row}` });
+      y = y + i;
+      printRow({ ...options, y, str: `    ${row}` });
+    });
+
+    // available actions
+    let availableActions = "    ";
+    if (hasComponent(world, Droppable, itemEid)) {
+      availableActions += "(d)Drop ";
+    }
+
+    y += 2;
+    const actionsContent = wrapAnsi(availableActions, width - 4).split("\n");
+    actionsContent.forEach((row, i) => {
+      y = y + i;
+      printRow({ ...options, y, str: `    ${row}` });
     });
   }
 };

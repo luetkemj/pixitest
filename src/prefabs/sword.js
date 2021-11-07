@@ -1,7 +1,14 @@
 import _ from "lodash";
 import { addComponent, addEntity } from "bitecs";
 
-import { Damage, Pickupable, Position, Wieldable, Zindex } from "../components";
+import {
+  Damage,
+  Droppable,
+  Pickupable,
+  Position,
+  Wieldable,
+  Zindex,
+} from "../components";
 
 import { addSprite } from "../lib/canvas";
 import { updatePosition } from "../lib/ecsHelpers";
@@ -11,6 +18,7 @@ export const createSword = (world, options) => {
 
   const eid = addEntity(world);
   addComponent(world, Damage, eid);
+  addComponent(world, Droppable, eid);
   addComponent(world, Pickupable, eid);
   addComponent(world, Position, eid);
   addComponent(world, Wieldable, eid);
