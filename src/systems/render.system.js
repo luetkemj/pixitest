@@ -40,6 +40,21 @@ const fovAlphaMap = ({ range, max = 1, min = 0.3 }) => {
   return alphaMap;
 };
 
+const renderEid = ({ world, eid, renderable = true, alpha = 1 }) => {
+  if (!world.sprites[eid]) return;
+
+  world.sprites[eid].width = cellWidth;
+  world.sprites[eid].height = cellWidth;
+  world.sprites[eid].renderable = renderable;
+  world.sprites[eid].alpha = alpha;
+  world.sprites[eid].x = Position.x[eid] * cellWidth;
+  world.sprites[eid].y = Position.y[eid] * cellWidth;
+
+  if (hasComponent(world, Dead, eid)) {
+    world.sprites[eid].texture = getAsciTexture({ char: "%" });
+  }
+};
+
 export const renderSystem = (world) => {
   const inFovEnts = inFovQuery(world);
   const revealedEnts = revealedQuery(world);
@@ -49,13 +64,12 @@ export const renderSystem = (world) => {
   // DO FIELD OF VISION THINGS
   for (let i = 0; i < revealedEnts.length; i++) {
     const eid = revealedEnts[i];
-    world.sprites[eid].renderable = true;
-    world.sprites[eid].alpha = 0.23;
+    renderEid({ world, eid, alpha: 0.23, renderable: true });
   }
 
   for (let i = 0; i < forgettableEnts.length; i++) {
     const eid = forgettableEnts[i];
-    world.sprites[eid].renderable = false;
+    renderEid({ world, eid, renderable: false });
   }
 
   const alphaMap = fovAlphaMap({
@@ -63,24 +77,6 @@ export const renderSystem = (world) => {
     max: 1,
     min: 0.3,
   });
-
-  for (let i = 0; i < inFovEnts.length; i++) {
-    const eid = inFovEnts[i];
-    world.sprites[eid].renderable = true;
-    world.sprites[eid].alpha = alphaMap[FovDistance.dist[eid]] || 0.23;
-    if (pcEnts.includes(eid)) {
-      world.sprites[eid].alpha = 1;
-    }
-  }
-
-  const renderEid = (eid) => {
-    world.sprites[eid].x = Position.x[eid] * cellWidth;
-    world.sprites[eid].y = Position.y[eid] * cellWidth;
-
-    if (hasComponent(world, Dead, eid)) {
-      world.sprites[eid].texture = getAsciTexture({ char: "%" });
-    }
-  };
 
   const isOnTop = (eid, eAtPos) => {
     let zIndex = 0;
@@ -100,21 +96,20 @@ export const renderSystem = (world) => {
   }
   for (let i = 0; i < inFovEnts.length; i++) {
     const eid = inFovEnts[i];
-    world.sprites[eid].width = cellWidth;
-    world.sprites[eid].height = cellWidth;
-
     const locId = `${Position.x[eid]},${Position.y[eid]},0`;
     const eAtPos = world.eAtPos[locId];
 
+    const alpha = alphaMap[FovDistance.dist[eid]] || 0.23;
+
     // If only one item at location - render it
     if (eAtPos.size === 1) {
-      renderEid(eid);
+      renderEid({ world, eid, alpha });
     } else {
       // if more than one item at location
       // render if current eid is on top
       // else hide it
       if (isOnTop(eid, eAtPos)) {
-        renderEid(eid);
+        renderEid({ world, eid, alpha });
       } else {
         world.sprites[eid].renderable = false;
       }

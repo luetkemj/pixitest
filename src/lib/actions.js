@@ -98,8 +98,11 @@ export const drop = (world, eid, itemEid, dir) => {
   const slotIndex = _.findIndex(Inventory.slots[eid], (x) => x === itemEid);
   // remove item from inventory
   Inventory.slots[eid][slotIndex] = 0;
-  // add position component
-  addComponent(world, Position, itemEid);
+
+  // add position component if needed
+  if (!hasComponent(world, Position, itemEid)) {
+    addComponent(world, Position, itemEid);
+  }
   // update position with new location
   updatePosition({ world, newPos: idToCell(newLoc), eid: itemEid });
   // remove selectedItemId
