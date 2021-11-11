@@ -103,6 +103,13 @@ const renderDescription = (world, pcEid) => {
     }
   }
 
+  // available actions for items within reach
+  if (currentColumn === 2) {
+    if (hasComponent(world, Pickupable, itemEid)) {
+      availableActions += "(g)Get ";
+    }
+  }
+
   y += 2;
   const actionsContent = wrapAnsi(availableActions, width - 4).split("\n");
   actionsContent.forEach((row, i) => {

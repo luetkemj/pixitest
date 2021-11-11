@@ -1,6 +1,6 @@
 import { Inventory, Position } from "../components";
 import { gettableEntitiesInReach, walkInventoryTree } from "./ecsHelpers";
-import { drop } from "./actions";
+import { drop, get } from "./actions";
 
 const gameplayControls = [
   "ArrowUp",
@@ -20,6 +20,7 @@ const inventoryControls = [
   "ArrowDown",
   "ArrowLeft",
   "d",
+  "g",
 ];
 
 export const processUserInput = (world) => {
@@ -122,10 +123,12 @@ export const processUserInput = (world) => {
         if (world.inventory.columnIndex === 0) {
           drop(world, pcEid, world.inventory.selectedItemEid);
         }
+      }
 
+      if (key === "g") {
         // possible actions from the WithinReach column
-        if (world.inventory.columnIndex === 1) {
-          // drop(world, pcEid, world.inventory.selectedItemEid);
+        if (world.inventory.columnIndex === 2) {
+          get(world, pcEid, world.inventory.selectedItemEid);
         }
       }
     }

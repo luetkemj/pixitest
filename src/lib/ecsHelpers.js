@@ -42,6 +42,8 @@ export const updatePosition = ({
 
   if (remove) {
     removeComponent(world, Position, eid);
+    // clear the sprite from view
+    world.sprites[eid].renderable = false;
     return;
   }
 
