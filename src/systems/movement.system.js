@@ -14,6 +14,7 @@ import {
   Forgettable,
   Health,
   PC,
+  Pickupable,
   Position,
   Strength,
   MoveTo,
@@ -29,6 +30,7 @@ const pcQuery = defineQuery([PC]);
 
 const kill = (world, eid) => {
   addComponent(world, Dead, eid);
+  addComponent(world, Pickupable, eid);
   removeComponent(world, MoveTo, eid);
   removeComponent(world, Ai, eid);
   removeComponent(world, Blocking, eid);

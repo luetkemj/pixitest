@@ -1,7 +1,8 @@
 import _ from "lodash";
 import * as Components from "../components";
-import { Body, Position } from "../components";
+import { Body, Pickupable, Position } from "../components";
 import { hasComponent, removeComponent } from "bitecs";
+import { getNeighborIds } from "../lib/grid";
 
 export const findEmptySlot = ({ component, containerEid }) => {
   const slots = component.slots[containerEid];
@@ -41,6 +42,8 @@ export const updatePosition = ({
 
   if (remove) {
     removeComponent(world, Position, eid);
+    // clear the sprite from view
+    world.sprites[eid].renderable = false;
     return;
   }
 
@@ -107,4 +110,14 @@ export const getEntityData = (world, eid) => {
     body: getEntityAnatomy(world, eid),
     meta: world.meta[eid],
   };
+};
+
+export const gettableEntitiesInReach = (world, locId) => {
+  const neighbors = [...getNeighborIds(locId, "ALL"), locId];
+  return _.flatMap(
+    neighbors.map((lId) => {
+      const eAtLoc = [...world.eAtPos[lId]];
+      return eAtLoc.filter((eid) => hasComponent(world, Pickupable, eid));
+    })
+  );
 };

@@ -28,7 +28,9 @@ function initGame() {
   world.setMode = setMode;
   world.looking = null;
   world.inventory = {
+    columnIndex: 0,
     inventoryListIndex: 0,
+    inReachListIndex: 0,
     selectedItemEid: "",
   };
 

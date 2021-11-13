@@ -1,6 +1,6 @@
-import { Inventory } from "../components";
-import { walkInventoryTree } from "./ecsHelpers";
-import { drop } from "./actions";
+import { Inventory, Position } from "../components";
+import { gettableEntitiesInReach, walkInventoryTree } from "./ecsHelpers";
+import { drop, get } from "./actions";
 
 const gameplayControls = [
   "ArrowUp",
@@ -20,6 +20,7 @@ const inventoryControls = [
   "ArrowDown",
   "ArrowLeft",
   "d",
+  "g",
 ];
 
 export const processUserInput = (world) => {
@@ -61,25 +62,74 @@ export const processUserInput = (world) => {
       walkInventoryTree(world, pcEid, Inventory, () => {
         nItems++;
       });
+      // count gettableEntitiesWithinReach
+      const currentLocId = `${Position.x[pcEid]},${Position.y[pcEid]},${Position.z[pcEid]}`;
+      const entitiesInReach = gettableEntitiesInReach(world, currentLocId);
 
       if (key === "ArrowUp") {
-        if (world.inventory.inventoryListIndex === 0) {
-          world.inventory.inventoryListIndex = nItems - 1;
-        } else {
-          world.inventory.inventoryListIndex--;
+        if (world.inventory.columnIndex === 0) {
+          if (world.inventory.inventoryListIndex === 0) {
+            world.inventory.inventoryListIndex = nItems - 1;
+          } else {
+            world.inventory.inventoryListIndex--;
+          }
+        }
+
+        if (world.inventory.columnIndex === 2) {
+          if (world.inventory.inReachListIndex === 0) {
+            world.inventory.inReachListIndex = entitiesInReach.length - 1;
+          } else {
+            world.inventory.inReachListIndex--;
+          }
         }
       }
 
       if (key === "ArrowDown") {
-        if (world.inventory.inventoryListIndex === nItems - 1) {
-          world.inventory.inventoryListIndex = 0;
+        if (world.inventory.columnIndex === 0) {
+          if (world.inventory.inventoryListIndex === nItems - 1) {
+            world.inventory.inventoryListIndex = 0;
+          } else {
+            world.inventory.inventoryListIndex++;
+          }
+        }
+
+        if (world.inventory.columnIndex === 2) {
+          if (world.inventory.inReachListIndex === entitiesInReach.length - 1) {
+            world.inventory.inReachListIndex = 0;
+          } else {
+            world.inventory.inReachListIndex++;
+          }
+        }
+      }
+
+      if (key === "ArrowLeft") {
+        if (world.inventory.columnIndex === 0) {
+          world.inventory.columnIndex = 2;
         } else {
-          world.inventory.inventoryListIndex++;
+          world.inventory.columnIndex = 0;
+        }
+      }
+
+      if (key === "ArrowRight") {
+        if (world.inventory.columnIndex === 2) {
+          world.inventory.columnIndex = 0;
+        } else {
+          world.inventory.columnIndex = 2;
         }
       }
 
       if (key === "d") {
-        drop(world, pcEid, world.inventory.selectedItemEid);
+        // possible actions from the Inventory column
+        if (world.inventory.columnIndex === 0) {
+          drop(world, pcEid, world.inventory.selectedItemEid);
+        }
+      }
+
+      if (key === "g") {
+        // possible actions from the WithinReach column
+        if (world.inventory.columnIndex === 2) {
+          get(world, pcEid, world.inventory.selectedItemEid);
+        }
       }
     }
   }

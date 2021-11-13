@@ -17,7 +17,7 @@ import {
   Wielding,
 } from "../components";
 
-export const get = (world, eid) => {
+export const get = (world, eid, itemEid) => {
   if (!hasComponent(world, Inventory, eid)) {
     return console.log(`Cannot pickup - ${eid} has no Inventory`);
   }
@@ -29,43 +29,44 @@ export const get = (world, eid) => {
   // get entity locId
   const locId = `${Position.x[eid]},${Position.y[eid]},${Position.z[eid]}`;
 
-  const pickupAtLoc = [...world.eAtPos[locId]].find((id) =>
-    hasComponent(world, Pickupable, id)
-  );
+  // if itemEid pickup that, else attempt to pickup something at currrent location
+  const pickupEid =
+    itemEid ||
+    [...world.eAtPos[locId]].find((id) => hasComponent(world, Pickupable, id));
 
-  if (!pickupAtLoc) {
+  if (!pickupEid) {
     world.log.unshift("There is nothing to pickup.");
   } else {
     // find first open inventory slot and add the pickup eid
     const inventory = Inventory.slots[eid];
     const openSlot = _.findIndex(inventory, (slot) => slot === 0);
     if (openSlot > -1) {
-      Inventory.slots[eid][openSlot] = pickupAtLoc;
+      Inventory.slots[eid][openSlot] = pickupEid;
 
       updatePosition({
         world,
         oldPos: {
-          x: Position.x[pickupAtLoc],
-          y: Position.y[pickupAtLoc],
-          z: Position.z[pickupAtLoc],
+          x: Position.x[pickupEid],
+          y: Position.y[pickupEid],
+          z: Position.z[pickupEid],
         },
-        eid: pickupAtLoc,
+        eid: pickupEid,
         remove: true,
       });
 
-      world.log.unshift(`You pickup ${world.meta[pickupAtLoc].name}.`);
+      world.log.unshift(`You pickup ${world.meta[pickupEid].name}.`);
 
       // TODO do this in response to an inventory UI input or AI action
-      const isConsumable = hasComponent(world, Consumable, pickupAtLoc);
+      const isConsumable = hasComponent(world, Consumable, pickupEid);
       if (isConsumable) {
-        return consume(world, eid, pickupAtLoc);
+        return consume(world, eid, pickupEid);
       }
 
-      const isWieldable = hasComponent(world, Wieldable, pickupAtLoc);
+      const isWieldable = hasComponent(world, Wieldable, pickupEid);
       if (isWieldable) {
         const alreadyWielding = hasComponent(world, Wielding, eid);
         if (!alreadyWielding) {
-          equip(world, eid, pickupAtLoc);
+          equip(world, eid, pickupEid);
         }
       }
     } else {
