@@ -1,6 +1,7 @@
 import _ from "lodash";
+import { getState, setState } from "../index";
 import { pipelineFovRender } from "../pipelines";
-import { addComponent, hasComponent, removeComponent } from "bitecs";
+import { addComponent, hasComponent } from "bitecs";
 import { updatePosition } from "./ecsHelpers";
 import { idToCell, getNeighborIds } from "./grid";
 import {
@@ -35,7 +36,9 @@ export const get = (world, eid, itemEid) => {
     [...world.eAtPos[locId]].find((id) => hasComponent(world, Pickupable, id));
 
   if (!pickupEid) {
-    world.log.unshift("There is nothing to pickup.");
+    setState((state) => {
+      state.log.unshift("There is nothing to pickup.");
+    });
   } else {
     // find first open inventory slot and add the pickup eid
     const inventory = Inventory.slots[eid];
@@ -54,7 +57,9 @@ export const get = (world, eid, itemEid) => {
         remove: true,
       });
 
-      world.log.unshift(`You pickup ${world.meta[pickupEid].name}.`);
+      setState((state) => {
+        state.log.unshift(`You pickup ${world.meta[pickupEid].name}.`);
+      });
 
       // TODO do this in response to an inventory UI input or AI action
       const isConsumable = hasComponent(world, Consumable, pickupEid);
@@ -70,7 +75,9 @@ export const get = (world, eid, itemEid) => {
         }
       }
     } else {
-      world.log.unshift("Your inventory is full.");
+      setState((state) => {
+        state.log.unshift("Your inventory is full.");
+      });
     }
   }
 };
@@ -79,7 +86,9 @@ export const drop = (world, eid, itemEid, dir) => {
   const isDroppable = hasComponent(world, Droppable, itemEid);
 
   if (!isDroppable) {
-    return world.log.unshift(`You can't drop that!`);
+    setState((state) => {
+      state.log.unshift("You can't drop that!");
+    });
   }
 
   const currentLocId = `${Position.x[eid]},${Position.y[eid]},${Position.z[eid]}`;
@@ -107,7 +116,7 @@ export const drop = (world, eid, itemEid, dir) => {
   // update position with new location
   updatePosition({ world, newPos: idToCell(newLoc), eid: itemEid });
   // remove selectedItemId
-  world.inventory.selectedItemEid = null;
+  getState().inventory.selectedItemEid = null;
   // somehow make sure to call FOV system again.
   pipelineFovRender(world);
 };
@@ -116,7 +125,9 @@ export const consume = (world, targetEid, itemEid) => {
   const isConsumable = hasComponent(world, Consumable, itemEid);
 
   if (!isConsumable) {
-    return world.log.unshift(`You can't consume that!`);
+    return setState((state) => {
+      state.log.unshift(`You can't consume that!`);
+    });
   }
 
   if (hasComponent(world, Health, targetEid)) {
@@ -135,7 +146,9 @@ export const consume = (world, targetEid, itemEid) => {
         : Strength.current[targetEid];
   }
 
-  return world.log.unshift(`You consume a ${world.meta[itemEid].name}!`);
+  return setState((state) => {
+    state.log.unshift(`You consume a ${world.meta[itemEid].name}!`);
+  });
 };
 
 export const equip = (world, targetEid, itemEid) => {
@@ -143,14 +156,20 @@ export const equip = (world, targetEid, itemEid) => {
   const isWieldable = hasComponent(world, Wieldable, itemEid);
 
   if (!isWieldable) {
-    return world.log.unshift(`You can't wield that!`);
+    return setState((state) => {
+      state.log.unshift(`You can't wield that!`);
+    });
   }
 
   if (alreadyWielding) {
-    return world.log.unshift(`You are already wielding something!`);
+    return setState((state) => {
+      state.log.unshift(`You are already wielding something!`);
+    });
   }
 
   addComponent(world, Wielding, targetEid);
   Wielding.slot[targetEid] = itemEid;
-  return world.log.unshift(`You are wielding a ${world.meta[itemEid].name}!`);
+  return setState((state) => {
+    state.log.unshift(`You are wielding a ${world.meta[itemEid].name}!`);
+  });
 };

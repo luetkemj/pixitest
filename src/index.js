@@ -16,23 +16,34 @@ import { loadSprites, initUi } from "./lib/canvas";
 // pixi loader load all the sprites and initialize game
 const loader = loadSprites(initGame);
 
-let mode = "GAME";
-const setMode = (str) => (mode = str);
-const getMode = () => mode;
-
-function initGame() {
-  const { world } = initWorld(loader);
-  world.loader = loader;
-  world.mode = mode;
-  world.getMode = getMode;
-  world.setMode = setMode;
-  world.looking = null;
-  world.inventory = {
+const state = {
+  mode: "GAME",
+  looking: null,
+  inventory: {
     columnIndex: 0,
     inventoryListIndex: 0,
     inReachListIndex: 0,
     selectedItemEid: "",
-  };
+  },
+  world: {},
+  pcEnts: [],
+  userInput: "",
+  turn: "",
+  debug: false,
+  log: [],
+  RESETTING_DEBUG: true,
+};
+
+export const setState = (callback) => {
+  callback(state);
+};
+
+export const getState = () => state;
+
+function initGame() {
+  setState((state) => {
+    state.world = initWorld(loader).world;
+  });
 
   initUi(loader);
 
@@ -45,30 +56,36 @@ function initGame() {
   const pcQuery = defineQuery([PC]);
 
   function gameLoop() {
-    if (mode === "GAMEOVER") {
+    if (getState().mode === "GAMEOVER") {
       console.log("GAME OVER");
       return;
     }
 
-    if (world.userInput && ["INVENTORY", "LOG", "LOOKING"].includes(mode)) {
-      const pcEnts = pcQuery(world);
-      world.pcEnts = pcEnts;
+    if (
+      getState().userInput &&
+      ["INVENTORY", "LOG", "LOOKING"].includes(getState().mode)
+    ) {
+      setState((state) => {
+        state.pcEnts = pcQuery(getState().world);
+      });
 
-      processUserInput(world);
-      uiPipeline(world);
+      processUserInput(getState().world);
+      uiPipeline(getState().world);
     }
 
-    if (mode === "GAME") {
-      if (world.userInput && world.turn === "PLAYER") {
-        processUserInput(world);
-        pipelinePlayerTurn(world);
-        debugPipeline(world);
+    if (getState().mode === "GAME") {
+      if (getState().userInput && getState().turn === "PLAYER") {
+        processUserInput(getState().world);
+        pipelinePlayerTurn(getState().world);
+        debugPipeline(getState().world);
       }
 
-      if (world.turn === "WORLD") {
-        pipelineWorldTurn(world);
-        debugPipeline(world);
-        world.turn = "PLAYER";
+      if (getState().turn === "WORLD") {
+        pipelineWorldTurn(getState().world);
+        debugPipeline(getState().world);
+        setState((state) => {
+          state.turn = "PLAYER";
+        });
       }
     }
 
@@ -94,14 +111,22 @@ function initGame() {
   gameLoop();
 
   document.addEventListener("keydown", (ev) => {
-    world.userInput = ev;
+    setState((state) => {
+      state.userInput = ev;
+    });
   });
 
   document.querySelector("#debug").addEventListener("click", () => {
-    world.debug = !world.debug;
+    setState((state) => {
+      state.debug = !state.debug;
+    });
 
-    if (!world.debug) {
-      world.RESETTING_DEBUG = true;
+    const { debug } = getState();
+
+    if (!debug) {
+      setState((state) => {
+        state.RESETTING_DEBUG = true;
+      });
     }
   });
 }

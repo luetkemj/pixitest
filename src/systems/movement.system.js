@@ -5,6 +5,7 @@ import {
   hasComponent,
   removeComponent,
 } from "bitecs";
+import { setState } from "../index";
 import {
   Ai,
   Blocking,
@@ -128,13 +129,19 @@ export const movementSystem = (world) => {
 
           if (pcEnts.includes(eid)) {
             const msg = `You attack a ${world.meta[e].name}!`;
-            world.log.unshift(msg);
+            setState((state) => {
+              state.log = [msg, ...state.log];
+            });
           } else {
             const msg = `A ${world.meta[eid].name} attacks you!`;
-            world.log.unshift(msg);
+            setState((state) => {
+              state.log = [msg, ...state.log];
+            });
           }
         } else {
-          world.log.unshift("BUMP!");
+          setState((state) => {
+            state.log = ["BUMP!", ...state.log];
+          });
         }
       }
     });

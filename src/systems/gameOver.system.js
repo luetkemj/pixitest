@@ -1,3 +1,4 @@
+import { setState } from "../index";
 import { defineQuery } from "bitecs";
 import { Dead, PC } from "../components";
 
@@ -7,7 +8,9 @@ export const gameOverSystem = (world) => {
   const ents = deadPCQuery(world);
 
   if (ents.length) {
-    world.setMode("GAMEOVER");
+    setState((state) => {
+      state.mode = "GAMEOVER";
+    });
   }
 
   return world;

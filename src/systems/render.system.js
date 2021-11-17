@@ -1,5 +1,6 @@
 import _ from "lodash";
 import { defineQuery, hasComponent, Not } from "bitecs";
+import { getState } from "../index";
 import {
   Dead,
   Forgettable,
@@ -56,6 +57,7 @@ const renderEid = ({ world, eid, renderable = true, alpha = 1 }) => {
 };
 
 export const renderSystem = (world) => {
+  const { mode } = getState();
   const inFovEnts = inFovQuery(world);
   const revealedEnts = revealedQuery(world);
   const forgettableEnts = forgettableQuery(world);
@@ -125,11 +127,11 @@ export const renderSystem = (world) => {
   hideContainer("overlay");
 
   // do overlay things
-  if (["LOOKING"].includes(world.getMode())) {
+  if (["LOOKING"].includes(mode)) {
     // clear the menuTab before rendering
     clearContainer("overlay");
 
-    switch (world.getMode()) {
+    switch (mode) {
       case "LOOKING":
         showContainer("overlay");
         renderLooking(world, pcEnts[0]);
@@ -138,16 +140,16 @@ export const renderSystem = (world) => {
   }
 
   // reset lookingAt if not in LOOKING mode
-  if (!["LOOKING"].includes(world.getMode())) {
+  if (!["LOOKING"].includes(mode)) {
     world.lookingAt = null;
   }
 
   // do menu things
-  if (["LOG", "INVENTORY"].includes(world.getMode())) {
+  if (["LOG", "INVENTORY"].includes(mode)) {
     // clear the menuTab before rendering
     clearContainer("menu");
 
-    switch (world.getMode()) {
+    switch (mode) {
       case "LOG":
         showContainer("menu");
         renderMenuLog(world);
