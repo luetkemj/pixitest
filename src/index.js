@@ -61,28 +61,30 @@ function initGame() {
       return;
     }
 
+    const { world } = getState();
+
     if (
       getState().userInput &&
       ["INVENTORY", "LOG", "LOOKING"].includes(getState().mode)
     ) {
       setState((state) => {
-        state.pcEnts = pcQuery(getState().world);
+        state.pcEnts = pcQuery(world);
       });
 
-      processUserInput(getState().world);
-      uiPipeline(getState().world);
+      processUserInput(world);
+      uiPipeline(world);
     }
 
     if (getState().mode === "GAME") {
       if (getState().userInput && getState().turn === "PLAYER") {
-        processUserInput(getState().world);
-        pipelinePlayerTurn(getState().world);
-        debugPipeline(getState().world);
+        processUserInput(world);
+        pipelinePlayerTurn(world);
+        debugPipeline(world);
       }
 
       if (getState().turn === "WORLD") {
-        pipelineWorldTurn(getState().world);
-        debugPipeline(getState().world);
+        pipelineWorldTurn(world);
+        debugPipeline(world);
         setState((state) => {
           state.turn = "PLAYER";
         });

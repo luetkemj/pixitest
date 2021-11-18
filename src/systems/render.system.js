@@ -152,7 +152,7 @@ export const renderSystem = (world) => {
     switch (mode) {
       case "LOG":
         showContainer("menu");
-        renderMenuLog(world);
+        renderMenuLog();
         break;
       case "INVENTORY":
         showContainer("menu");

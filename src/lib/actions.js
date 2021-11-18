@@ -86,7 +86,7 @@ export const drop = (world, eid, itemEid, dir) => {
   const isDroppable = hasComponent(world, Droppable, itemEid);
 
   if (!isDroppable) {
-    setState((state) => {
+    return setState((state) => {
       state.log.unshift("You can't drop that!");
     });
   }
