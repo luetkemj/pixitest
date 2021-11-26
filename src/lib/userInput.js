@@ -159,14 +159,14 @@ export const processUserInput = (world) => {
       if (key === "d") {
         // possible actions from the Inventory column
         if (inventory.columnIndex === 0) {
-          drop(world, pcEid, inventory.selectedItemEid);
+          drop(world, pcEid, inventory.selectedInventoryItemEid);
         }
       }
 
       if (key === "g") {
         // possible actions from the WithinReach column
         if (inventory.columnIndex === 2) {
-          get(world, pcEid, inventory.selectedItemEid);
+          get(world, pcEid, inventory.selectedInReachItemEid);
         }
       }
     }

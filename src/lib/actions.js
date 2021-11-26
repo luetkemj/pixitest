@@ -116,7 +116,7 @@ export const drop = (world, eid, itemEid, dir) => {
   // update position with new location
   updatePosition({ world, newPos: idToCell(newLoc), eid: itemEid });
   // remove selectedItemId
-  getState().inventory.selectedItemEid = null;
+  getState().inventory.selectedInventoryItemEid = null;
   // somehow make sure to call FOV system again.
   pipelineFovRender(world);
 };

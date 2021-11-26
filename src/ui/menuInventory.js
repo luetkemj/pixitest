@@ -34,6 +34,10 @@ const renderInventoryList = (world, pcEid) => {
   const items = _.compact(Inventory.slots[pcEid]);
 
   if (!items.length) {
+    // clear out selected item
+    setState((state) => {
+      state.inventory.selectedInventoryItemEid = "";
+    });
     printRow({
       ...options,
       y: 3,
@@ -47,7 +51,7 @@ const renderInventoryList = (world, pcEid) => {
       const isSelected = inventory.inventoryListIndex === i;
       if (isSelected && isCurrentColumn) {
         setState((state) => {
-          state.inventory.selectedItemEid = eid;
+          state.inventory.selectedInventoryItemEid = eid;
         });
       }
 
@@ -65,7 +69,15 @@ const renderInventoryList = (world, pcEid) => {
 
 const renderDescription = (world, pcEid) => {
   const { inventory } = getState();
-  const itemEid = inventory.selectedItemEid;
+
+  let itemEid;
+  if (inventory.columnIndex === 0) {
+    itemEid = inventory.selectedInventoryItemEid;
+  }
+  if (inventory.columnIndex === 2) {
+    itemEid = inventory.selectedInReachItemEid;
+  }
+
   if (!itemEid) return;
 
   const itemName = world.meta[itemEid].name;
@@ -145,6 +157,10 @@ const renderInReachList = (world, pcEid) => {
   });
 
   if (!entitiesInReach.length) {
+    // clear out selected item
+    setState((state) => {
+      state.inventory.selectedInReachItemEid = "";
+    });
     printRow({
       ...options,
       y: 3,
@@ -158,7 +174,7 @@ const renderInReachList = (world, pcEid) => {
       const isSelected = inventory.inReachListIndex === i;
       if (isSelected && isCurrentColumn) {
         setState((state) => {
-          state.inventory.selectedItemEid = eid;
+          state.inventory.selectedInReachItemEid = eid;
         });
       }
 
