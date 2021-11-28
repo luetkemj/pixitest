@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { getState, setState } from "../index";
 import wrapAnsi from "wrap-ansi";
 import { hasComponent } from "bitecs";
 import { printRow } from "../lib/canvas";
@@ -13,7 +14,8 @@ import {
 } from "../components";
 
 const renderInventoryList = (world, pcEid) => {
-  const isCurrentColumn = world.inventory.columnIndex === 0;
+  const { inventory } = getState();
+  const isCurrentColumn = inventory.columnIndex === 0;
   // Render inventory list
   const width = 57;
   const color = isCurrentColumn ? 0xffffff : 0x666666;
@@ -32,6 +34,10 @@ const renderInventoryList = (world, pcEid) => {
   const items = _.compact(Inventory.slots[pcEid]);
 
   if (!items.length) {
+    // clear out selected item
+    setState((state) => {
+      state.inventory.selectedInventoryItemEid = "";
+    });
     printRow({
       ...options,
       y: 3,
@@ -42,9 +48,11 @@ const renderInventoryList = (world, pcEid) => {
   items.forEach((eid, i) => {
     if (eid) {
       const itemName = world.meta[eid].name;
-      const isSelected = world.inventory.inventoryListIndex === i;
+      const isSelected = inventory.inventoryListIndex === i;
       if (isSelected && isCurrentColumn) {
-        world.inventory.selectedItemEid = eid;
+        setState((state) => {
+          state.inventory.selectedInventoryItemEid = eid;
+        });
       }
 
       let str = isSelected ? "  * " : "    ";
@@ -60,12 +68,21 @@ const renderInventoryList = (world, pcEid) => {
 };
 
 const renderDescription = (world, pcEid) => {
-  const itemEid = world.inventory.selectedItemEid;
+  const { inventory } = getState();
+
+  let itemEid;
+  if (inventory.columnIndex === 0) {
+    itemEid = inventory.selectedInventoryItemEid;
+  }
+  if (inventory.columnIndex === 2) {
+    itemEid = inventory.selectedInReachItemEid;
+  }
+
   if (!itemEid) return;
 
   const itemName = world.meta[itemEid].name;
   const itemDesc = world.meta[itemEid].description;
-  const currentColumn = world.inventory.columnIndex;
+  const currentColumn = inventory.columnIndex;
 
   const belongsToEid = BelongsTo.eid[itemEid];
   let belongsTo = "";
@@ -119,9 +136,10 @@ const renderDescription = (world, pcEid) => {
 };
 
 const renderInReachList = (world, pcEid) => {
+  const { inventory } = getState();
   const currentLocId = `${Position.x[pcEid]},${Position.y[pcEid]},${Position.z[pcEid]}`;
   const entitiesInReach = gettableEntitiesInReach(world, currentLocId);
-  const isCurrentColumn = world.inventory.columnIndex === 2;
+  const isCurrentColumn = inventory.columnIndex === 2;
 
   // Render inReach list
   const color = isCurrentColumn ? 0xffffff : 0x666666;
@@ -139,6 +157,10 @@ const renderInReachList = (world, pcEid) => {
   });
 
   if (!entitiesInReach.length) {
+    // clear out selected item
+    setState((state) => {
+      state.inventory.selectedInReachItemEid = "";
+    });
     printRow({
       ...options,
       y: 3,
@@ -149,9 +171,11 @@ const renderInReachList = (world, pcEid) => {
   entitiesInReach.forEach((eid, i) => {
     if (eid) {
       const itemName = world.meta[eid].name;
-      const isSelected = world.inventory.inReachListIndex === i;
+      const isSelected = inventory.inReachListIndex === i;
       if (isSelected && isCurrentColumn) {
-        world.inventory.selectedItemEid = eid;
+        setState((state) => {
+          state.inventory.selectedInReachItemEid = eid;
+        });
       }
 
       let str = isSelected ? "  * " : "    ";

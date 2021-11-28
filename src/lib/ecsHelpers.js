@@ -1,6 +1,6 @@
 import _ from "lodash";
 import * as Components from "../components";
-import { Body, Pickupable, Position } from "../components";
+import { Body, Pickupable, Position, Wielding } from "../components";
 import { hasComponent, removeComponent } from "bitecs";
 import { getNeighborIds } from "../lib/grid";
 
@@ -67,7 +67,7 @@ export const walkInventoryTree = (world, eid, inventoryComponent, func) => {
     const branch = inventoryComponent.slots[eid];
     _.each(branch, (partEid) => {
       if (partEid) {
-        func(eid, partEid);
+        func(partEid);
         if (hasComponent(world, inventoryComponent, partEid)) {
           walkTree(partEid);
         }
@@ -82,7 +82,7 @@ export const getEntityAnatomy = (world, eid) => {
   const anatomy = [];
 
   // recursivley build anatomy
-  walkInventoryTree(world, eid, Body, (rootEid, currentEid) => {
+  walkInventoryTree(world, eid, Body, (currentEid) => {
     anatomy.push(currentEid);
   });
   return anatomy.map((partEid) => world.meta[partEid].name);
@@ -120,4 +120,19 @@ export const gettableEntitiesInReach = (world, locId) => {
       return eAtLoc.filter((eid) => hasComponent(world, Pickupable, eid));
     })
   );
+};
+
+export const getWielders = (world, eid) => {
+  let wielders = []; // [wielderEid, wieldingEid]
+  walkInventoryTree(world, eid, Body, (currentEid) => {
+    if (hasComponent(world, Wielding, currentEid)) {
+      const wieldedItemEid = Wielding.slot[currentEid];
+      if (wieldedItemEid) {
+        wielders.push([currentEid, wieldedItemEid]);
+      } else {
+        wielders.push([currentEid]);
+      }
+    }
+  });
+  return wielders;
 };

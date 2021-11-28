@@ -2,11 +2,12 @@ import { defineQuery, addComponent } from "bitecs";
 import { PC, Position, MoveTo } from "../components";
 import * as actions from "../lib/actions";
 import { grid } from "../lib/grid";
+import { getState, setState } from "../index";
 
 const pcQuery = defineQuery([PC]);
 
 export const userInputSystem = (world) => {
-  const { userInput } = world;
+  const { userInput, mode } = getState();
 
   if (!userInput) {
     return world;
@@ -14,7 +15,7 @@ export const userInputSystem = (world) => {
 
   const { key, shiftKey } = userInput;
 
-  if (world.getMode() === "LOOKING") {
+  if (mode === "LOOKING") {
     const steps = shiftKey ? 5 : 1;
 
     if (key === "ArrowUp") {
@@ -35,7 +36,7 @@ export const userInputSystem = (world) => {
     }
   }
 
-  if (world.getMode() === "GAME") {
+  if (mode === "GAME") {
     const ents = pcQuery(world);
 
     for (let i = 0; i < ents.length; i++) {
@@ -71,6 +72,8 @@ export const userInputSystem = (world) => {
     }
   }
 
-  world.userInput = null;
+  setState((state) => {
+    state.userInput = null;
+  });
   return world;
 };

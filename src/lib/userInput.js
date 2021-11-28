@@ -1,3 +1,4 @@
+import { getState, setState } from "../index";
 import { Inventory, Position } from "../components";
 import { gettableEntitiesInReach, walkInventoryTree } from "./ecsHelpers";
 import { drop, get } from "./actions";
@@ -24,40 +25,52 @@ const inventoryControls = [
 ];
 
 export const processUserInput = (world) => {
-  const { userInput } = world;
+  const { userInput, mode, pcEnts } = getState();
 
   const { key } = userInput;
 
   // Game modes must be used in the gameLoop() to processUserInput and call pipelines.
   // if you don't the game will hang and never process user input
   if (key === "Escape") {
-    world.setMode("GAME");
+    setState((state) => {
+      state.mode = "GAME";
+    });
   }
 
   if (key === "i") {
-    world.setMode("INVENTORY");
+    setState((state) => {
+      state.mode = "INVENTORY";
+    });
   }
 
   if (key === "k") {
-    world.setMode("LOOKING");
+    setState((state) => {
+      state.mode = "LOOKING";
+    });
   }
 
   if (key === "l") {
-    world.setMode("LOG");
+    setState((state) => {
+      state.mode = "LOG";
+    });
   }
 
-  if (["LOOKING"].includes(world.getMode())) {
+  if (["LOOKING"].includes(mode)) {
     if (lookingControls.includes(key)) {
-      world.userInput = userInput;
+      setState((state) => {
+        state.userInput = userInput;
+      });
     }
   }
 
-  if (["INVENTORY"].includes(world.getMode())) {
+  if (["INVENTORY"].includes(mode)) {
     if (inventoryControls.includes(key)) {
-      world.userInput = userInput;
+      setState((state) => {
+        state.userInput = userInput;
+      });
 
       // count items in inventory
-      const pcEid = world.pcEnts[0];
+      const pcEid = pcEnts[0];
       let nItems = 0;
       walkInventoryTree(world, pcEid, Inventory, () => {
         nItems++;
@@ -65,87 +78,119 @@ export const processUserInput = (world) => {
       // count gettableEntitiesWithinReach
       const currentLocId = `${Position.x[pcEid]},${Position.y[pcEid]},${Position.z[pcEid]}`;
       const entitiesInReach = gettableEntitiesInReach(world, currentLocId);
+      const { inventory } = getState();
 
       if (key === "ArrowUp") {
-        if (world.inventory.columnIndex === 0) {
-          if (world.inventory.inventoryListIndex === 0) {
-            world.inventory.inventoryListIndex = nItems - 1;
+        if (inventory.columnIndex === 0) {
+          if (inventory.inventoryListIndex === 0) {
+            setState((state) => {
+              state.inventory.inventoryListIndex = nItems - 1;
+            });
           } else {
-            world.inventory.inventoryListIndex--;
+            setState((state) => {
+              state.inventory.inventoryListIndex--;
+            });
           }
         }
 
-        if (world.inventory.columnIndex === 2) {
-          if (world.inventory.inReachListIndex === 0) {
-            world.inventory.inReachListIndex = entitiesInReach.length - 1;
+        if (inventory.columnIndex === 2) {
+          if (inventory.inReachListIndex === 0) {
+            setState((state) => {
+              state.inventory.inReachListIndex = entitiesInReach.length - 1;
+            });
           } else {
-            world.inventory.inReachListIndex--;
+            setState((state) => {
+              state.inventory.inReachListIndex--;
+            });
           }
         }
       }
 
       if (key === "ArrowDown") {
-        if (world.inventory.columnIndex === 0) {
-          if (world.inventory.inventoryListIndex === nItems - 1) {
-            world.inventory.inventoryListIndex = 0;
+        if (inventory.columnIndex === 0) {
+          if (inventory.inventoryListIndex === nItems - 1) {
+            setState((state) => {
+              state.inventory.inventoryListIndex = 0;
+            });
           } else {
-            world.inventory.inventoryListIndex++;
+            setState((state) => {
+              state.inventory.inventoryListIndex++;
+            });
           }
         }
 
-        if (world.inventory.columnIndex === 2) {
-          if (world.inventory.inReachListIndex === entitiesInReach.length - 1) {
-            world.inventory.inReachListIndex = 0;
+        if (inventory.columnIndex === 2) {
+          if (inventory.inReachListIndex === entitiesInReach.length - 1) {
+            setState((state) => {
+              state.inventory.inReachListIndex = 0;
+            });
           } else {
-            world.inventory.inReachListIndex++;
+            setState((state) => {
+              state.inventory.inReachListIndex++;
+            });
           }
         }
       }
 
       if (key === "ArrowLeft") {
-        if (world.inventory.columnIndex === 0) {
-          world.inventory.columnIndex = 2;
+        if (inventory.columnIndex === 0) {
+          setState((state) => {
+            state.inventory.columnIndex = 2;
+          });
         } else {
-          world.inventory.columnIndex = 0;
+          setState((state) => {
+            state.inventory.columnIndex = 0;
+          });
         }
       }
 
       if (key === "ArrowRight") {
-        if (world.inventory.columnIndex === 2) {
-          world.inventory.columnIndex = 0;
+        if (inventory.columnIndex === 2) {
+          setState((state) => {
+            state.inventory.columnIndex = 0;
+          });
         } else {
-          world.inventory.columnIndex = 2;
+          setState((state) => {
+            state.inventory.columnIndex = 2;
+          });
         }
       }
 
       if (key === "d") {
         // possible actions from the Inventory column
-        if (world.inventory.columnIndex === 0) {
-          drop(world, pcEid, world.inventory.selectedItemEid);
+        if (inventory.columnIndex === 0) {
+          drop(world, pcEid, inventory.selectedInventoryItemEid);
         }
       }
 
       if (key === "g") {
         // possible actions from the WithinReach column
-        if (world.inventory.columnIndex === 2) {
-          get(world, pcEid, world.inventory.selectedItemEid);
+        if (inventory.columnIndex === 2) {
+          get(world, pcEid, inventory.selectedInReachItemEid);
         }
       }
     }
   }
 
-  if (["GAME"].includes(world.getMode())) {
+  if (["GAME"].includes(mode)) {
     if (gameplayControls.includes(key)) {
-      world.userInput = userInput;
+      setState((state) => {
+        state.userInput = userInput;
+      });
     }
   }
 
-  // update turn
   if (uiControls.includes(key)) {
-    world.turn = "PLAYER";
+    setState((state) => {
+      state.turn = "PLAYER";
+    });
   } else if (uiControls.includes(userInput)) {
-    world.turn = "UI";
+    setState((state) => {
+      state.turn = "UI";
+    });
   } else {
-    world.turn = "WORLD";
+    setState((state) => {
+      state.turn = "WORLD";
+    });
   }
 };
