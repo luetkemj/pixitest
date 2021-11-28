@@ -9,7 +9,6 @@ import { setState } from "../index";
 import {
   Ai,
   Blocking,
-  Body,
   Damage,
   Dead,
   Forgettable,
@@ -19,11 +18,9 @@ import {
   Position,
   Strength,
   MoveTo,
-  Wielding,
   Zindex,
 } from "../components";
-import { walkInventoryTree, updatePosition } from "../lib/ecsHelpers";
-import { addSprite } from "../lib/canvas";
+import { getWielders, updatePosition } from "../lib/ecsHelpers";
 import { grid } from "../lib/grid";
 
 const movementQuery = defineQuery([Position, MoveTo]);
@@ -42,44 +39,21 @@ const kill = (world, eid) => {
 const attack = (world, aggressor, target) => {
   let damage = Strength.current[aggressor];
 
-  const isWielding = hasComponent(world, Wielding, aggressor);
-  if (isWielding) {
-    const wieldable = Wielding.slot[aggressor];
-    if (hasComponent(world, Damage, wieldable)) {
-      damage += Damage.current[wieldable];
-    }
-  }
-
-  // TESTING
-  walkInventoryTree(world, target, Body, (rootEid, currentEid) => {
-    if (world.meta[currentEid].name === "Right Leg") {
-      const slot = _.findIndex(
-        Body.slots[rootEid],
-        (eid) => eid === currentEid
-      );
-
-      Body.slots[rootEid][slot] = 0;
-
-      const newPos = {
-        x: Position.x[target],
-        y: Position.y[target],
-        z: Position.z[target],
-      };
-      updatePosition({ world, newPos, eid: currentEid });
-
-      if (!world.sprites[currentEid]) {
-        addSprite({
-          texture: "~",
-          world,
-          eid: currentEid,
-          options: {
-            tint: 0xd0212d,
-          },
-        });
+  const wielders = getWielders(world, aggressor);
+  _.each(wielders, (wielder) => {
+    const itemEid = wielder[1];
+    if (itemEid) {
+      if (hasComponent(world, Damage, itemEid)) {
+        damage += Damage.current[itemEid];
       }
     }
   });
-  // TESTING
+
+  setState((state) => {
+    state.log.unshift(
+      `${world.meta[aggressor].name} hits ${world.meta[target].name} for ${damage} damage`
+    );
+  });
 
   Health.current[target] -= damage;
   if (Health.current[target] <= 0) {

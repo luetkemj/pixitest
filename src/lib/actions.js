@@ -2,10 +2,11 @@ import _ from "lodash";
 import { getState, setState } from "../index";
 import { pipelineFovRender } from "../pipelines";
 import { addComponent, hasComponent } from "bitecs";
-import { updatePosition } from "./ecsHelpers";
+import { getWielders, updatePosition } from "./ecsHelpers";
 import { idToCell, getNeighborIds } from "./grid";
 import {
   Blocking,
+  Body,
   Consumable,
   Droppable,
   Effects,
@@ -71,7 +72,7 @@ export const get = (world, eid, itemEid) => {
       if (isWieldable) {
         const alreadyWielding = hasComponent(world, Wielding, eid);
         if (!alreadyWielding) {
-          equip(world, eid, pickupEid);
+          wield(world, eid, pickupEid);
         }
       }
     } else {
@@ -151,25 +152,46 @@ export const consume = (world, targetEid, itemEid) => {
   });
 };
 
-export const equip = (world, targetEid, itemEid) => {
-  const alreadyWielding = hasComponent(world, Wielding, targetEid);
-  const isWieldable = hasComponent(world, Wieldable, itemEid);
+export const unwield = (world, wielderEid) => {
+  if (hasComponent(world, Wielding, wielderEid)) {
+    Wielding.slot[wielderEid] = 0;
+  }
+};
 
+export const wield = (world, targetEid, itemEid) => {
+  // check if item is wieldable
+  const isWieldable = hasComponent(world, Wieldable, itemEid);
   if (!isWieldable) {
     return setState((state) => {
       state.log.unshift(`You can't wield that!`);
     });
   }
 
-  if (alreadyWielding) {
+  // check if entity can wield
+  const wielders = getWielders(world, targetEid);
+  if (!wielders.length) {
     return setState((state) => {
-      state.log.unshift(`You are already wielding something!`);
+      state.log.unshift(`You cannot wield anything. (no wielders)`);
     });
   }
 
-  addComponent(world, Wielding, targetEid);
-  Wielding.slot[targetEid] = itemEid;
+  // check if all wielders are full
+  const hasFreeWielders = _.some(wielders, (wielder) => wielder.length < 2);
+  if (!hasFreeWielders) {
+    return setState((state) => {
+      state.log.unshift(`You cannot wield anything. (wielders full)`);
+    });
+  }
+
+  // get first free wielder add component to be wielded
+  const freeWielder = _.find(wielders, (wielder) => wielder.length < 2);
+  const wielderEid = freeWielder[0];
+
+  Wielding.slot[wielderEid] = itemEid;
+  // addComponent(world, Wielding, targetEid);
   return setState((state) => {
-    state.log.unshift(`You are wielding a ${world.meta[itemEid].name}!`);
+    state.log.unshift(
+      `You are wielding a ${world.meta[itemEid].name} in your ${world.meta[wielderEid].name}!`
+    );
   });
 };

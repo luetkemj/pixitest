@@ -8,6 +8,7 @@ import {
   Pickupable,
   Position,
   Wieldable,
+  Wielding,
   Zindex,
 } from "../../components";
 
@@ -58,6 +59,9 @@ export const createHumanoidBody = (world, parentEid) => {
     Zindex.zIndex[partEid] = 20;
     BelongsTo.eid[partEid] = parentEid;
   });
+
+  addComponent(world, Wielding, handLeftEid);
+  addComponent(world, Wielding, handRightEid);
 
   // Torso
   [headEid, armLeftEid, armRightEid, legLeftEid, legRightEid].forEach(
