@@ -92,6 +92,24 @@ export const drop = (world, eid, itemEid, dir) => {
     });
   }
 
+  // check if item to be dropped can also be wielded
+  const isWieldable = hasComponent(world, Wieldable, itemEid);
+  if (isWieldable) {
+    // check if entity dropping item can also wield items
+    const wielders = getWielders(world, eid);
+    if (wielders.length) {
+      // check if entity dropping item is also wielding said item
+      const wielderToUnwield = _.find(
+        wielders,
+        (wielder) => wielder[1] === itemEid
+      );
+      // if item is being wielded, unwield
+      if (wielderToUnwield) {
+        unwield(world, wielderToUnwield[0]);
+      }
+    }
+  }
+
   const currentLocId = `${Position.x[eid]},${Position.y[eid]},${Position.z[eid]}`;
 
   const neighbors = getNeighborIds(currentLocId, "ALL");
@@ -109,6 +127,10 @@ export const drop = (world, eid, itemEid, dir) => {
   const slotIndex = _.findIndex(Inventory.slots[eid], (x) => x === itemEid);
   // remove item from inventory
   Inventory.slots[eid][slotIndex] = 0;
+
+  setState((state) => {
+    state.log.unshift(`You drop a ${world.meta[itemEid].name}.`);
+  });
 
   // add position component if needed
   if (!hasComponent(world, Position, itemEid)) {
