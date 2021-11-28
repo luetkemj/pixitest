@@ -5,6 +5,7 @@ import {
   Ai,
   Blocking,
   Body,
+  Damage,
   Droppable,
   Forgettable,
   Health,
@@ -27,6 +28,7 @@ export const createGoblin = (world, options) => {
   addComponent(world, Position, eid);
   addComponent(world, Blocking, eid);
   addComponent(world, Body, eid);
+  addComponent(world, Damage, eid);
   addComponent(world, Droppable, eid);
   addComponent(world, Forgettable, eid);
   addComponent(world, Health, eid);
@@ -37,6 +39,8 @@ export const createGoblin = (world, options) => {
   addComponent(world, Zindex, eid);
 
   Zindex.zIndex[eid] = 30;
+  Damage.max[eid] = 2;
+  Damage.current[eid] = 2;
   Health.max[eid] = 10;
   Health.current[eid] = 10;
   Intelligence.max[eid] = 5;
