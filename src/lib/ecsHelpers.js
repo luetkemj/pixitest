@@ -85,7 +85,7 @@ export const getEntityAnatomy = (world, eid) => {
   walkInventoryTree(world, eid, Body, (currentEid) => {
     anatomy.push(currentEid);
   });
-  return anatomy.map((partEid) => world.meta[partEid].name);
+  return anatomy.map((partEid) => getEntityData(world, partEid));
 };
 
 export const getEntityData = (world, eid) => {
