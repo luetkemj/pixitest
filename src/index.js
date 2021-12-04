@@ -66,7 +66,9 @@ function initGame() {
 
     if (
       getState().userInput &&
-      ["INVENTORY", "LOG", "LOOKING"].includes(getState().mode)
+      ["CHARACTER_MENU", "INVENTORY", "LOG", "LOOKING"].includes(
+        getState().mode
+      )
     ) {
       setState((state) => {
         state.pcEnts = pcQuery(world);

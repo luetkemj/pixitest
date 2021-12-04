@@ -11,7 +11,7 @@ const gameplayControls = [
   "g",
 ];
 
-const uiControls = ["Escape", "i", "k", "l", "Shift"];
+const uiControls = ["Escape", "c", "i", "k", "l", "Shift"];
 
 const lookingControls = ["ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft"];
 
@@ -34,6 +34,12 @@ export const processUserInput = (world) => {
   if (key === "Escape") {
     setState((state) => {
       state.mode = "GAME";
+    });
+  }
+
+  if (key === "c") {
+    setState((state) => {
+      state.mode = "CHARACTER_MENU";
     });
   }
 

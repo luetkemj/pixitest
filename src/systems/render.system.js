@@ -21,8 +21,9 @@ import {
 } from "../lib/canvas";
 import { renderAmbiance } from "../ui/ambiance";
 import { renderLegend } from "../ui/legend";
-import { renderMenuLog } from "../ui/menuLog";
+import { renderMenuCharacter } from "../ui/menuCharacter";
 import { renderMenuInventory } from "../ui/menuInventory";
+import { renderMenuLog } from "../ui/menuLog";
 import { renderLooking } from "../ui/looking";
 
 let cellWidth;
@@ -145,7 +146,7 @@ export const renderSystem = (world) => {
   }
 
   // do menu things
-  if (["LOG", "INVENTORY"].includes(mode)) {
+  if (["LOG", "INVENTORY", "CHARACTER_MENU"].includes(mode)) {
     // clear the menuTab before rendering
     clearContainer("menu");
 
@@ -157,6 +158,10 @@ export const renderSystem = (world) => {
       case "INVENTORY":
         showContainer("menu");
         renderMenuInventory(world, pcEnts[0]);
+        break;
+      case "CHARACTER_MENU":
+        showContainer("menu");
+        renderMenuCharacter(world, pcEnts[0]);
         break;
     }
   }
