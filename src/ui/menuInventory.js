@@ -1,7 +1,7 @@
-import _ from "../../_snowpack/pkg/lodash.js";
+import _ from "../../dist/pkg/lodash.js";
 import { getState, setState } from "../index.js";
-import wrapAnsi from "../../_snowpack/pkg/wrap-ansi.js";
-import { hasComponent } from "../../_snowpack/pkg/bitecs.js";
+import wrapAnsi from "../../dist/pkg/wrap-ansi.js";
+import { hasComponent } from "../../dist/pkg/bitecs.js";
 import { printRow } from "../lib/canvas.js";
 import { gettableEntitiesInReach } from "../lib/ecsHelpers.js";
 import { getNeighborIds } from "../lib/grid.js";

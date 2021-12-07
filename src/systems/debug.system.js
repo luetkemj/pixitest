@@ -1,5 +1,5 @@
-import _ from "../../_snowpack/pkg/lodash.js";
-import { defineQuery, removeComponent, Not } from "../../_snowpack/pkg/bitecs.js";
+import _ from "../../dist/pkg/lodash.js";
+import { defineQuery, removeComponent, Not } from "../../dist/pkg/bitecs.js";
 import { Position } from "../components.js";
 import { addDebugSprite } from "../lib/canvas.js";
 import { grid } from "../lib/grid.js";

@@ -1,6 +1,6 @@
 // https://www.redblobgames.com/maps/terrain-from-noise/
 
-import SimplexNoise from "../../_snowpack/pkg/simplex-noise.js";
+import SimplexNoise from "../../dist/pkg/simplex-noise.js";
 
 const noises = {
   // gen1: new SimplexNoise("seed1"),

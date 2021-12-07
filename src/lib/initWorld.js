@@ -1,5 +1,5 @@
-import _ from "../../_snowpack/pkg/lodash.js";
-import { addComponent, createWorld } from "../../_snowpack/pkg/bitecs.js";
+import _ from "../../dist/pkg/lodash.js";
+import { addComponent, createWorld } from "../../dist/pkg/bitecs.js";
 import { grid } from "./grid.js";
 import { PC } from "../components.js";
 import { setState } from "../index.js";

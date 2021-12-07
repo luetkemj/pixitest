@@ -1,5 +1,5 @@
 import { setState } from "../index.js";
-import { defineQuery } from "../../_snowpack/pkg/bitecs.js";
+import { defineQuery } from "../../dist/pkg/bitecs.js";
 import { Dead, PC } from "../components.js";
 
 const deadPCQuery = defineQuery([Dead, PC]);

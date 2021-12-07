@@ -1,5 +1,5 @@
-import _ from "../../_snowpack/pkg/lodash.js";
-import wrapAnsi from "../../_snowpack/pkg/wrap-ansi.js";
+import _ from "../../dist/pkg/lodash.js";
+import wrapAnsi from "../../dist/pkg/wrap-ansi.js";
 import { printRow } from "../lib/canvas.js";
 import { getEntityData, getWielders } from "../lib/ecsHelpers.js";
 import { grid } from "../lib/grid.js";

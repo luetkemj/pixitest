@@ -1,4 +1,4 @@
-import { addComponent, addEntity } from "../../../_snowpack/pkg/bitecs.js";
+import { addComponent, addEntity } from "../../../dist/pkg/bitecs.js";
 import { fillFirstEmptySlot } from "../../lib/ecsHelpers.js";
 import {
   BelongsTo,

@@ -1,4 +1,4 @@
-import { Types, defineComponent } from "../_snowpack/pkg/bitecs.js";
+import { Types, defineComponent } from "../dist/pkg/bitecs.js";
 
 const Vector3 = { x: Types.f32, y: Types.f32, z: Types.f32 };
 const MaxCurrent = { max: Types.i16, current: Types.i16 };

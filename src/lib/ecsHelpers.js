@@ -1,7 +1,7 @@
-import _ from "../../_snowpack/pkg/lodash.js";
+import _ from "../../dist/pkg/lodash.js";
 import * as Components from "../components.js";
 import { Body, Pickupable, Position, Wielding } from "../components.js";
-import { hasComponent, removeComponent } from "../../_snowpack/pkg/bitecs.js";
+import { hasComponent, removeComponent } from "../../dist/pkg/bitecs.js";
 import { getNeighborIds } from "./grid.js";
 
 export const findEmptySlot = ({ component, containerEid }) => {

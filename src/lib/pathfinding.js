@@ -1,10 +1,10 @@
-import PF from "../../_snowpack/pkg/pathfinding.js";
-import { some, times } from "../../_snowpack/pkg/lodash.js";
+import PF from "../../dist/pkg/pathfinding.js";
+import { some, times } from "../../dist/pkg/lodash.js";
 
 import { Ai, Blocking } from "../components.js";
 
 import { grid, toCell } from "./grid.js";
-import { hasComponent } from "../../_snowpack/pkg/bitecs.js";
+import { hasComponent } from "../../dist/pkg/bitecs.js";
 
 export const aStar = (world, start, goal) => {
   const matrix = [];

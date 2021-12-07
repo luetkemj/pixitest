@@ -1,4 +1,4 @@
-import { defineQuery, addComponent } from "../../_snowpack/pkg/bitecs.js";
+import { defineQuery, addComponent } from "../../dist/pkg/bitecs.js";
 import { Ai, Intelligence, MoveTo, PC, Position } from "../components.js";
 import { aStar } from "../lib/pathfinding.js";
 

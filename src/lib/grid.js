@@ -1,4 +1,4 @@
-import { sample } from "../../_snowpack/pkg/lodash.js";
+import { sample } from "../../dist/pkg/lodash.js";
 
 export const grid = {
   width: 100,

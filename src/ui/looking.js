@@ -1,4 +1,4 @@
-import _ from "../../_snowpack/pkg/lodash.js";
+import _ from "../../dist/pkg/lodash.js";
 import { Position } from "../components.js";
 import { clearContainer, printRow } from "../lib/canvas.js";
 import { getEntityData } from "../lib/ecsHelpers.js";

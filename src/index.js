@@ -1,5 +1,5 @@
-import _ from "../_snowpack/pkg/lodash.js";
-import { defineQuery, pipe } from "../_snowpack/pkg/bitecs.js";
+import _ from "../dist/pkg/lodash.js";
+import { defineQuery, pipe } from "../dist/pkg/bitecs.js";
 import { PC } from "./components.js";
 import {
   pipelinePlayerTurn,

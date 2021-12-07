@@ -1,4 +1,4 @@
-import _ from "../../_snowpack/pkg/lodash.js";
+import _ from "../../dist/pkg/lodash.js";
 import { printRow } from "../lib/canvas.js";
 import { grid } from "../lib/grid.js";
 import { getState } from "../index.js";

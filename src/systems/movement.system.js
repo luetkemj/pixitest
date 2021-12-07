@@ -1,10 +1,10 @@
-import _ from "../../_snowpack/pkg/lodash.js";
+import _ from "../../dist/pkg/lodash.js";
 import {
   defineQuery,
   addComponent,
   hasComponent,
   removeComponent,
-} from "../../_snowpack/pkg/bitecs.js";
+} from "../../dist/pkg/bitecs.js";
 import { setState } from "../index.js";
 import {
   Ai,

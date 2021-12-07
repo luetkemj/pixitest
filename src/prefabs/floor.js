@@ -1,5 +1,5 @@
-import _ from "../../_snowpack/pkg/lodash.js";
-import { addComponent, addEntity } from "../../_snowpack/pkg/bitecs.js";
+import _ from "../../dist/pkg/lodash.js";
+import { addComponent, addEntity } from "../../dist/pkg/bitecs.js";
 
 import { Position, Zindex } from "../components.js";
 

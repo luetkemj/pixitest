@@ -1,5 +1,5 @@
-import * as PIXI from "../_snowpack/pkg/pixijs.js";
-import _ from "../_snowpack/pkg/lodash.js";
+import * as PIXI from "../dist/pkg/pixijs.js";
+import _ from "../dist/pkg/lodash.js";
 import { grid } from "./lib/grid.js";
 import { makeNoise } from "./lib/worldgen.js";
 

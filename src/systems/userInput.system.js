@@ -1,4 +1,4 @@
-import { defineQuery, addComponent } from "../../_snowpack/pkg/bitecs.js";
+import { defineQuery, addComponent } from "../../dist/pkg/bitecs.js";
 import { PC, Position, MoveTo } from "../components.js";
 import * as actions from "../lib/actions.js";
 import { grid } from "../lib/grid.js";

@@ -1,4 +1,4 @@
-import { defineQuery, addComponent, removeComponent } from "../../_snowpack/pkg/bitecs.js";
+import { defineQuery, addComponent, removeComponent } from "../../dist/pkg/bitecs.js";
 import {
   FovDistance,
   FovRange,

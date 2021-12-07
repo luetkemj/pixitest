@@ -1,5 +1,5 @@
-import _ from "../../_snowpack/pkg/lodash.js";
-import * as PIXI from "../../_snowpack/pkg/pixijs.js";
+import _ from "../../dist/pkg/lodash.js";
+import * as PIXI from "../../dist/pkg/pixijs.js";
 import { Position } from "../components.js";
 import { getEntityData } from "./ecsHelpers.js";
 import { grid } from "./grid.js";

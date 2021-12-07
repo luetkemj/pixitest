@@ -1,7 +1,7 @@
-import _ from "../../_snowpack/pkg/lodash.js";
+import _ from "../../dist/pkg/lodash.js";
 import { getState, setState } from "../index.js";
 import { pipelineFovRender } from "../pipelines.js";
-import { addComponent, hasComponent } from "../../_snowpack/pkg/bitecs.js";
+import { addComponent, hasComponent } from "../../dist/pkg/bitecs.js";
 import { getWielders, updatePosition } from "./ecsHelpers.js";
 import { idToCell, getNeighborIds } from "./grid.js";
 import {

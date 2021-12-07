@@ -1,4 +1,4 @@
-import { random, times } from "../../_snowpack/pkg/lodash.js";
+import { random, times } from "../../dist/pkg/lodash.js";
 import { rectangle, rectsIntersect } from "./grid.js";
 
 function digHorizontalPassage(x1, x2, y) {

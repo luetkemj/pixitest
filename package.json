@@ -5,7 +5,7 @@
   "scripts": {
     "start": "snowpack dev",
     "build": "snowpack build --polyfill-node",
-    "deploy": "gh-pages -d dist",
+    "deploy": "gh-pages -d build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

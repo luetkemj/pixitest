@@ -1,4 +1,4 @@
-import { pipe } from "../_snowpack/pkg/bitecs.js";
+import { pipe } from "../dist/pkg/bitecs.js";
 import { aiSystem } from "./systems/ai.system.js";
 import { debugSystem } from "./systems/debug.system.js";
 import { fovSystem } from "./systems/fov.system.js";
