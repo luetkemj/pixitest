@@ -1,34 +1,30 @@
-<!doctype html>
-
-<head>
+<!DOCTYPE html><html><head>
   <title>MAPGEN</title>
 
-  <meta id="viewport" name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
 
-  <style>
-    html,
-    body {
-      margin: 0;
-      padding: 5px;
-      height: 100%;
-      background: black;
-      color: #ddd;
-    }
-
-    canvas {
-      image-rendering: -moz-crisp-edges;
-      image-rendering: -webkit-crisp-edges;
-      image-rendering: pixelated;
-      image-rendering: crisp-edges;
-    }
-  </style>
+  <style>/* build/index-mapgen.html.inline.0.css */
+html,
+body {
+  margin: 0;
+  padding: 5px;
+  height: 100%;
+  background: black;
+  color: #ddd;
+}
+canvas {
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+</style>
 </head>
 
 <body>
   <noscript>Please enable JavaScript in your web browser to view this page.</noscript>
-  <div id="pixi-content"><canvas id="pixi-canvas" /></div>
+  <div id="pixi-content"><canvas id="pixi-canvas"></canvas></div>
 
   <div>
     <input type="checkbox" id="island" name="island">
@@ -83,15 +79,15 @@
   </div>
 
   <div>
-    <label for="poles">Poles (H -> C)</label>
+    <label for="poles">Poles (H -&gt; C)</label>
     <input value="2" type="range" id="poles" name="poles" min="-2" max="2" step="0.1">
   </div>
 
   <div>
-    <label for="equator">Equator (H -> C)</label>
+    <label for="equator">Equator (H -&gt; C)</label>
     <input value="-2" type="range" id="equator" name="equator" min="-2" max="2" step="0.1">
   </div>
-</body>
+
 <script type="module" src="./src/index-mapgen.js"></script>
 
-</html>
+</body></html>

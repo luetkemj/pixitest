@@ -19,4 +19,7 @@ module.exports = {
     baseUrl: "/pixitest",
     metaUrlPath: `dist`,
   },
+  optimize: {
+    bundle: true,
+  },
 };
