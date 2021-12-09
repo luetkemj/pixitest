@@ -2340,14 +2340,14 @@ var lodash = createCommonjsModule(function(module, exports) {
           });
         });
       }
-      function createPadding(length, chars) {
-        chars = chars === undefined$1 ? " " : baseToString(chars);
-        var charsLength = chars.length;
+      function createPadding(length, chars2) {
+        chars2 = chars2 === undefined$1 ? " " : baseToString(chars2);
+        var charsLength = chars2.length;
         if (charsLength < 2) {
-          return charsLength ? baseRepeat(chars, length) : chars;
+          return charsLength ? baseRepeat(chars2, length) : chars2;
         }
-        var result2 = baseRepeat(chars, nativeCeil(length / stringSize(chars)));
-        return hasUnicode(chars) ? castSlice(stringToArray(result2), 0, length).join("") : result2.slice(0, length);
+        var result2 = baseRepeat(chars2, nativeCeil(length / stringSize(chars2)));
+        return hasUnicode(chars2) ? castSlice(stringToArray(result2), 0, length).join("") : result2.slice(0, length);
       }
       function createPartial(func, bitmask, thisArg, partials) {
         var isBind = bitmask & WRAP_BIND_FLAG, Ctor = createCtor(func);
@@ -4520,7 +4520,7 @@ var lodash = createCommonjsModule(function(module, exports) {
         return result2 + (index ? " " : "") + word.toLowerCase();
       });
       var lowerFirst = createCaseFirst("toLowerCase");
-      function pad(string, length, chars) {
+      function pad(string, length, chars2) {
         string = toString(string);
         length = toInteger(length);
         var strLength = length ? stringSize(string) : 0;
@@ -4528,19 +4528,19 @@ var lodash = createCommonjsModule(function(module, exports) {
           return string;
         }
         var mid = (length - strLength) / 2;
-        return createPadding(nativeFloor(mid), chars) + string + createPadding(nativeCeil(mid), chars);
+        return createPadding(nativeFloor(mid), chars2) + string + createPadding(nativeCeil(mid), chars2);
       }
-      function padEnd(string, length, chars) {
+      function padEnd(string, length, chars2) {
         string = toString(string);
         length = toInteger(length);
         var strLength = length ? stringSize(string) : 0;
-        return length && strLength < length ? string + createPadding(length - strLength, chars) : string;
+        return length && strLength < length ? string + createPadding(length - strLength, chars2) : string;
       }
-      function padStart(string, length, chars) {
+      function padStart(string, length, chars2) {
         string = toString(string);
         length = toInteger(length);
         var strLength = length ? stringSize(string) : 0;
-        return length && strLength < length ? createPadding(length - strLength, chars) + string : string;
+        return length && strLength < length ? createPadding(length - strLength, chars2) + string : string;
       }
       function parseInt2(string, radix, guard) {
         if (guard || radix == null) {
@@ -4643,37 +4643,37 @@ var lodash = createCommonjsModule(function(module, exports) {
       function toUpper(value) {
         return toString(value).toUpperCase();
       }
-      function trim(string, chars, guard) {
+      function trim(string, chars2, guard) {
         string = toString(string);
-        if (string && (guard || chars === undefined$1)) {
+        if (string && (guard || chars2 === undefined$1)) {
           return baseTrim(string);
         }
-        if (!string || !(chars = baseToString(chars))) {
+        if (!string || !(chars2 = baseToString(chars2))) {
           return string;
         }
-        var strSymbols = stringToArray(string), chrSymbols = stringToArray(chars), start = charsStartIndex(strSymbols, chrSymbols), end = charsEndIndex(strSymbols, chrSymbols) + 1;
+        var strSymbols = stringToArray(string), chrSymbols = stringToArray(chars2), start = charsStartIndex(strSymbols, chrSymbols), end = charsEndIndex(strSymbols, chrSymbols) + 1;
         return castSlice(strSymbols, start, end).join("");
       }
-      function trimEnd(string, chars, guard) {
+      function trimEnd(string, chars2, guard) {
         string = toString(string);
-        if (string && (guard || chars === undefined$1)) {
+        if (string && (guard || chars2 === undefined$1)) {
           return string.slice(0, trimmedEndIndex(string) + 1);
         }
-        if (!string || !(chars = baseToString(chars))) {
+        if (!string || !(chars2 = baseToString(chars2))) {
           return string;
         }
-        var strSymbols = stringToArray(string), end = charsEndIndex(strSymbols, stringToArray(chars)) + 1;
+        var strSymbols = stringToArray(string), end = charsEndIndex(strSymbols, stringToArray(chars2)) + 1;
         return castSlice(strSymbols, 0, end).join("");
       }
-      function trimStart(string, chars, guard) {
+      function trimStart(string, chars2, guard) {
         string = toString(string);
-        if (string && (guard || chars === undefined$1)) {
+        if (string && (guard || chars2 === undefined$1)) {
           return string.replace(reTrimStart, "");
         }
-        if (!string || !(chars = baseToString(chars))) {
+        if (!string || !(chars2 = baseToString(chars2))) {
           return string;
         }
-        var strSymbols = stringToArray(string), start = charsStartIndex(strSymbols, stringToArray(chars));
+        var strSymbols = stringToArray(string), start = charsStartIndex(strSymbols, stringToArray(chars2));
         return castSlice(strSymbols, start).join("");
       }
       function truncate(string, options) {
@@ -14668,7 +14668,7 @@ Object.defineProperties(Runner.prototype, {
   run: {value: Runner.prototype.emit}
 });
 
-// build/dist/pkg/common/core-2368fc42.js
+// build/dist/pkg/common/core-541076f2.js
 /*!
  * @pixi/core - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -21145,7 +21145,7 @@ for (var name in _systems) {
   _loop_2(name);
 }
 
-// build/dist/pkg/common/app-d7d87427.js
+// build/dist/pkg/common/app-8480bac6.js
 /*!
  * @pixi/app - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -21266,7 +21266,7 @@ var ResizePlugin = function() {
 }();
 Application.registerPlugin(ResizePlugin);
 
-// build/dist/pkg/common/extract-a875de90.js
+// build/dist/pkg/common/extract-a856e4f2.js
 /*!
  * @pixi/extract - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -21393,7 +21393,7 @@ var Extract = function() {
   return Extract2;
 }();
 
-// build/dist/pkg/common/loaders-7f59b462.js
+// build/dist/pkg/common/loaders-7c81f587.js
 /*!
  * @pixi/loaders - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -22600,7 +22600,7 @@ function parsing(resource, next) {
 Loader.registerPlugin({use: parsing});
 Loader.registerPlugin(TextureLoader);
 
-// build/dist/pkg/common/compressed-textures-8c09a999.js
+// build/dist/pkg/common/compressed-textures-637d56f2.js
 /*!
  * @pixi/compressed-textures - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -23440,7 +23440,7 @@ var KTXLoader = function() {
   return KTXLoader2;
 }();
 
-// build/dist/pkg/common/particle-container-e9370ca4.js
+// build/dist/pkg/common/particle-container-cba002ba.js
 /*!
  * @pixi/particle-container - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -23891,7 +23891,7 @@ var ParticleRenderer = function(_super) {
   return ParticleRenderer2;
 }(ObjectRenderer);
 
-// build/dist/pkg/common/graphics-03001b9f.js
+// build/dist/pkg/common/graphics-a31cc4bc.js
 /*!
  * @pixi/graphics - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -24960,7 +24960,7 @@ var GraphicsGeometry = function(_super) {
       DRAW_CALL_POOL.push(this.drawCalls[i]);
     }
     this.drawCalls.length = 0;
-    var colors = this.colors;
+    var colors2 = this.colors;
     var textureIds = this.textureIds;
     var currentGroup = DRAW_CALL_POOL.pop();
     if (!currentGroup) {
@@ -25020,7 +25020,7 @@ var GraphicsGeometry = function(_super) {
       currentGroup.size += data.size;
       index += data.size;
       textureId = nextTexture._batchLocation;
-      this.addColors(colors, style.color, style.alpha, data.attribSize, data.attribStart);
+      this.addColors(colors2, style.color, style.alpha, data.attribSize, data.attribStart);
       this.addTextureIds(textureIds, textureId, data.attribSize, data.attribStart);
     }
     BaseTexture._globalBatch = TICK;
@@ -25029,7 +25029,7 @@ var GraphicsGeometry = function(_super) {
   GraphicsGeometry2.prototype.packAttributes = function() {
     var verts = this.points;
     var uvs = this.uvs;
-    var colors = this.colors;
+    var colors2 = this.colors;
     var textureIds = this.textureIds;
     var glPoints = new ArrayBuffer(verts.length * 3 * 4);
     var f32 = new Float32Array(glPoints);
@@ -25040,7 +25040,7 @@ var GraphicsGeometry = function(_super) {
       f32[p++] = verts[i * 2 + 1];
       f32[p++] = uvs[i * 2];
       f32[p++] = uvs[i * 2 + 1];
-      u32[p++] = colors[i];
+      u32[p++] = colors2[i];
       f32[p++] = textureIds[i];
     }
     this._buffer.update(glPoints);
@@ -25131,15 +25131,15 @@ var GraphicsGeometry = function(_super) {
       points[i * 2 + 1] = matrix.b * x + matrix.d * y + matrix.ty;
     }
   };
-  GraphicsGeometry2.prototype.addColors = function(colors, color, alpha, size, offset) {
+  GraphicsGeometry2.prototype.addColors = function(colors2, color, alpha, size, offset) {
     if (offset === void 0) {
       offset = 0;
     }
     var rgb = (color >> 16) + (color & 65280) + ((color & 255) << 16);
     var rgba = premultiplyTint(rgb, alpha);
-    colors.length = Math.max(colors.length, offset + size);
+    colors2.length = Math.max(colors2.length, offset + size);
     for (var i = 0; i < size; i++) {
-      colors[offset + i] = rgba;
+      colors2[offset + i] = rgba;
     }
   };
   GraphicsGeometry2.prototype.addTextureIds = function(textureIds, id, size, offset) {
@@ -25781,7 +25781,7 @@ var graphicsUtils = {
   DRAW_CALL_POOL
 };
 
-// build/dist/pkg/common/sprite-1fba2fba.js
+// build/dist/pkg/common/sprite-64a4fd62.js
 /*!
  * @pixi/sprite - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -26097,7 +26097,7 @@ var Sprite = function(_super) {
   return Sprite2;
 }(Container);
 
-// build/dist/pkg/common/text-af171ed5.js
+// build/dist/pkg/common/text-5267fe76.js
 /*!
  * @pixi/text - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -27317,7 +27317,7 @@ var Text = function(_super) {
   return Text2;
 }(Sprite);
 
-// build/dist/pkg/common/prepare-bf06e226.js
+// build/dist/pkg/common/prepare-4b349d06.js
 /*!
  * @pixi/prepare - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -27625,7 +27625,7 @@ var TimeLimiter = function() {
   return TimeLimiter2;
 }();
 
-// build/dist/pkg/common/spritesheet-5774abbe.js
+// build/dist/pkg/common/spritesheet-e6bb5028.js
 /*!
  * @pixi/spritesheet - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -27817,7 +27817,7 @@ var SpritesheetLoader = function() {
   return SpritesheetLoader2;
 }();
 
-// build/dist/pkg/common/sprite-tiling-5d297176.js
+// build/dist/pkg/common/sprite-tiling-3b10b0d7.js
 /*!
  * @pixi/sprite-tiling - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -28063,7 +28063,7 @@ var TilingSpriteRenderer = function(_super) {
   return TilingSpriteRenderer2;
 }(ObjectRenderer);
 
-// build/dist/pkg/common/mesh-29a0e785.js
+// build/dist/pkg/common/mesh-39ca619e.js
 /*!
  * @pixi/mesh - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -28458,7 +28458,7 @@ var MeshGeometry = function(_super) {
   return MeshGeometry2;
 }(Geometry);
 
-// build/dist/pkg/common/text-bitmap-363035dc.js
+// build/dist/pkg/common/text-bitmap-9f6c9c8a.js
 /*!
  * @pixi/text-bitmap - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -28764,13 +28764,13 @@ function drawGlyph(canvas3, context2, metrics, x, y, resolution, style) {
   context2.setTransform(1, 0, 0, 1, 0, 0);
   context2.fillStyle = "rgba(0, 0, 0, 0)";
 }
-function resolveCharacters(chars) {
-  if (typeof chars === "string") {
-    chars = [chars];
+function resolveCharacters(chars2) {
+  if (typeof chars2 === "string") {
+    chars2 = [chars2];
   }
   var result = [];
-  for (var i = 0, j = chars.length; i < j; i++) {
-    var item = chars[i];
+  for (var i = 0, j = chars2.length; i < j; i++) {
+    var item = chars2[i];
     if (Array.isArray(item)) {
       if (item.length !== 2) {
         throw new Error("[BitmapFont]: Invalid character range length, expecting 2 got " + item.length + ".");
@@ -28883,8 +28883,8 @@ var BitmapFont = function() {
     if (!name) {
       throw new Error("[BitmapFont] Property `name` is required.");
     }
-    var _a3 = Object.assign({}, BitmapFont2.defaultOptions, options), chars = _a3.chars, padding = _a3.padding, resolution = _a3.resolution, textureWidth = _a3.textureWidth, textureHeight = _a3.textureHeight;
-    var charsList = resolveCharacters(chars);
+    var _a3 = Object.assign({}, BitmapFont2.defaultOptions, options), chars2 = _a3.chars, padding = _a3.padding, resolution = _a3.resolution, textureWidth = _a3.textureWidth, textureHeight = _a3.textureHeight;
+    var charsList = resolveCharacters(chars2);
     var style = textStyle instanceof TextStyle ? textStyle : new TextStyle(textStyle);
     var lineWidth = textureWidth;
     var fontData = new BitmapFontData();
@@ -29033,7 +29033,7 @@ var BitmapText = function(_super) {
     var data = BitmapFont.available[this._fontName];
     var scale = this._fontSize / data.size;
     var pos = new Point();
-    var chars = [];
+    var chars2 = [];
     var lineWidths = [];
     var lineSpaces = [];
     var text = this._text.replace(/(?:\r\n|\r)/g, "\n") || " ";
@@ -29088,18 +29088,18 @@ var BitmapText = function(_super) {
       charRenderData.position.x = pos.x + charData.xOffset + this._letterSpacing / 2;
       charRenderData.position.y = pos.y + charData.yOffset;
       charRenderData.prevSpaces = spaceCount;
-      chars.push(charRenderData);
+      chars2.push(charRenderData);
       lastLineWidth = charRenderData.position.x + charData.texture.orig.width;
       pos.x += charData.xAdvance + this._letterSpacing;
       maxLineHeight = Math.max(maxLineHeight, charData.yOffset + charData.texture.height);
       prevCharCode = charCode;
       if (lastBreakPos !== -1 && maxWidth > 0 && pos.x > maxWidth) {
         ++spacesRemoved;
-        removeItems(chars, 1 + lastBreakPos - spacesRemoved, 1 + i - lastBreakPos);
+        removeItems(chars2, 1 + lastBreakPos - spacesRemoved, 1 + i - lastBreakPos);
         i = lastBreakPos;
         lastBreakPos = -1;
         lineWidths.push(lastBreakWidth);
-        lineSpaces.push(chars.length > 0 ? chars[chars.length - 1].prevSpaces : 0);
+        lineSpaces.push(chars2.length > 0 ? chars2[chars2.length - 1].prevSpaces : 0);
         maxLineWidth = Math.max(maxLineWidth, lastBreakWidth);
         line++;
         pos.x = 0;
@@ -29129,7 +29129,7 @@ var BitmapText = function(_super) {
       }
       lineAlignOffsets.push(alignOffset);
     }
-    var lenChars = chars.length;
+    var lenChars = chars2.length;
     var pagesMeshData = {};
     var newPagesMeshData = [];
     var activePagesMeshData = this._activePagesMeshData;
@@ -29137,7 +29137,7 @@ var BitmapText = function(_super) {
       pageMeshDataPool.push(activePagesMeshData[i]);
     }
     for (var i = 0; i < lenChars; i++) {
-      var texture = chars[i].texture;
+      var texture = chars2[i].texture;
       var baseTextureUid = texture.baseTexture.uid;
       if (!pagesMeshData[baseTextureUid]) {
         var pageMeshData = pageMeshDataPool.pop();
@@ -29199,7 +29199,7 @@ var BitmapText = function(_super) {
       pageMeshData.mesh.size = 6 * total;
     }
     for (var i = 0; i < lenChars; i++) {
-      var char = chars[i];
+      var char = chars2[i];
       var offset = char.position.x + lineAlignOffsets[char.line] * (this._align === "justify" ? char.prevSpaces : 1);
       if (this._roundPixels) {
         offset = Math.round(offset);
@@ -29264,8 +29264,8 @@ var BitmapText = function(_super) {
       textureBuffer.update();
       indexBuffer.update();
     }
-    for (var i = 0; i < chars.length; i++) {
-      charRenderDataPool.push(chars[i]);
+    for (var i = 0; i < chars2.length; i++) {
+      charRenderDataPool.push(chars2[i]);
     }
   };
   BitmapText2.prototype.updateTransform = function() {
@@ -29531,7 +29531,7 @@ var BitmapFontLoader = function() {
   return BitmapFontLoader2;
 }();
 
-// build/dist/pkg/common/filter-alpha-bb52f9f0.js
+// build/dist/pkg/common/filter-alpha-318b36e2.js
 /*!
  * @pixi/filter-alpha - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -29596,7 +29596,7 @@ var AlphaFilter = function(_super) {
   return AlphaFilter2;
 }(Filter);
 
-// build/dist/pkg/common/filter-blur-9f171ed2.js
+// build/dist/pkg/common/filter-blur-b0b480bb.js
 /*!
  * @pixi/filter-blur - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -30087,7 +30087,7 @@ var BlurFilter = function(_super) {
   return BlurFilter2;
 }(Filter);
 
-// build/dist/pkg/common/filter-color-matrix-8420be68.js
+// build/dist/pkg/common/filter-color-matrix-aa9e2b57.js
 /*!
  * @pixi/filter-color-matrix - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -30767,7 +30767,7 @@ var ColorMatrixFilter = function(_super) {
 }(Filter);
 ColorMatrixFilter.prototype.grayscale = ColorMatrixFilter.prototype.greyscale;
 
-// build/dist/pkg/common/filter-displacement-34b4859d.js
+// build/dist/pkg/common/filter-displacement-d19cc3c3.js
 /*!
  * @pixi/filter-displacement - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -30858,7 +30858,7 @@ var DisplacementFilter = function(_super) {
   return DisplacementFilter2;
 }(Filter);
 
-// build/dist/pkg/common/filter-fxaa-4b619190.js
+// build/dist/pkg/common/filter-fxaa-54565e7b.js
 /*!
  * @pixi/filter-fxaa - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -31030,7 +31030,7 @@ var FXAAFilter = function(_super) {
   return FXAAFilter2;
 }(Filter);
 
-// build/dist/pkg/common/filter-noise-95a01673.js
+// build/dist/pkg/common/filter-noise-6c061521.js
 /*!
  * @pixi/filter-noise - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -31605,7 +31605,7 @@ DisplayObject.prototype.getGlobalPosition = function getGlobalPosition(point, sk
   return point;
 };
 
-// build/dist/pkg/common/mesh-extras-ae8348c5.js
+// build/dist/pkg/common/mesh-extras-b9649130.js
 /*!
  * @pixi/mesh-extras - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -32089,7 +32089,7 @@ var NineSlicePlane = function(_super) {
   return NineSlicePlane2;
 }(SimplePlane);
 
-// build/dist/pkg/common/sprite-animated-67690b33.js
+// build/dist/pkg/common/sprite-animated-338908b4.js
 /*!
  * @pixi/sprite-animated - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -32488,6 +32488,26 @@ var getWielders = (world, eid) => {
   return wielders;
 };
 
+// build/src/lib/graphics.js
+var colors = {
+  default: 16711799,
+  potion: 14329120,
+  weapon: 14329120,
+  wall: 11184810,
+  floor: 5592405,
+  knight: 16777215,
+  goblin: 8497218
+};
+var chars = {
+  default: "?",
+  weapon: ")",
+  potion: "!",
+  wall: "#",
+  floor: "•",
+  knight: "@",
+  goblin: "g"
+};
+
 // build/static/fonts/menlo-bold.map.js
 var menloBoldAlphaMap = {
   A: "menlo-bold-0.png",
@@ -32747,7 +32767,8 @@ var addDebugSprite = ({texture, x, y}) => {
 };
 var addSprite = ({
   container = "map",
-  texture = "?",
+  texture = chars.default,
+  tint = colors.default,
   options = {},
   world,
   eid
@@ -32755,7 +32776,8 @@ var addSprite = ({
   const sprite = new Sprite(getAsciTexture({char: texture}));
   world.sprites[eid] = lodash_default.merge(sprite, {
     renderable: false,
-    interactive: true
+    interactive: true,
+    tint
   }, options);
   world.sprites[eid].on("click", (ev) => {
     const x = Position.x[eid];
@@ -32772,7 +32794,7 @@ var printRow = ({
   y = 0,
   width = null,
   str,
-  color = 16777215,
+  color = 13421772,
   halfWidth = true
 }) => {
   const len = width || uiSprites[container][y].length;
@@ -33111,29 +33133,16 @@ var renderLegend = (world, pcEid) => {
   });
 };
 
-// build/dist/pkg/common/index-0d60a979.js
+// build/dist/pkg/ansi-regex.js
 var ansiRegex = function() {
   return /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-PRZcf-nqry=><]/g;
 };
+var ansi_regex_default = ansiRegex;
 
-// build/dist/pkg/common/index-d7ef03e3.js
-var stripAnsi = (string) => typeof string === "string" ? string.replace(ansiRegex(), "") : string;
+// build/dist/pkg/common/index-9061e5f8.js
+var stripAnsi = (string) => typeof string === "string" ? string.replace(ansi_regex_default(), "") : string;
 
-// build/dist/pkg/common/index-9c08a9cd.js
-var numberIsNan = Number.isNaN || function(x) {
-  return x !== x;
-};
-var isFullwidthCodePoint = function(x) {
-  if (numberIsNan(x)) {
-    return false;
-  }
-  if (x >= 4352 && (x <= 4447 || x === 9001 || x === 9002 || 11904 <= x && x <= 12871 && x !== 12351 || 12880 <= x && x <= 19903 || 19968 <= x && x <= 42182 || 43360 <= x && x <= 43388 || 44032 <= x && x <= 55203 || 63744 <= x && x <= 64255 || 65040 <= x && x <= 65049 || 65072 <= x && x <= 65131 || 65281 <= x && x <= 65376 || 65504 <= x && x <= 65510 || 110592 <= x && x <= 110593 || 127488 <= x && x <= 127569 || 131072 <= x && x <= 262141)) {
-    return true;
-  }
-  return false;
-};
-
-// build/dist/pkg/common/index-12f64af9.js
+// build/dist/pkg/common/index-8930a462.js
 var codePointAt = function(str, pos) {
   if (str === null || str === void 0) {
     throw TypeError();
@@ -33156,6 +33165,24 @@ var codePointAt = function(str, pos) {
   }
   return first;
 };
+
+// build/dist/pkg/common/index-b86d3cfa.js
+var numberIsNan = Number.isNaN || function(x) {
+  return x !== x;
+};
+
+// build/dist/pkg/common/index-3d489f2b.js
+var isFullwidthCodePoint = function(x) {
+  if (numberIsNan(x)) {
+    return false;
+  }
+  if (x >= 4352 && (x <= 4447 || x === 9001 || x === 9002 || 11904 <= x && x <= 12871 && x !== 12351 || 12880 <= x && x <= 19903 || 19968 <= x && x <= 42182 || 43360 <= x && x <= 43388 || 44032 <= x && x <= 55203 || 63744 <= x && x <= 64255 || 65040 <= x && x <= 65049 || 65072 <= x && x <= 65131 || 65281 <= x && x <= 65376 || 65504 <= x && x <= 65510 || 110592 <= x && x <= 110593 || 127488 <= x && x <= 127569 || 131072 <= x && x <= 262141)) {
+    return true;
+  }
+  return false;
+};
+
+// build/dist/pkg/common/index-4f986023.js
 var stringWidth = function(str) {
   if (typeof str !== "string" || str.length === 0) {
     return 0;
@@ -33179,7 +33206,7 @@ var stringWidth = function(str) {
   return width;
 };
 
-// build/dist/pkg/common/index-2b322308.js
+// build/dist/pkg/common/index-126c8de9.js
 var colorName = {
   aliceblue: [240, 248, 255],
   antiquewhite: [250, 235, 215],
@@ -33330,6 +33357,8 @@ var colorName = {
   yellow: [255, 255, 0],
   yellowgreen: [154, 205, 50]
 };
+
+// build/dist/pkg/common/index-86a332a9.js
 var conversions = createCommonjsModule(function(module) {
   var reverseKeywords = {};
   for (var key in colorName) {
@@ -34146,6 +34175,8 @@ models.forEach(function(fromModel) {
   });
 });
 var colorConvert = convert;
+
+// build/dist/pkg/common/index-0cddb4c9.js
 var ansiStyles = createCommonjsModule(function(module) {
   const wrapAnsi16 = (fn, offset) => function() {
     const code = fn.apply(colorConvert, arguments);
@@ -34496,7 +34527,7 @@ var renderInventoryList = (world, pcEid) => {
   const {inventory} = getState();
   const isCurrentColumn = inventory.columnIndex === 0;
   const width = 57;
-  const color = isCurrentColumn ? 16777215 : 6710886;
+  const color = isCurrentColumn ? void 0 : 6710886;
   const options = {
     container: "menu",
     width,
@@ -34595,7 +34626,7 @@ var renderInReachList = (world, pcEid) => {
   const currentLocId = `${Position.x[pcEid]},${Position.y[pcEid]},${Position.z[pcEid]}`;
   const entitiesInReach = gettableEntitiesInReach(world, currentLocId);
   const isCurrentColumn = inventory.columnIndex === 2;
-  const color = isCurrentColumn ? 16777215 : 6710886;
+  const color = isCurrentColumn ? void 0 : 6710886;
   const options = {
     container: "menu",
     width: 57,
@@ -35187,6 +35218,34 @@ var processUserInput = (world) => {
   }
 };
 
+// build/src/lib/meta.js
+var meta = {
+  floor: {
+    name: "floor",
+    description: "The floor of the cave is flat hard and covered in dust."
+  },
+  goblin: {
+    name: "goblin",
+    description: "An ugly or grotesque sprite that is usually mischievous and sometimes evil and malicious"
+  },
+  healthPotion: {
+    name: "health potion",
+    description: "A shimmering red liquid in a small glass vial."
+  },
+  knight: {
+    name: "Knight",
+    description: "A shiny pompous tin can of a creature with a comically large red feather plume potruding from it's head"
+  },
+  sword: {
+    name: "sword",
+    description: "A weapon with a long blade for cutting or thrusting that is often used as a symbol of honor or authority"
+  },
+  wall: {
+    name: "wall",
+    description: "One of the sides of a room or building connecting floor and ceiling or foundation and roof"
+  }
+};
+
 // build/src/prefabs/floor.js
 var createFloor = (world, options) => {
   const {x, y, z} = options;
@@ -35200,16 +35259,14 @@ var createFloor = (world, options) => {
     eid
   });
   addSprite({
-    texture: "•",
+    texture: chars.floor,
     world,
     eid,
     options: {
-      tint: 5592405
+      tint: colors.floor
     }
   });
-  world.meta[eid] = {};
-  world.meta[eid].name = "floor";
-  world.meta[eid].description = "The floor of the cave is flat hard and covered in dust.";
+  world.meta[eid] = meta.floor;
 };
 
 // build/src/prefabs/bodies/createHumanoidBody.js
@@ -35323,16 +35380,14 @@ var createGoblin = (world, options) => {
     eid
   });
   addSprite({
-    texture: "g",
+    texture: chars.goblin,
     world,
     eid,
     options: {
-      tint: 8497218
+      tint: colors.goblin
     }
   });
-  world.meta[eid] = {};
-  world.meta[eid].name = "goblin";
-  world.meta[eid].description = "An ugly or grotesque sprite that is usually mischievous and sometimes evil and malicious";
+  world.meta[eid] = meta.goblin;
   world.meta[eid].debugSprites = [];
   world.meta[eid].ai = {pathAlgo: "", path: []};
   return eid;
@@ -35357,16 +35412,14 @@ var createHealthPotion = (world, options) => {
     eid
   });
   addSprite({
-    texture: "!",
+    texture: chars.potion,
     world,
     eid,
     options: {
-      tint: 14329120
+      tint: colors.potion
     }
   });
-  world.meta[eid] = {};
-  world.meta[eid].name = "health potion";
-  world.meta[eid].description = "A shimmering red liquid in a small glass vial.";
+  world.meta[eid] = meta.healthPotion;
 };
 
 // build/src/prefabs/knight.js
@@ -35398,13 +35451,12 @@ var createKnight = (world, options) => {
     eid
   });
   addSprite({
-    texture: "@",
+    texture: chars.knight,
     world,
-    eid
+    eid,
+    tint: colors.knight
   });
-  world.meta[eid] = {};
-  world.meta[eid].name = "knight";
-  world.meta[eid].description = "A shiny pompous tin can of a creature with a comically large red feather plume potruding from it's head";
+  world.meta[eid] = meta.knight;
   return eid;
 };
 
@@ -35427,16 +35479,14 @@ var createSword = (world, options) => {
     eid
   });
   addSprite({
-    texture: ")",
+    texture: chars.weapon,
     world,
     eid,
     options: {
-      tint: 14329120
+      tint: colors.weapon
     }
   });
-  world.meta[eid] = {};
-  world.meta[eid].name = "sword";
-  world.meta[eid].description = "A weapon with a long blade for cutting or thrusting that is often used as a symbol of honor or authority";
+  world.meta[eid] = meta.sword;
 };
 
 // build/src/prefabs/wall.js
@@ -35454,16 +35504,14 @@ var createWall = (world, options) => {
     eid
   });
   addSprite({
-    texture: "#",
+    texture: chars.wall,
     world,
     eid,
     options: {
-      tint: 11184810
+      tint: colors.wall
     }
   });
-  world.meta[eid] = {};
-  world.meta[eid].name = "wall";
-  world.meta[eid].description = "One of the sides of a room or building connecting floor and ceiling or foundation and roof";
+  world.meta[eid] = meta.wall;
 };
 
 // build/src/lib/dungeon.js
