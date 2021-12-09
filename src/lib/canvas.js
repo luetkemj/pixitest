@@ -3,6 +3,7 @@ import * as PIXI from "pixi.js";
 import { Position } from "../components";
 import { getEntityData } from "./ecsHelpers";
 import { grid } from "./grid";
+import * as gfx from "./graphics";
 import { menloBoldAlphaMap } from "../../static/fonts/menlo-bold.map";
 import { menloBoldHalfAlphaMap } from "../../static/fonts/menlo-bold-half.map";
 
@@ -91,7 +92,8 @@ export const addDebugSprite = ({ texture, x, y }) => {
 
 export const addSprite = ({
   container = "map",
-  texture = "?",
+  texture = gfx.chars.default,
+  tint = gfx.colors.default,
   options = {},
   world,
   eid,
@@ -102,6 +104,7 @@ export const addSprite = ({
     {
       renderable: false,
       interactive: true,
+      tint,
     },
     options
   );
@@ -123,7 +126,7 @@ export const printRow = ({
   y = 0,
   width = null,
   str,
-  color = 0xffffff,
+  color = 0xcccccc,
   halfWidth = true,
 }) => {
   const len = width || uiSprites[container][y].length;

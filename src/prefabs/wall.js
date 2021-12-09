@@ -1,5 +1,7 @@
 import _ from "lodash";
 import { addComponent, addEntity } from "bitecs";
+import * as gfx from "../lib/graphics";
+import { meta } from "../lib/meta";
 
 import { Blocking, Opaque, Position, Zindex } from "../components";
 
@@ -23,16 +25,13 @@ export const createWall = (world, options) => {
   });
 
   addSprite({
-    texture: "#",
+    texture: gfx.chars.wall,
     world,
     eid: eid,
     options: {
-      tint: 0xaaaaaa,
+      tint: gfx.colors.wall,
     },
   });
 
-  world.meta[eid] = {};
-  world.meta[eid].name = "wall";
-  world.meta[eid].description =
-    "One of the sides of a room or building connecting floor and ceiling or foundation and roof";
+  world.meta[eid] = meta.wall;
 };

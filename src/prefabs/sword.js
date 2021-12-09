@@ -1,5 +1,7 @@
 import _ from "lodash";
 import { addComponent, addEntity } from "bitecs";
+import * as gfx from "../lib/graphics";
+import { meta } from "../lib/meta";
 
 import {
   Damage,
@@ -35,16 +37,13 @@ export const createSword = (world, options) => {
   });
 
   addSprite({
-    texture: ")",
+    texture: gfx.chars.weapon,
     world,
     eid: eid,
     options: {
-      tint: 0xdaa520,
+      tint: gfx.colors.weapon,
     },
   });
 
-  world.meta[eid] = {};
-  world.meta[eid].name = "sword";
-  world.meta[eid].description =
-    "A weapon with a long blade for cutting or thrusting that is often used as a symbol of honor or authority";
+  world.meta[eid] = meta.sword;
 };

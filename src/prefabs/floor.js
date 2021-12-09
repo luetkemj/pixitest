@@ -1,5 +1,7 @@
 import _ from "lodash";
 import { addComponent, addEntity } from "bitecs";
+import * as gfx from "../lib/graphics";
+import { meta } from "../lib/meta";
 
 import { Position, Zindex } from "../components";
 
@@ -22,16 +24,13 @@ export const createFloor = (world, options) => {
   });
 
   addSprite({
-    texture: "•",
+    texture: gfx.chars.floor,
     world,
     eid: eid,
     options: {
-      tint: 0x555555,
+      tint: gfx.colors.floor,
     },
   });
 
-  world.meta[eid] = {};
-  world.meta[eid].name = "floor";
-  world.meta[eid].description =
-    "The floor of the cave is flat hard and covered in dust.";
+  world.meta[eid] = meta.floor;
 };

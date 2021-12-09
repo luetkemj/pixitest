@@ -1,5 +1,7 @@
 import _ from "lodash";
 import { addComponent, addEntity } from "bitecs";
+import * as gfx from "../lib/graphics";
+import { meta } from "../lib/meta";
 
 import {
   Consumable,
@@ -35,16 +37,13 @@ export const createHealthPotion = (world, options) => {
   });
 
   addSprite({
-    texture: "!",
+    texture: gfx.chars.potion,
     world,
     eid: eid,
     options: {
-      tint: 0xdaa520,
+      tint: gfx.colors.potion,
     },
   });
 
-  world.meta[eid] = {};
-  world.meta[eid].name = "health potion";
-  world.meta[eid].description =
-    "A shimmering red liquid in a small glass vial.";
+  world.meta[eid] = meta.healthPotion;
 };

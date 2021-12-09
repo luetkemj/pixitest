@@ -1,5 +1,7 @@
 import _ from "lodash";
 import { addComponent, addEntity } from "bitecs";
+import * as gfx from "../lib/graphics";
+import { meta } from "../lib/meta";
 
 import {
   Blocking,
@@ -52,15 +54,13 @@ export const createKnight = (world, options) => {
   });
 
   addSprite({
-    texture: "@",
+    texture: gfx.chars.knight,
     world,
     eid: eid,
+    tint: gfx.colors.knight,
   });
 
-  world.meta[eid] = {};
-  world.meta[eid].name = "knight";
-  world.meta[eid].description =
-    "A shiny pompous tin can of a creature with a comically large red feather plume potruding from it's head";
+  world.meta[eid] = meta.knight;
 
   return eid;
 };

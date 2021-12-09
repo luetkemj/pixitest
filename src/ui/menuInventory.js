@@ -18,7 +18,7 @@ const renderInventoryList = (world, pcEid) => {
   const isCurrentColumn = inventory.columnIndex === 0;
   // Render inventory list
   const width = 57;
-  const color = isCurrentColumn ? 0xffffff : 0x666666;
+  const color = isCurrentColumn ? undefined : 0x666666;
   const options = {
     container: "menu",
     width,
@@ -142,7 +142,7 @@ const renderInReachList = (world, pcEid) => {
   const isCurrentColumn = inventory.columnIndex === 2;
 
   // Render inReach list
-  const color = isCurrentColumn ? 0xffffff : 0x666666;
+  const color = isCurrentColumn ? undefined : 0x666666;
   const options = {
     container: "menu",
     width: 57,

@@ -1,5 +1,7 @@
 import _ from "lodash";
 import { addComponent, addEntity } from "bitecs";
+import * as gfx from "../lib/graphics";
+import { meta } from "../lib/meta";
 
 import {
   Ai,
@@ -57,19 +59,15 @@ export const createGoblin = (world, options) => {
   });
 
   addSprite({
-    texture: "g",
+    texture: gfx.chars.goblin,
     world,
     eid: eid,
     options: {
-      tint: 0x81a842,
+      tint: gfx.colors.goblin,
     },
   });
 
-  world.meta[eid] = {};
-  world.meta[eid].name = "goblin";
-  world.meta[eid].description =
-    "An ugly or grotesque sprite that is usually mischievous and sometimes evil and malicious";
-
+  world.meta[eid] = meta.goblin;
   world.meta[eid].debugSprites = [];
   world.meta[eid].ai = { pathAlgo: "", path: [] };
 
