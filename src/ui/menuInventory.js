@@ -3,7 +3,7 @@ import { getState, setState } from "../index";
 import wrapAnsi from "wrap-ansi";
 import { hasComponent } from "bitecs";
 import { printRow } from "../lib/canvas";
-import { gettableEntitiesInReach } from "../lib/ecsHelpers";
+import { getEquipped, gettableEntitiesInReach } from "../lib/ecsHelpers";
 import { getNeighborIds } from "../lib/grid";
 import {
   BelongsTo,
@@ -11,6 +11,7 @@ import {
   Pickupable,
   Inventory,
   Position,
+  Wieldable,
 } from "../components";
 
 const renderInventoryList = (world, pcEid) => {
@@ -45,6 +46,8 @@ const renderInventoryList = (world, pcEid) => {
     });
   }
 
+  const equippedItems = getEquipped(world, pcEid);
+
   items.forEach((eid, i) => {
     if (eid) {
       const itemName = world.meta[eid].name;
@@ -55,8 +58,17 @@ const renderInventoryList = (world, pcEid) => {
         });
       }
 
+      const equipped = equippedItems.find((x) => x[0] === eid);
+      const isEquipped = !!equipped;
+
       let str = isSelected ? "  * " : "    ";
       str = `${str}${itemName}`;
+
+      if (isEquipped) {
+        const equipName = world.meta[equipped[1]].name;
+        const equipType = equipped[2];
+        str = `${str} (${equipName}) ${equipType}`;
+      }
 
       printRow({
         ...options,
@@ -83,6 +95,7 @@ const renderDescription = (world, pcEid) => {
   const itemName = world.meta[itemEid].name;
   const itemDesc = world.meta[itemEid].description;
   const currentColumn = inventory.columnIndex;
+  const equippedItems = getEquipped(world, pcEid);
 
   const belongsToEid = BelongsTo.eid[itemEid];
   let belongsTo = "";
@@ -117,6 +130,17 @@ const renderDescription = (world, pcEid) => {
   if (currentColumn === 0) {
     if (hasComponent(world, Droppable, itemEid)) {
       availableActions += "(d)Drop ";
+    }
+  }
+
+  const isEquipped = equippedItems.find((x) => x[0] === itemEid);
+  if (isEquipped) {
+    availableActions += "(r)Remove ";
+  }
+
+  if (!isEquipped) {
+    if (hasComponent(world, Wieldable, itemEid)) {
+      availableActions += "(w)Wield ";
     }
   }
 
