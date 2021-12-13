@@ -14668,7 +14668,7 @@ Object.defineProperties(Runner.prototype, {
   run: {value: Runner.prototype.emit}
 });
 
-// build/dist/pkg/common/core-541076f2.js
+// build/dist/pkg/common/core-c3d46723.js
 /*!
  * @pixi/core - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -21145,7 +21145,7 @@ for (var name in _systems) {
   _loop_2(name);
 }
 
-// build/dist/pkg/common/app-8480bac6.js
+// build/dist/pkg/common/app-99627c3d.js
 /*!
  * @pixi/app - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -21266,7 +21266,7 @@ var ResizePlugin = function() {
 }();
 Application.registerPlugin(ResizePlugin);
 
-// build/dist/pkg/common/extract-a856e4f2.js
+// build/dist/pkg/common/extract-50662cc5.js
 /*!
  * @pixi/extract - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -21393,7 +21393,7 @@ var Extract = function() {
   return Extract2;
 }();
 
-// build/dist/pkg/common/loaders-7c81f587.js
+// build/dist/pkg/common/loaders-807375c5.js
 /*!
  * @pixi/loaders - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -22600,7 +22600,7 @@ function parsing(resource, next) {
 Loader.registerPlugin({use: parsing});
 Loader.registerPlugin(TextureLoader);
 
-// build/dist/pkg/common/compressed-textures-637d56f2.js
+// build/dist/pkg/common/compressed-textures-351f6a1e.js
 /*!
  * @pixi/compressed-textures - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -23440,7 +23440,7 @@ var KTXLoader = function() {
   return KTXLoader2;
 }();
 
-// build/dist/pkg/common/particle-container-cba002ba.js
+// build/dist/pkg/common/particle-container-d6e84128.js
 /*!
  * @pixi/particle-container - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -23891,7 +23891,7 @@ var ParticleRenderer = function(_super) {
   return ParticleRenderer2;
 }(ObjectRenderer);
 
-// build/dist/pkg/common/graphics-a31cc4bc.js
+// build/dist/pkg/common/graphics-d3cf0edf.js
 /*!
  * @pixi/graphics - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -25781,7 +25781,7 @@ var graphicsUtils = {
   DRAW_CALL_POOL
 };
 
-// build/dist/pkg/common/sprite-64a4fd62.js
+// build/dist/pkg/common/sprite-d462414a.js
 /*!
  * @pixi/sprite - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -26097,7 +26097,7 @@ var Sprite = function(_super) {
   return Sprite2;
 }(Container);
 
-// build/dist/pkg/common/text-5267fe76.js
+// build/dist/pkg/common/text-fcb12f4f.js
 /*!
  * @pixi/text - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -27317,7 +27317,7 @@ var Text = function(_super) {
   return Text2;
 }(Sprite);
 
-// build/dist/pkg/common/prepare-4b349d06.js
+// build/dist/pkg/common/prepare-eba840b9.js
 /*!
  * @pixi/prepare - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -27625,7 +27625,7 @@ var TimeLimiter = function() {
   return TimeLimiter2;
 }();
 
-// build/dist/pkg/common/spritesheet-e6bb5028.js
+// build/dist/pkg/common/spritesheet-2fc4d6ac.js
 /*!
  * @pixi/spritesheet - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -27817,7 +27817,7 @@ var SpritesheetLoader = function() {
   return SpritesheetLoader2;
 }();
 
-// build/dist/pkg/common/sprite-tiling-3b10b0d7.js
+// build/dist/pkg/common/sprite-tiling-f31bbfb6.js
 /*!
  * @pixi/sprite-tiling - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -28063,7 +28063,7 @@ var TilingSpriteRenderer = function(_super) {
   return TilingSpriteRenderer2;
 }(ObjectRenderer);
 
-// build/dist/pkg/common/mesh-39ca619e.js
+// build/dist/pkg/common/mesh-ed197c20.js
 /*!
  * @pixi/mesh - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -28458,7 +28458,7 @@ var MeshGeometry = function(_super) {
   return MeshGeometry2;
 }(Geometry);
 
-// build/dist/pkg/common/text-bitmap-9f6c9c8a.js
+// build/dist/pkg/common/text-bitmap-744fe4c3.js
 /*!
  * @pixi/text-bitmap - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -29531,7 +29531,7 @@ var BitmapFontLoader = function() {
   return BitmapFontLoader2;
 }();
 
-// build/dist/pkg/common/filter-alpha-318b36e2.js
+// build/dist/pkg/common/filter-alpha-a688aaca.js
 /*!
  * @pixi/filter-alpha - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -29596,7 +29596,7 @@ var AlphaFilter = function(_super) {
   return AlphaFilter2;
 }(Filter);
 
-// build/dist/pkg/common/filter-blur-b0b480bb.js
+// build/dist/pkg/common/filter-blur-556e7a17.js
 /*!
  * @pixi/filter-blur - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -30087,7 +30087,7 @@ var BlurFilter = function(_super) {
   return BlurFilter2;
 }(Filter);
 
-// build/dist/pkg/common/filter-color-matrix-aa9e2b57.js
+// build/dist/pkg/common/filter-color-matrix-0b77b686.js
 /*!
  * @pixi/filter-color-matrix - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -30767,7 +30767,7 @@ var ColorMatrixFilter = function(_super) {
 }(Filter);
 ColorMatrixFilter.prototype.grayscale = ColorMatrixFilter.prototype.greyscale;
 
-// build/dist/pkg/common/filter-displacement-d19cc3c3.js
+// build/dist/pkg/common/filter-displacement-95490ab5.js
 /*!
  * @pixi/filter-displacement - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -30858,7 +30858,7 @@ var DisplacementFilter = function(_super) {
   return DisplacementFilter2;
 }(Filter);
 
-// build/dist/pkg/common/filter-fxaa-54565e7b.js
+// build/dist/pkg/common/filter-fxaa-e56bc64d.js
 /*!
  * @pixi/filter-fxaa - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -31030,7 +31030,7 @@ var FXAAFilter = function(_super) {
   return FXAAFilter2;
 }(Filter);
 
-// build/dist/pkg/common/filter-noise-6c061521.js
+// build/dist/pkg/common/filter-noise-af3f093e.js
 /*!
  * @pixi/filter-noise - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -31605,7 +31605,7 @@ DisplayObject.prototype.getGlobalPosition = function getGlobalPosition(point, sk
   return point;
 };
 
-// build/dist/pkg/common/mesh-extras-b9649130.js
+// build/dist/pkg/common/mesh-extras-c3054815.js
 /*!
  * @pixi/mesh-extras - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -32089,7 +32089,7 @@ var NineSlicePlane = function(_super) {
   return NineSlicePlane2;
 }(SimplePlane);
 
-// build/dist/pkg/common/sprite-animated-338908b4.js
+// build/dist/pkg/common/sprite-animated-7dac8ef6.js
 /*!
  * @pixi/sprite-animated - v6.1.2
  * Compiled Thu, 12 Aug 2021 17:11:19 UTC
@@ -32486,6 +32486,22 @@ var getWielders = (world, eid) => {
     }
   });
   return wielders;
+};
+var getWielder = (world, eid, itemEid) => {
+  const wielders = getWielders(world, eid);
+  return wielders.find((x) => x[1] === itemEid);
+};
+var getEquipped = (world, eid) => {
+  let equipped = [];
+  walkInventoryTree(world, eid, Body, (equipperEid) => {
+    if (hasComponent(world, Wielding, equipperEid)) {
+      const wieldedItemEid = Wielding.slot[equipperEid];
+      if (wieldedItemEid) {
+        equipped.push([wieldedItemEid, equipperEid, "Wielding"]);
+      }
+    }
+  });
+  return equipped;
 };
 
 // build/src/lib/graphics.js
@@ -34549,6 +34565,7 @@ var renderInventoryList = (world, pcEid) => {
       str: "    Your inventory is empty."
     });
   }
+  const equippedItems = getEquipped(world, pcEid);
   items.forEach((eid, i) => {
     if (eid) {
       const itemName = world.meta[eid].name;
@@ -34558,8 +34575,15 @@ var renderInventoryList = (world, pcEid) => {
           state2.inventory.selectedInventoryItemEid = eid;
         });
       }
+      const equipped = equippedItems.find((x) => x[0] === eid);
+      const isEquipped = !!equipped;
       let str = isSelected ? "  * " : "    ";
       str = `${str}${itemName}`;
+      if (isEquipped) {
+        const equipName = world.meta[equipped[1]].name;
+        const equipType = equipped[2];
+        str = `${str} (${equipName}) ${equipType}`;
+      }
       printRow({
         ...options,
         y: i + 3,
@@ -34582,6 +34606,7 @@ var renderDescription = (world, pcEid) => {
   const itemName = world.meta[itemEid].name;
   const itemDesc = world.meta[itemEid].description;
   const currentColumn = inventory.columnIndex;
+  const equippedItems = getEquipped(world, pcEid);
   const belongsToEid = BelongsTo.eid[itemEid];
   let belongsTo = "";
   if (belongsToEid) {
@@ -34607,6 +34632,15 @@ var renderDescription = (world, pcEid) => {
   if (currentColumn === 0) {
     if (hasComponent(world, Droppable, itemEid)) {
       availableActions += "(d)Drop ";
+    }
+  }
+  const isEquipped = equippedItems.find((x) => x[0] === itemEid);
+  if (isEquipped) {
+    availableActions += "(r)Remove ";
+  }
+  if (!isEquipped) {
+    if (hasComponent(world, Wieldable, itemEid)) {
+      availableActions += "(w)Wield ";
     }
   }
   if (currentColumn === 2) {
@@ -35064,7 +35098,9 @@ var inventoryControls = [
   "ArrowDown",
   "ArrowLeft",
   "d",
-  "g"
+  "g",
+  "r",
+  "w"
 ];
 var processUserInput = (world) => {
   const {userInput, mode, pcEnts} = getState();
@@ -35187,6 +35223,19 @@ var processUserInput = (world) => {
       if (key === "d") {
         if (inventory.columnIndex === 0) {
           drop(world, pcEid, inventory.selectedInventoryItemEid);
+        }
+      }
+      if (key === "r") {
+        if (inventory.columnIndex === 0) {
+          const wielder = getWielder(world, pcEid, inventory.selectedInventoryItemEid);
+          if (wielder) {
+            unwield(world, wielder[0]);
+          }
+        }
+      }
+      if (key === "w") {
+        if (inventory.columnIndex === 0) {
+          wield(world, pcEid, inventory.selectedInventoryItemEid);
         }
       }
       if (key === "g") {
