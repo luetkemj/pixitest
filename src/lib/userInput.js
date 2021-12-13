@@ -1,7 +1,11 @@
 import { getState, setState } from "../index";
 import { Inventory, Position } from "../components";
-import { gettableEntitiesInReach, walkInventoryTree } from "./ecsHelpers";
-import { drop, get } from "./actions";
+import {
+  getWielder,
+  gettableEntitiesInReach,
+  walkInventoryTree,
+} from "./ecsHelpers";
+import { drop, get, unwield, wield } from "./actions";
 
 const gameplayControls = [
   "ArrowUp",
@@ -20,8 +24,10 @@ const inventoryControls = [
   "ArrowRight",
   "ArrowDown",
   "ArrowLeft",
-  "d",
-  "g",
+  "d", // drop
+  "g", // get
+  "r", // remove
+  "w", // wield
 ];
 
 export const processUserInput = (world) => {
@@ -166,6 +172,29 @@ export const processUserInput = (world) => {
         // possible actions from the Inventory column
         if (inventory.columnIndex === 0) {
           drop(world, pcEid, inventory.selectedInventoryItemEid);
+        }
+      }
+
+      if (key === "r") {
+        // possible actions from the Inventory column
+        if (inventory.columnIndex === 0) {
+          // get wielder of item
+          const wielder = getWielder(
+            world,
+            pcEid,
+            inventory.selectedInventoryItemEid
+          );
+
+          if (wielder) {
+            unwield(world, wielder[0]);
+          }
+        }
+      }
+
+      if (key === "w") {
+        // possible actions from the Inventory column
+        if (inventory.columnIndex === 0) {
+          wield(world, pcEid, inventory.selectedInventoryItemEid);
         }
       }
 

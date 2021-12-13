@@ -122,6 +122,8 @@ export const gettableEntitiesInReach = (world, locId) => {
   );
 };
 
+// get all body parts from a given entity that can wield and what if anything they are wielding
+// return Array [ [wielderEid, wieldingEid], ... ]
 export const getWielders = (world, eid) => {
   let wielders = []; // [wielderEid, wieldingEid]
   walkInventoryTree(world, eid, Body, (currentEid) => {
@@ -135,4 +137,27 @@ export const getWielders = (world, eid) => {
     }
   });
   return wielders;
+};
+
+// check if item is being wielded by entity and return wielder
+// return Array [wielderEid, wieldingEid]
+export const getWielder = (world, eid, itemEid) => {
+  const wielders = getWielders(world, eid);
+  return wielders.find((x) => x[1] === itemEid);
+};
+
+// get all equipped items for a given entity
+// returns Array [ [equippedEid, equipperEid, "Component"], ... ]
+export const getEquipped = (world, eid) => {
+  let equipped = []; // [equippedEid, equipperEid, "Component"]
+  walkInventoryTree(world, eid, Body, (equipperEid) => {
+    // wielded Items
+    if (hasComponent(world, Wielding, equipperEid)) {
+      const wieldedItemEid = Wielding.slot[equipperEid];
+      if (wieldedItemEid) {
+        equipped.push([wieldedItemEid, equipperEid, "Wielding"]);
+      }
+    }
+  });
+  return equipped;
 };

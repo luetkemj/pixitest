@@ -2,8 +2,6 @@ import _ from "lodash";
 import wrapAnsi from "wrap-ansi";
 import { printRow } from "../lib/canvas";
 import { getEntityData, getWielders } from "../lib/ecsHelpers";
-import { grid } from "../lib/grid";
-import { getState } from "../index";
 
 export const renderMenuCharacter = (world, pcEid) => {
   const data = getEntityData(world, pcEid);
