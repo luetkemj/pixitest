@@ -6031,7 +6031,6 @@ __export(components_exports, {
   BelongsTo: () => BelongsTo,
   Blocking: () => Blocking,
   Body: () => Body,
-  Consumable: () => Consumable,
   Damage: () => Damage,
   Dead: () => Dead,
   Droppable: () => Droppable,
@@ -6043,6 +6042,7 @@ __export(components_exports, {
   InFov: () => InFov,
   Intelligence: () => Intelligence,
   Inventory: () => Inventory,
+  Liquid: () => Liquid,
   MoveTo: () => MoveTo,
   Opaque: () => Opaque,
   PC: () => PC,
@@ -6062,13 +6062,12 @@ var Ai = defineComponent();
 var Attack = defineComponent(MaxCurrent);
 var Blocking = defineComponent();
 var Body = defineComponent({slots: [Types.eid, 5]});
-var Consumable = defineComponent();
 var Damage = defineComponent(MaxCurrent);
 var Dead = defineComponent();
 var Droppable = defineComponent();
 var Effects = defineComponent({
-  health: Types.i16,
-  strength: Types.i16
+  Health: Types.i16,
+  Strength: Types.i16
 });
 var Forgettable = defineComponent();
 var FovDistance = defineComponent({dist: Types.ui8});
@@ -6077,6 +6076,7 @@ var Health = defineComponent(MaxCurrent);
 var Intelligence = defineComponent(MaxCurrent);
 var InFov = defineComponent();
 var Inventory = defineComponent({slots: [Types.eid, 24]});
+var Liquid = defineComponent();
 var MoveTo = defineComponent(Vector3);
 var Opaque = defineComponent();
 var BelongsTo = defineComponent({eid: Types.eid});
@@ -34901,17 +34901,6 @@ var get = (world, eid, itemEid) => {
       setState((state2) => {
         state2.log.unshift(`You pickup ${world.meta[pickupEid].name}.`);
       });
-      const isConsumable = hasComponent(world, Consumable, pickupEid);
-      if (isConsumable) {
-        return consume(world, eid, pickupEid);
-      }
-      const isWieldable = hasComponent(world, Wieldable, pickupEid);
-      if (isWieldable) {
-        const alreadyWielding = hasComponent(world, Wielding, eid);
-        if (!alreadyWielding) {
-          wield(world, eid, pickupEid);
-        }
-      }
     } else {
       setState((state2) => {
         state2.log.unshift("Your inventory is full.");
@@ -34958,23 +34947,23 @@ var drop = (world, eid, itemEid, dir) => {
   getState().inventory.selectedInventoryItemEid = null;
   pipelineFovRender(world);
 };
-var consume = (world, targetEid, itemEid) => {
-  const isConsumable = hasComponent(world, Consumable, itemEid);
-  if (!isConsumable) {
+var quaff = (world, targetEid, itemEid) => {
+  const isLiquid = hasComponent(world, Liquid, itemEid);
+  if (!isLiquid) {
     return setState((state2) => {
-      state2.log.unshift(`You can't consume that!`);
+      state2.log.unshift(`You can't drink that!`);
     });
   }
-  if (hasComponent(world, Health, targetEid)) {
-    Health.current[targetEid] += Effects.health[itemEid];
-    Health.current[targetEid] = Health.current[targetEid] > Health.max[targetEid] ? Health.max[targetEid] : Health.current[targetEid];
-  }
-  if (hasComponent(world, Strength, targetEid)) {
-    Strength.current[targetEid] += Effects.strength[itemEid];
-    Strength.current[targetEid] = Strength.current[targetEid] > Strength.max[targetEid] ? Strength.max[targetEid] : Strength.current[targetEid];
+  const components = Object.keys(Effects);
+  for (const [i, c] of components.entries()) {
+    const component = components_exports[c];
+    if (hasComponent(world, component, targetEid)) {
+      component.current[targetEid] += Effects[c][itemEid];
+      component.current[targetEid] = component.current[targetEid] > component.max[targetEid] ? component.max[targetEid] : component.current[targetEid];
+    }
   }
   return setState((state2) => {
-    state2.log.unshift(`You consume a ${world.meta[itemEid].name}!`);
+    state2.log.unshift(`You drink a ${world.meta[itemEid].name}!`);
   });
 };
 var unwield = (world, wielderEid) => {
@@ -35099,6 +35088,7 @@ var inventoryControls = [
   "ArrowLeft",
   "d",
   "g",
+  "q",
   "r",
   "w"
 ];
@@ -35223,6 +35213,11 @@ var processUserInput = (world) => {
       if (key === "d") {
         if (inventory.columnIndex === 0) {
           drop(world, pcEid, inventory.selectedInventoryItemEid);
+        }
+      }
+      if (key === "q") {
+        if (inventory.columnIndex === 0) {
+          quaff(world, pcEid, inventory.selectedInventoryItemEid);
         }
       }
       if (key === "r") {
@@ -35446,15 +35441,15 @@ var createGoblin = (world, options) => {
 var createHealthPotion = (world, options) => {
   const {x, y, z} = options;
   const eid = addEntity(world);
-  addComponent(world, Consumable, eid);
+  addComponent(world, Liquid, eid);
   addComponent(world, Droppable, eid);
   addComponent(world, Effects, eid);
   addComponent(world, Pickupable, eid);
   addComponent(world, Position, eid);
   addComponent(world, Zindex, eid);
   Zindex.zIndex[eid] = 20;
-  Effects.health[eid] = 5;
-  Effects.strength[eid] = 0;
+  Effects.Health[eid] = 5;
+  Effects.Strength[eid] = 0;
   updatePosition({
     world,
     newPos: {x, y, z},

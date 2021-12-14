@@ -1,3 +1,10 @@
+Deploy: https://github.com/withastro/snowpack/discussions/2419
+`npm run build`
+in build/index.html
+change <script type="module" src="./src/index.js"></script>
+to <script type="module" src="https://luetkemj.github.io/pixitest/src/index.js"></script>
+`npm run deploy`
+
 FPS:
 ~30fps at start of dev
 
