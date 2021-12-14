@@ -7,13 +7,12 @@ export const Ai = defineComponent();
 export const Attack = defineComponent(MaxCurrent);
 export const Blocking = defineComponent();
 export const Body = defineComponent({ slots: [Types.eid, 5] });
-export const Consumable = defineComponent();
 export const Damage = defineComponent(MaxCurrent);
 export const Dead = defineComponent();
 export const Droppable = defineComponent();
 export const Effects = defineComponent({
-  health: Types.i16,
-  strength: Types.i16,
+  Health: Types.i16,
+  Strength: Types.i16,
 });
 export const Forgettable = defineComponent();
 export const FovDistance = defineComponent({ dist: Types.ui8 });
@@ -22,6 +21,7 @@ export const Health = defineComponent(MaxCurrent);
 export const Intelligence = defineComponent(MaxCurrent);
 export const InFov = defineComponent();
 export const Inventory = defineComponent({ slots: [Types.eid, 24] });
+export const Liquid = defineComponent();
 export const MoveTo = defineComponent(Vector3);
 export const Opaque = defineComponent();
 export const BelongsTo = defineComponent({ eid: Types.eid });

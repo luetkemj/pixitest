@@ -7,6 +7,7 @@ import {
   Consumable,
   Droppable,
   Effects,
+  Liquid,
   Pickupable,
   Position,
   Zindex,
@@ -19,7 +20,7 @@ export const createHealthPotion = (world, options) => {
   const { x, y, z } = options;
 
   const eid = addEntity(world);
-  addComponent(world, Consumable, eid);
+  addComponent(world, Liquid, eid);
   addComponent(world, Droppable, eid);
   addComponent(world, Effects, eid);
   addComponent(world, Pickupable, eid);
@@ -27,8 +28,8 @@ export const createHealthPotion = (world, options) => {
   addComponent(world, Zindex, eid);
   Zindex.zIndex[eid] = 20;
 
-  Effects.health[eid] = 5;
-  Effects.strength[eid] = 0;
+  Effects.Health[eid] = 5;
+  Effects.Strength[eid] = 0;
 
   updatePosition({
     world,
