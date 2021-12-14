@@ -5,7 +5,7 @@ import {
   gettableEntitiesInReach,
   walkInventoryTree,
 } from "./ecsHelpers";
-import { drop, get, unwield, wield } from "./actions";
+import { drop, get, quaff, unwield, wield } from "./actions";
 
 const gameplayControls = [
   "ArrowUp",
@@ -26,6 +26,7 @@ const inventoryControls = [
   "ArrowLeft",
   "d", // drop
   "g", // get
+  "q", // quaff
   "r", // remove
   "w", // wield
 ];
@@ -172,6 +173,14 @@ export const processUserInput = (world) => {
         // possible actions from the Inventory column
         if (inventory.columnIndex === 0) {
           drop(world, pcEid, inventory.selectedInventoryItemEid);
+        }
+      }
+
+      // need to "drop" this item - or better yet, consume the liquid within. #77
+      if (key === "q") {
+        // possible actions from the Inventory column
+        if (inventory.columnIndex === 0) {
+          quaff(world, pcEid, inventory.selectedInventoryItemEid);
         }
       }
 

@@ -6,18 +6,16 @@ import { getWielders, updatePosition } from "./ecsHelpers";
 import { idToCell, getNeighborIds } from "./grid";
 import {
   Blocking,
-  Body,
-  Consumable,
   Droppable,
   Effects,
-  Health,
   Inventory,
+  Liquid,
   Pickupable,
   Position,
-  Strength,
   Wieldable,
   Wielding,
 } from "../components";
+import * as Components from "../components";
 
 export const get = (world, eid, itemEid) => {
   if (!hasComponent(world, Inventory, eid)) {
@@ -61,20 +59,6 @@ export const get = (world, eid, itemEid) => {
       setState((state) => {
         state.log.unshift(`You pickup ${world.meta[pickupEid].name}.`);
       });
-
-      // TODO do this in response to an inventory UI input or AI action
-      const isConsumable = hasComponent(world, Consumable, pickupEid);
-      if (isConsumable) {
-        return consume(world, eid, pickupEid);
-      }
-
-      const isWieldable = hasComponent(world, Wieldable, pickupEid);
-      if (isWieldable) {
-        const alreadyWielding = hasComponent(world, Wielding, eid);
-        if (!alreadyWielding) {
-          wield(world, eid, pickupEid);
-        }
-      }
     } else {
       setState((state) => {
         state.log.unshift("Your inventory is full.");
@@ -144,33 +128,31 @@ export const drop = (world, eid, itemEid, dir) => {
   pipelineFovRender(world);
 };
 
-export const consume = (world, targetEid, itemEid) => {
-  const isConsumable = hasComponent(world, Consumable, itemEid);
+// Instead of "Quaffable" we should look for Liquid
+export const quaff = (world, targetEid, itemEid) => {
+  const isLiquid = hasComponent(world, Liquid, itemEid);
 
-  if (!isConsumable) {
+  if (!isLiquid) {
     return setState((state) => {
-      state.log.unshift(`You can't consume that!`);
+      state.log.unshift(`You can't drink that!`);
     });
   }
 
-  if (hasComponent(world, Health, targetEid)) {
-    Health.current[targetEid] += Effects.health[itemEid];
-    Health.current[targetEid] =
-      Health.current[targetEid] > Health.max[targetEid]
-        ? Health.max[targetEid]
-        : Health.current[targetEid];
-  }
+  const components = Object.keys(Effects);
 
-  if (hasComponent(world, Strength, targetEid)) {
-    Strength.current[targetEid] += Effects.strength[itemEid];
-    Strength.current[targetEid] =
-      Strength.current[targetEid] > Strength.max[targetEid]
-        ? Strength.max[targetEid]
-        : Strength.current[targetEid];
+  for (const [i, c] of components.entries()) {
+    const component = Components[c];
+    if (hasComponent(world, component, targetEid)) {
+      component.current[targetEid] += Effects[c][itemEid];
+      component.current[targetEid] =
+        component.current[targetEid] > component.max[targetEid]
+          ? component.max[targetEid]
+          : component.current[targetEid];
+    }
   }
 
   return setState((state) => {
-    state.log.unshift(`You consume a ${world.meta[itemEid].name}!`);
+    state.log.unshift(`You drink a ${world.meta[itemEid].name}!`);
   });
 };
 
