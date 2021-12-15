@@ -2,7 +2,7 @@ import _ from "lodash";
 import { getState, setState } from "../index";
 import { pipelineFovRender } from "../pipelines";
 import { addComponent, hasComponent } from "bitecs";
-import { getWielders, updatePosition } from "./ecsHelpers";
+import { deleteEntity, getWielders, updatePosition } from "./ecsHelpers";
 import { idToCell, getNeighborIds } from "./grid";
 import {
   Blocking,
@@ -150,6 +150,16 @@ export const quaff = (world, targetEid, itemEid) => {
           : component.current[targetEid];
     }
   }
+
+  // findSlot index for item
+  const slotIndex = _.findIndex(
+    Inventory.slots[targetEid],
+    (x) => x === itemEid
+  );
+  // remove item from inventory
+  Inventory.slots[targetEid][slotIndex] = 0;
+
+  deleteEntity(world, itemEid);
 
   return setState((state) => {
     state.log.unshift(`You drink a ${world.meta[itemEid].name}!`);

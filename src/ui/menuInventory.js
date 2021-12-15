@@ -8,6 +8,7 @@ import { getNeighborIds } from "../lib/grid";
 import {
   BelongsTo,
   Droppable,
+  Liquid,
   Pickupable,
   Inventory,
   Position,
@@ -131,16 +132,20 @@ const renderDescription = (world, pcEid) => {
     if (hasComponent(world, Droppable, itemEid)) {
       availableActions += "(d)Drop ";
     }
-  }
 
-  const isEquipped = equippedItems.find((x) => x[0] === itemEid);
-  if (isEquipped) {
-    availableActions += "(r)Remove ";
-  }
+    const isEquipped = equippedItems.find((x) => x[0] === itemEid);
+    if (isEquipped) {
+      availableActions += "(r)Remove ";
+    }
 
-  if (!isEquipped) {
-    if (hasComponent(world, Wieldable, itemEid)) {
-      availableActions += "(w)Wield ";
+    if (!isEquipped) {
+      if (hasComponent(world, Wieldable, itemEid)) {
+        availableActions += "(w)Wield ";
+      }
+    }
+
+    if (hasComponent(world, Liquid, itemEid)) {
+      availableActions += "(q)Quaff ";
     }
   }
 

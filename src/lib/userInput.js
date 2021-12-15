@@ -94,7 +94,7 @@ export const processUserInput = (world) => {
       const { inventory } = getState();
 
       if (key === "ArrowUp") {
-        if (inventory.columnIndex === 0) {
+        if (inventory.columnIndex <= 0) {
           if (inventory.inventoryListIndex === 0) {
             setState((state) => {
               state.inventory.inventoryListIndex = nItems - 1;
@@ -121,7 +121,7 @@ export const processUserInput = (world) => {
 
       if (key === "ArrowDown") {
         if (inventory.columnIndex === 0) {
-          if (inventory.inventoryListIndex === nItems - 1) {
+          if (inventory.inventoryListIndex >= nItems - 1) {
             setState((state) => {
               state.inventory.inventoryListIndex = 0;
             });

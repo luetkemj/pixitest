@@ -1,7 +1,7 @@
 import _ from "lodash";
 import * as Components from "../components";
 import { Body, Pickupable, Position, Wielding } from "../components";
-import { hasComponent, removeComponent } from "bitecs";
+import { hasComponent, removeComponent, removeEntity } from "bitecs";
 import { getNeighborIds } from "../lib/grid";
 
 export const findEmptySlot = ({ component, containerEid }) => {
@@ -58,6 +58,10 @@ export const updatePosition = ({
   Position.x[eid] = newPos.x;
   Position.y[eid] = newPos.y;
   Position.z[eid] = newPos.z;
+};
+
+export const deleteEntity = (world, eid) => {
+  removeEntity(world, eid);
 };
 
 export const walkInventoryTree = (world, eid, inventoryComponent, func) => {
