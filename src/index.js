@@ -32420,6 +32420,9 @@ var updatePosition = ({
   Position.y[eid] = newPos.y;
   Position.z[eid] = newPos.z;
 };
+var deleteEntity = (world, eid) => {
+  removeEntity(world, eid);
+};
 var walkInventoryTree = (world, eid, inventoryComponent, func) => {
   if (!hasComponent(world, inventoryComponent, eid))
     return;
@@ -34633,14 +34636,17 @@ var renderDescription = (world, pcEid) => {
     if (hasComponent(world, Droppable, itemEid)) {
       availableActions += "(d)Drop ";
     }
-  }
-  const isEquipped = equippedItems.find((x) => x[0] === itemEid);
-  if (isEquipped) {
-    availableActions += "(r)Remove ";
-  }
-  if (!isEquipped) {
-    if (hasComponent(world, Wieldable, itemEid)) {
-      availableActions += "(w)Wield ";
+    const isEquipped = equippedItems.find((x) => x[0] === itemEid);
+    if (isEquipped) {
+      availableActions += "(r)Remove ";
+    }
+    if (!isEquipped) {
+      if (hasComponent(world, Wieldable, itemEid)) {
+        availableActions += "(w)Wield ";
+      }
+    }
+    if (hasComponent(world, Liquid, itemEid)) {
+      availableActions += "(q)Quaff ";
     }
   }
   if (currentColumn === 2) {
@@ -34962,6 +34968,9 @@ var quaff = (world, targetEid, itemEid) => {
       component.current[targetEid] = component.current[targetEid] > component.max[targetEid] ? component.max[targetEid] : component.current[targetEid];
     }
   }
+  const slotIndex = lodash_default.findIndex(Inventory.slots[targetEid], (x) => x === itemEid);
+  Inventory.slots[targetEid][slotIndex] = 0;
+  deleteEntity(world, itemEid);
   return setState((state2) => {
     state2.log.unshift(`You drink a ${world.meta[itemEid].name}!`);
   });
@@ -35141,7 +35150,7 @@ var processUserInput = (world) => {
       const entitiesInReach = gettableEntitiesInReach(world, currentLocId);
       const {inventory} = getState();
       if (key === "ArrowUp") {
-        if (inventory.columnIndex === 0) {
+        if (inventory.columnIndex <= 0) {
           if (inventory.inventoryListIndex === 0) {
             setState((state2) => {
               state2.inventory.inventoryListIndex = nItems - 1;
@@ -35166,7 +35175,7 @@ var processUserInput = (world) => {
       }
       if (key === "ArrowDown") {
         if (inventory.columnIndex === 0) {
-          if (inventory.inventoryListIndex === nItems - 1) {
+          if (inventory.inventoryListIndex >= nItems - 1) {
             setState((state2) => {
               state2.inventory.inventoryListIndex = 0;
             });
