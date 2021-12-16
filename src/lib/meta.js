@@ -1,4 +1,20 @@
 export const meta = {
+  breastplate: {
+    name: "breastplate",
+    description: "A piece of armor covering the chest.",
+    coverage: ["Torso"],
+  },
+  chausses: {
+    name: "chausses",
+    description: "A piece of armor covering the legs.",
+    coverage: ["Left Leg", "Right Leg"],
+  },
+  helm: {
+    name: "helm",
+    description: "A piece of armor covering the head.",
+    coverage: ["Head"],
+  },
+
   floor: {
     name: "floor",
     description: "The floor of the cave is flat hard and covered in dust.",

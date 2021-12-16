@@ -4,31 +4,31 @@ import * as gfx from "../lib/graphics";
 import { meta } from "../lib/meta";
 
 import {
+  Damage,
   Droppable,
-  Effects,
-  Liquid,
   Pickupable,
   Position,
+  Wieldable,
   Zindex,
 } from "../components";
 
 import { addSprite } from "../lib/canvas";
 import { updatePosition } from "../lib/ecsHelpers";
 
-export const createHealthPotion = (world, options) => {
+export const createSword = (world, options) => {
   const { x, y, z } = options;
 
   const eid = addEntity(world);
-  addComponent(world, Liquid, eid);
+  // armor component!
   addComponent(world, Droppable, eid);
-  addComponent(world, Effects, eid);
   addComponent(world, Pickupable, eid);
   addComponent(world, Position, eid);
+  // wearable component!
   addComponent(world, Zindex, eid);
   Zindex.zIndex[eid] = 20;
 
-  Effects.Health[eid] = 5;
-  Effects.Strength[eid] = 0;
+  // Armor.max[eid] = 2;
+  // Armor.current[eid] = 20;
 
   updatePosition({
     world,
@@ -37,13 +37,13 @@ export const createHealthPotion = (world, options) => {
   });
 
   addSprite({
-    texture: gfx.chars.potion,
+    texture: gfx.chars.armor,
     world,
     eid: eid,
     options: {
-      tint: gfx.colors.potion,
+      tint: gfx.colors.armor,
     },
   });
 
-  world.meta[eid] = meta.healthPotion;
+  world.meta[eid] = meta.breastplate;
 };

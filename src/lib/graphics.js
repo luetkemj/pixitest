@@ -1,5 +1,6 @@
 export const colors = {
   default: 0xff0077,
+  armor: 0xdaa520,
   potion: 0xdaa520,
   weapon: 0xdaa520,
   wall: 0xaaaaaa,
@@ -10,6 +11,7 @@ export const colors = {
 
 export const chars = {
   default: "?",
+  armor: "[",
   weapon: ")",
   potion: "!",
   wall: "#",
@@ -34,7 +36,6 @@ export const chars = {
 // stairsUp: 0xaaaaaa,
 // stairsDown: 0xaaaaaa,
 // rat: 0xf1948a,
-// armor: "[",
 // chest: "=",
 // items
 // currency: "*",
