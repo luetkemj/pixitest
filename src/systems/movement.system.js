@@ -50,9 +50,15 @@ const attack = (world, aggressor, target) => {
   });
 
   setState((state) => {
-    state.log.unshift(
-      `${world.meta[aggressor].name} hits ${world.meta[target].name} for ${damage} damage`
-    );
+    state.log.unshift([
+      {
+        str: `${world.meta[aggressor].name} `,
+      },
+      {
+        str: `hits ${world.meta[target].name} for ${damage} damage`,
+        color: 0xff0077,
+      },
+    ]);
   });
 
   Health.current[target] -= damage;

@@ -22,7 +22,7 @@ export const initWorld = (loader) => {
   setState((state) => {
     state.turn = "WORLD";
     state.debug = false;
-    state.log = ["Adventure, awaits!"];
+    state.log = [[{ str: "Adventure, awaits!" }]];
   });
 
   // create the dungeon
