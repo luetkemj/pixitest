@@ -47,7 +47,14 @@ export const getAsciTexture = ({ char }) => {
 };
 
 const containers = {};
-const containerNames = ["legend", "map", "ambiance", "menu", "overlay"];
+const containerNames = [
+  "legend",
+  "map",
+  "ambiance",
+  "adventureLog",
+  "menu",
+  "overlay",
+];
 containerNames.forEach((name) => {
   const width = grid[name].width * cellW;
   const height = grid[name].height * cellW;
@@ -74,7 +81,13 @@ containerNames.forEach((name) => {
 });
 
 const uiSprites = {};
-const uiSpriteContainerNames = ["legend", "ambiance", "menu", "overlay"];
+const uiSpriteContainerNames = [
+  "legend",
+  "ambiance",
+  "adventureLog",
+  "menu",
+  "overlay",
+];
 uiSpriteContainerNames.forEach((name) => {
   // create array structure for storing uiSprites for later use
   uiSprites[name] = Array.from(Array(grid[name].height), () => []);

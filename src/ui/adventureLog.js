@@ -4,19 +4,19 @@ import { grid } from "../lib/grid";
 import { getState } from "../index";
 
 // TODO: add an ambiance field to world. It can be updated directly without a history
-export const renderAmbiance = (world, str) => {
-  if (str) {
-    printRow({ container: "ambiance", str });
-  } else {
-    const log = getState().log[0];
+const container = "adventureLog";
 
-    if (Array.isArray(log)) {
+export const renderAdventureLog = (world) => {
+  const log = getState().log.slice(0, 3).reverse();
+  for (const [i, l] of log.entries()) {
+    if (Array.isArray(l)) {
       printTemplate({
-        container: "ambiance",
-        template: log,
+        container,
+        template: l,
+        y: i,
       });
     } else {
-      printRow({ container: "ambiance", str: log });
+      printRow({ container, str: l, y: i });
     }
   }
 };
