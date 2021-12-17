@@ -30151,27 +30151,33 @@ var grid = {
   },
   map: {
     width: 87,
-    height: 43,
+    height: 40,
     x: 13,
-    y: 1
+    y: 3
   },
   overlay: {
     width: 87,
-    height: 43,
+    height: 40,
     x: 13,
-    y: 1
+    y: 3
+  },
+  adventureLog: {
+    width: 87,
+    height: 3,
+    x: 13,
+    y: 0
   },
   ambiance: {
     width: 87,
     height: 1,
     x: 13,
-    y: 0
+    y: 43
   },
   menu: {
     width: 87,
-    height: 44,
+    height: 41,
     x: 13,
-    y: 0
+    y: 3
   }
 };
 var CARDINAL = [

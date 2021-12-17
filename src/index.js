@@ -7495,27 +7495,33 @@ var grid = {
   },
   map: {
     width: 87,
-    height: 43,
+    height: 40,
     x: 13,
-    y: 1
+    y: 3
   },
   overlay: {
     width: 87,
-    height: 43,
+    height: 40,
     x: 13,
-    y: 1
+    y: 3
+  },
+  adventureLog: {
+    width: 87,
+    height: 3,
+    x: 13,
+    y: 0
   },
   ambiance: {
     width: 87,
     height: 1,
     x: 13,
-    y: 0
+    y: 43
   },
   menu: {
     width: 87,
-    height: 44,
+    height: 41,
     x: 13,
-    y: 0
+    y: 3
   }
 };
 var CARDINAL = [
@@ -12376,12 +12382,12 @@ var DisplayObject = function(_super) {
     }
     return this.worldTransform.applyInverse(position, point);
   };
-  DisplayObject2.prototype.setParent = function(container) {
-    if (!container || !container.addChild) {
+  DisplayObject2.prototype.setParent = function(container2) {
+    if (!container2 || !container2.addChild) {
       throw new Error("setParent: Argument must be a Container");
     }
-    container.addChild(this);
-    return container;
+    container2.addChild(this);
+    return container2;
   };
   DisplayObject2.prototype.setTransform = function(x, y, scaleX, scaleY, rotation, skewX, skewY, pivotX, pivotY) {
     if (x === void 0) {
@@ -23722,29 +23728,29 @@ var ParticleRenderer = function(_super) {
     _this.state = State.for2d();
     return _this;
   }
-  ParticleRenderer2.prototype.render = function(container) {
-    var children = container.children;
-    var maxSize = container._maxSize;
-    var batchSize = container._batchSize;
+  ParticleRenderer2.prototype.render = function(container2) {
+    var children = container2.children;
+    var maxSize = container2._maxSize;
+    var batchSize = container2._batchSize;
     var renderer = this.renderer;
     var totalChildren = children.length;
     if (totalChildren === 0) {
       return;
-    } else if (totalChildren > maxSize && !container.autoResize) {
+    } else if (totalChildren > maxSize && !container2.autoResize) {
       totalChildren = maxSize;
     }
-    var buffers = container._buffers;
+    var buffers = container2._buffers;
     if (!buffers) {
-      buffers = container._buffers = this.generateBuffers(container);
+      buffers = container2._buffers = this.generateBuffers(container2);
     }
     var baseTexture = children[0]._texture.baseTexture;
-    this.state.blendMode = correctBlendMode(container.blendMode, baseTexture.alphaMode);
+    this.state.blendMode = correctBlendMode(container2.blendMode, baseTexture.alphaMode);
     renderer.state.set(this.state);
     var gl = renderer.gl;
-    var m = container.worldTransform.copyTo(this.tempMatrix);
+    var m = container2.worldTransform.copyTo(this.tempMatrix);
     m.prepend(renderer.globalUniforms.uniforms.projectionMatrix);
     this.shader.uniforms.translationMatrix = m.toArray(true);
-    this.shader.uniforms.uColor = premultiplyRgba(container.tintRgb, container.worldAlpha, this.shader.uniforms.uColor, baseTexture.alphaMode);
+    this.shader.uniforms.uColor = premultiplyRgba(container2.tintRgb, container2.worldAlpha, this.shader.uniforms.uColor, baseTexture.alphaMode);
     this.shader.uniforms.uSampler = baseTexture;
     this.renderer.shader.bind(this.shader);
     var updateStatic = false;
@@ -23754,33 +23760,33 @@ var ParticleRenderer = function(_super) {
         amount = batchSize;
       }
       if (j >= buffers.length) {
-        buffers.push(this._generateOneMoreBuffer(container));
+        buffers.push(this._generateOneMoreBuffer(container2));
       }
       var buffer = buffers[j];
       buffer.uploadDynamic(children, i, amount);
-      var bid = container._bufferUpdateIDs[j] || 0;
+      var bid = container2._bufferUpdateIDs[j] || 0;
       updateStatic = updateStatic || buffer._updateID < bid;
       if (updateStatic) {
-        buffer._updateID = container._updateID;
+        buffer._updateID = container2._updateID;
         buffer.uploadStatic(children, i, amount);
       }
       renderer.geometry.bind(buffer.geometry);
       gl.drawElements(gl.TRIANGLES, amount * 6, gl.UNSIGNED_SHORT, 0);
     }
   };
-  ParticleRenderer2.prototype.generateBuffers = function(container) {
+  ParticleRenderer2.prototype.generateBuffers = function(container2) {
     var buffers = [];
-    var size = container._maxSize;
-    var batchSize = container._batchSize;
-    var dynamicPropertyFlags = container._properties;
+    var size = container2._maxSize;
+    var batchSize = container2._batchSize;
+    var dynamicPropertyFlags = container2._properties;
     for (var i = 0; i < size; i += batchSize) {
       buffers.push(new ParticleBuffer(this.properties, dynamicPropertyFlags, batchSize));
     }
     return buffers;
   };
-  ParticleRenderer2.prototype._generateOneMoreBuffer = function(container) {
-    var batchSize = container._batchSize;
-    var dynamicPropertyFlags = container._properties;
+  ParticleRenderer2.prototype._generateOneMoreBuffer = function(container2) {
+    var batchSize = container2._batchSize;
+    var dynamicPropertyFlags = container2._properties;
     return new ParticleBuffer(this.properties, dynamicPropertyFlags, batchSize);
   };
   ParticleRenderer2.prototype.uploadVertices = function(children, startIndex, amount, array, stride, offset) {
@@ -32750,7 +32756,14 @@ var getAsciTexture = ({char}) => {
   return loader.resources["static/fonts/menlo-bold.json"].textures[menloBoldAlphaMap[char]];
 };
 var containers = {};
-var containerNames = ["legend", "map", "ambiance", "menu", "overlay"];
+var containerNames = [
+  "legend",
+  "map",
+  "ambiance",
+  "adventureLog",
+  "menu",
+  "overlay"
+];
 containerNames.forEach((name) => {
   const width = grid[name].width * cellW;
   const height = grid[name].height * cellW;
@@ -32772,7 +32785,13 @@ containerNames.forEach((name) => {
   graphics && containers[name].addChild(graphics);
 });
 var uiSprites = {};
-var uiSpriteContainerNames = ["legend", "ambiance", "menu", "overlay"];
+var uiSpriteContainerNames = [
+  "legend",
+  "ambiance",
+  "adventureLog",
+  "menu",
+  "overlay"
+];
 uiSpriteContainerNames.forEach((name) => {
   uiSprites[name] = Array.from(Array(grid[name].height), () => []);
 });
@@ -32785,7 +32804,7 @@ var addDebugSprite = ({texture, x, y}) => {
   return sprite;
 };
 var addSprite = ({
-  container = "map",
+  container: container2 = "map",
   texture = chars.default,
   tint = colors.default,
   options = {},
@@ -32805,10 +32824,22 @@ var addSprite = ({
     const pos = `${x},${y},${z}`;
     world.eAtPos[pos].forEach((e) => console.log(getEntityData(world, e)));
   });
-  containers[container].addChild(world.sprites[eid]);
+  containers[container2].addChild(world.sprites[eid]);
+};
+var printCell = ({
+  container: container2,
+  x = 0,
+  y = 0,
+  char,
+  color = 13421772,
+  halfWidth = true
+}) => {
+  uiSprites[container2][y][x].tint = color;
+  const func = halfWidth ? getFontTexture : getAsciTexture;
+  uiSprites[container2][y][x].texture = func({char});
 };
 var printRow = ({
-  container,
+  container: container2,
   x = 0,
   y = 0,
   width = null,
@@ -32816,24 +32847,50 @@ var printRow = ({
   color = 13421772,
   halfWidth = true
 }) => {
-  const len = width || uiSprites[container][y].length;
+  const len = width || uiSprites[container2][y].length;
   for (let i = 0; i < len; i++) {
-    uiSprites[container][y][i + x].tint = color;
-    const func = halfWidth ? getFontTexture : getAsciTexture;
-    uiSprites[container][y][i + x].texture = func({char: str[i]});
+    printCell({
+      container: container2,
+      x: x + i,
+      y,
+      char: str[i],
+      color,
+      halfWidth
+    });
+  }
+};
+var printTemplate = ({
+  container: container2,
+  x = 0,
+  y = 0,
+  halfWidth = true,
+  template = []
+}) => {
+  let curX = x;
+  for (const [i, t] of template.entries()) {
+    printRow({
+      container: container2,
+      x: curX,
+      y,
+      str: t.str,
+      color: t.color || 13421772,
+      halfWidth,
+      width: t.str.length
+    });
+    curX += t.str.length;
   }
 };
 var initUi = () => {
-  const initUiRow = ({container, row, halfWidth = true}) => {
-    lodash_default.times(grid[container].width * 2, (i) => {
+  const initUiRow = ({container: container2, row, halfWidth = true}) => {
+    lodash_default.times(grid[container2].width * 2, (i) => {
       const sprite = new Sprite(getFontTexture({char: ""}));
       const width = halfWidth ? cellHfW : cellW;
       sprite.width = width;
       sprite.height = cellW;
       sprite.x = i * width;
       sprite.y = row * cellW;
-      uiSprites[container][row][i] = sprite;
-      containers[container].addChild(sprite);
+      uiSprites[container2][row][i] = sprite;
+      containers[container2].addChild(sprite);
     });
   };
   uiSpriteContainerNames.forEach((name) => {
@@ -32847,17 +32904,17 @@ var initUi = () => {
   });
   printRow({container: "legend", str: "You are a Knight."});
 };
-var clearContainer = (container) => {
-  const str = new Array(grid[container].width).join(" ");
-  uiSprites[container].forEach((row, i) => {
-    printRow({container, y: i, str});
+var clearContainer = (container2) => {
+  const str = new Array(grid[container2].width).join(" ");
+  uiSprites[container2].forEach((row, i) => {
+    printRow({container: container2, y: i, str});
   });
 };
-var hideContainer = (container) => {
-  containers[container].visible = false;
+var hideContainer = (container2) => {
+  containers[container2].visible = false;
 };
-var showContainer = (container) => {
-  containers[container].visible = true;
+var showContainer = (container2) => {
+  containers[container2].visible = true;
 };
 
 // build/src/systems/debug.system.js
@@ -33067,7 +33124,15 @@ var attack = (world, aggressor, target) => {
     }
   });
   setState((state2) => {
-    state2.log.unshift(`${world.meta[aggressor].name} hits ${world.meta[target].name} for ${damage} damage`);
+    state2.log.unshift([
+      {
+        str: `${world.meta[aggressor].name} `
+      },
+      {
+        str: `hits ${world.meta[target].name} for ${damage} damage`,
+        color: 16711799
+      }
+    ]);
   });
   Health.current[target] -= damage;
   if (Health.current[target] <= 0) {
@@ -33129,12 +33194,32 @@ var renderAmbiance = (world, str) => {
   if (str) {
     printRow({container: "ambiance", str});
   } else {
-    lodash_default.times(grid.ambiance.height, (i) => {
-      const arr = getState().log;
-      const log = arr.slice(Math.max(arr.length - grid.ambiance.height, 0));
-      const str2 = log[i];
-      printRow({container: "ambiance", y: i, str: str2});
-    });
+    const log = getState().log[0];
+    if (Array.isArray(log)) {
+      printTemplate({
+        container: "ambiance",
+        template: log
+      });
+    } else {
+      printRow({container: "ambiance", str: log});
+    }
+  }
+};
+
+// build/src/ui/adventureLog.js
+var container = "adventureLog";
+var renderAdventureLog = (world) => {
+  const log = getState().log.slice(0, 3).reverse();
+  for (const [i, l] of log.entries()) {
+    if (Array.isArray(l)) {
+      printTemplate({
+        container,
+        template: l,
+        y: i
+      });
+    } else {
+      printRow({container, str: l, y: i});
+    }
   }
 };
 
@@ -34716,11 +34801,14 @@ var renderMenuInventory = (world, pcEid) => {
 // build/src/ui/menuLog.js
 var renderMenuLog = () => {
   const arr = getState().log;
-  const log = arr.slice(0, grid.menu.height);
-  lodash_default.times(log.length, (i) => {
-    const str = log[i];
-    printRow({container: "menu", y: i, str});
-  });
+  const visibleLog = arr.slice(0, grid.menu.height);
+  for (const [i, log] of visibleLog.entries()) {
+    if (Array.isArray(log)) {
+      printTemplate({container: "menu", y: i, template: log});
+    } else {
+      printRow({container: "menu", y: i, str: log});
+    }
+  }
 };
 
 // build/src/ui/looking.js
@@ -34840,6 +34928,7 @@ var renderSystem = (world) => {
     }
   }
   renderAmbiance(world);
+  renderAdventureLog(world);
   renderLegend(world, pcEnts[0]);
   hideContainer("menu");
   hideContainer("overlay");
@@ -35642,7 +35731,7 @@ var initWorld = (loader3) => {
   setState((state2) => {
     state2.turn = "WORLD";
     state2.debug = false;
-    state2.log = ["Adventure, awaits!"];
+    state2.log = [[{str: "Adventure, awaits!"}]];
   });
   const dungeon = buildDungeon({
     x: 0,
