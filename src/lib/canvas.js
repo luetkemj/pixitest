@@ -120,6 +120,19 @@ export const addSprite = ({
   containers[container].addChild(world.sprites[eid]);
 };
 
+const printCell = ({
+  container,
+  x = 0,
+  y = 0,
+  char,
+  color = 0xcccccc,
+  halfWidth = true,
+}) => {
+  uiSprites[container][y][x].tint = color;
+  const func = halfWidth ? getFontTexture : getAsciTexture;
+  uiSprites[container][y][x].texture = func({ char });
+};
+
 export const printRow = ({
   container,
   x = 0,
@@ -132,10 +145,36 @@ export const printRow = ({
   const len = width || uiSprites[container][y].length;
 
   for (let i = 0; i < len; i++) {
-    uiSprites[container][y][i + x].tint = color;
+    printCell({
+      container,
+      x: x + i,
+      y,
+      char: str[i],
+      color,
+      halfWidth,
+    });
+  }
+};
 
-    const func = halfWidth ? getFontTexture : getAsciTexture;
-    uiSprites[container][y][i + x].texture = func({ char: str[i] });
+export const printTemplate = ({
+  container,
+  x = 0,
+  y = 0,
+  halfWidth = true,
+  template = [],
+}) => {
+  let curX = x;
+  for (const [i, t] of template.entries()) {
+    printRow({
+      container,
+      x: curX,
+      y,
+      str: t.str,
+      color: t.color || 0xcccccc,
+      halfWidth,
+      width: t.str.length,
+    });
+    curX += t.str.length;
   }
 };
 

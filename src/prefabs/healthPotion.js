@@ -4,7 +4,6 @@ import * as gfx from "../lib/graphics";
 import { meta } from "../lib/meta";
 
 import {
-  Consumable,
   Droppable,
   Effects,
   Liquid,

@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { printRow } from "../lib/canvas";
+import { printRow, printTemplate } from "../lib/canvas";
 import { grid } from "../lib/grid";
 import { getState } from "../index";
 
@@ -13,7 +13,8 @@ export const renderAmbiance = (world, str) => {
       // get the last 3 messages in the log
       const log = arr.slice(Math.max(arr.length - grid.ambiance.height, 0));
       const str = log[i];
-      printRow({ container: "ambiance", y: i, str });
+      // printRow({ container: "ambiance", y: i, str });
+      printTemplate({ container: "ambiance", y: i, template: str });
     });
   }
 };
