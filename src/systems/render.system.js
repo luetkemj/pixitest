@@ -20,6 +20,7 @@ import {
   getAsciTexture,
 } from "../lib/canvas";
 import { renderAmbiance } from "../ui/ambiance";
+import { renderAdventureLog } from "../ui/adventureLog";
 import { renderLegend } from "../ui/legend";
 import { renderMenuCharacter } from "../ui/menuCharacter";
 import { renderMenuInventory } from "../ui/menuInventory";
@@ -121,6 +122,7 @@ export const renderSystem = (world) => {
 
   // RENDER UI THINGS
   renderAmbiance(world);
+  renderAdventureLog(world);
   renderLegend(world, pcEnts[0]);
 
   // hide menu and overlay
