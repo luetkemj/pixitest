@@ -140,8 +140,10 @@ const printCell = ({
   char,
   color = 0xcccccc,
   halfWidth = true,
+  alpha = 1,
 }) => {
   uiSprites[container][y][x].tint = color;
+  uiSprites[container][y][x].alpha = alpha;
   const func = halfWidth ? getFontTexture : getAsciTexture;
   uiSprites[container][y][x].texture = func({ char });
 };
@@ -154,6 +156,7 @@ export const printRow = ({
   str,
   color = 0xcccccc,
   halfWidth = true,
+  alpha = 1,
 }) => {
   const len = width || uiSprites[container][y].length;
 
@@ -165,6 +168,7 @@ export const printRow = ({
       char: str[i],
       color,
       halfWidth,
+      alpha,
     });
   }
 };
@@ -175,6 +179,7 @@ export const printTemplate = ({
   y = 0,
   halfWidth = true,
   template = [],
+  alpha = 1,
 }) => {
   let curX = x;
   for (const [i, t] of template.entries()) {
@@ -186,6 +191,7 @@ export const printTemplate = ({
       color: t.color || 0xcccccc,
       halfWidth,
       width: t.str.length,
+      alpha,
     });
     curX += t.str.length;
   }

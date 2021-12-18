@@ -5,7 +5,7 @@ import {
   hasComponent,
   removeComponent,
 } from "bitecs";
-import { setState } from "../index";
+import { addLog, getState, setState } from "../index";
 import {
   Ai,
   Blocking,
@@ -50,28 +50,26 @@ const attack = ({ world, aggEid, tarEid, pcEid }) => {
     }
   });
 
-  setState((state) => {
-    state.log.unshift([
-      {
-        str: `${world.meta[aggEid].name} `,
-        color: `${world.sprites[aggEid].tint}`,
-      },
-      {
-        str: ` hits`,
-      },
-      {
-        str: ` ${world.meta[tarEid].name}`,
-        color: world.sprites[tarEid].tint,
-      },
-      {
-        str: ` for`,
-      },
-      {
-        str: ` ${damage} damage`,
-        color: gfx.colors.blood,
-      },
-    ]);
-  });
+  addLog([
+    {
+      str: `${world.meta[aggEid].name} `,
+      color: `${world.sprites[aggEid].tint}`,
+    },
+    {
+      str: ` hits`,
+    },
+    {
+      str: ` ${world.meta[tarEid].name}`,
+      color: world.sprites[tarEid].tint,
+    },
+    {
+      str: ` for`,
+    },
+    {
+      str: ` ${damage} damage`,
+      color: gfx.colors.blood,
+    },
+  ]);
 
   Health.current[tarEid] -= damage;
   if (Health.current[tarEid] <= 0) {
@@ -119,9 +117,7 @@ export const movementSystem = (world) => {
           // attack the thing!
           attack({ world, aggEid: eid, tarEid: e, pcEid: pcEnts[0] });
         } else {
-          setState((state) => {
-            state.log = ["BUMP!", ...state.log];
-          });
+          addLog("BUMP!");
         }
       }
     });

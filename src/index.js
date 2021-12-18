@@ -32,6 +32,7 @@ const state = {
   turn: "",
   debug: false,
   log: [],
+  tick: 0,
   RESETTING_DEBUG: true,
 };
 
@@ -40,6 +41,18 @@ export const setState = (callback) => {
 };
 
 export const getState = () => state;
+
+export const addLog = (log) => {
+  if (!Array.isArray(log)) {
+    log = [{ str: log }];
+  }
+  setState((state) => {
+    state.log.unshift({
+      tick: getState().tick,
+      log,
+    });
+  });
+};
 
 function initGame() {
   setState((state) => {
@@ -80,6 +93,9 @@ function initGame() {
 
     if (getState().mode === "GAME") {
       if (getState().userInput && getState().turn === "PLAYER") {
+        setState((state) => {
+          state.tick = state.tick + 1;
+        });
         processUserInput(world);
         pipelinePlayerTurn(world);
         debugPipeline(world);
@@ -88,6 +104,7 @@ function initGame() {
       if (getState().turn === "WORLD") {
         pipelineWorldTurn(world);
         debugPipeline(world);
+
         setState((state) => {
           state.turn = "PLAYER";
         });
@@ -105,7 +122,9 @@ function initGame() {
       if (fpsSamples.length > 3) {
         fpsSamples.pop();
       }
-      fpsEl.innerHTML = Math.round(_.mean(fpsSamples));
+      fpsEl.innerHTML = `${Math.round(_.mean(fpsSamples))} [${state.tick}] [${
+        state.turn
+      }]`;
 
       now = Date.now();
       fps = 0;
