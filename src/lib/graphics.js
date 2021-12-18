@@ -6,6 +6,7 @@ export const colors = {
   floor: 0x555555,
   knight: 0xffffff,
   goblin: 0x81a842,
+  blood: 0xb91906,
 };
 
 export const chars = {
