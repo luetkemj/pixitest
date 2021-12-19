@@ -12382,12 +12382,12 @@ var DisplayObject = function(_super) {
     }
     return this.worldTransform.applyInverse(position, point);
   };
-  DisplayObject2.prototype.setParent = function(container2) {
-    if (!container2 || !container2.addChild) {
+  DisplayObject2.prototype.setParent = function(container4) {
+    if (!container4 || !container4.addChild) {
       throw new Error("setParent: Argument must be a Container");
     }
-    container2.addChild(this);
-    return container2;
+    container4.addChild(this);
+    return container4;
   };
   DisplayObject2.prototype.setTransform = function(x, y, scaleX, scaleY, rotation, skewX, skewY, pivotX, pivotY) {
     if (x === void 0) {
@@ -23728,29 +23728,29 @@ var ParticleRenderer = function(_super) {
     _this.state = State.for2d();
     return _this;
   }
-  ParticleRenderer2.prototype.render = function(container2) {
-    var children = container2.children;
-    var maxSize = container2._maxSize;
-    var batchSize = container2._batchSize;
+  ParticleRenderer2.prototype.render = function(container4) {
+    var children = container4.children;
+    var maxSize = container4._maxSize;
+    var batchSize = container4._batchSize;
     var renderer = this.renderer;
     var totalChildren = children.length;
     if (totalChildren === 0) {
       return;
-    } else if (totalChildren > maxSize && !container2.autoResize) {
+    } else if (totalChildren > maxSize && !container4.autoResize) {
       totalChildren = maxSize;
     }
-    var buffers = container2._buffers;
+    var buffers = container4._buffers;
     if (!buffers) {
-      buffers = container2._buffers = this.generateBuffers(container2);
+      buffers = container4._buffers = this.generateBuffers(container4);
     }
     var baseTexture = children[0]._texture.baseTexture;
-    this.state.blendMode = correctBlendMode(container2.blendMode, baseTexture.alphaMode);
+    this.state.blendMode = correctBlendMode(container4.blendMode, baseTexture.alphaMode);
     renderer.state.set(this.state);
     var gl = renderer.gl;
-    var m = container2.worldTransform.copyTo(this.tempMatrix);
+    var m = container4.worldTransform.copyTo(this.tempMatrix);
     m.prepend(renderer.globalUniforms.uniforms.projectionMatrix);
     this.shader.uniforms.translationMatrix = m.toArray(true);
-    this.shader.uniforms.uColor = premultiplyRgba(container2.tintRgb, container2.worldAlpha, this.shader.uniforms.uColor, baseTexture.alphaMode);
+    this.shader.uniforms.uColor = premultiplyRgba(container4.tintRgb, container4.worldAlpha, this.shader.uniforms.uColor, baseTexture.alphaMode);
     this.shader.uniforms.uSampler = baseTexture;
     this.renderer.shader.bind(this.shader);
     var updateStatic = false;
@@ -23760,33 +23760,33 @@ var ParticleRenderer = function(_super) {
         amount = batchSize;
       }
       if (j >= buffers.length) {
-        buffers.push(this._generateOneMoreBuffer(container2));
+        buffers.push(this._generateOneMoreBuffer(container4));
       }
       var buffer = buffers[j];
       buffer.uploadDynamic(children, i, amount);
-      var bid = container2._bufferUpdateIDs[j] || 0;
+      var bid = container4._bufferUpdateIDs[j] || 0;
       updateStatic = updateStatic || buffer._updateID < bid;
       if (updateStatic) {
-        buffer._updateID = container2._updateID;
+        buffer._updateID = container4._updateID;
         buffer.uploadStatic(children, i, amount);
       }
       renderer.geometry.bind(buffer.geometry);
       gl.drawElements(gl.TRIANGLES, amount * 6, gl.UNSIGNED_SHORT, 0);
     }
   };
-  ParticleRenderer2.prototype.generateBuffers = function(container2) {
+  ParticleRenderer2.prototype.generateBuffers = function(container4) {
     var buffers = [];
-    var size = container2._maxSize;
-    var batchSize = container2._batchSize;
-    var dynamicPropertyFlags = container2._properties;
+    var size = container4._maxSize;
+    var batchSize = container4._batchSize;
+    var dynamicPropertyFlags = container4._properties;
     for (var i = 0; i < size; i += batchSize) {
       buffers.push(new ParticleBuffer(this.properties, dynamicPropertyFlags, batchSize));
     }
     return buffers;
   };
-  ParticleRenderer2.prototype._generateOneMoreBuffer = function(container2) {
-    var batchSize = container2._batchSize;
-    var dynamicPropertyFlags = container2._properties;
+  ParticleRenderer2.prototype._generateOneMoreBuffer = function(container4) {
+    var batchSize = container4._batchSize;
+    var dynamicPropertyFlags = container4._properties;
     return new ParticleBuffer(this.properties, dynamicPropertyFlags, batchSize);
   };
   ParticleRenderer2.prototype.uploadVertices = function(children, startIndex, amount, array, stride, offset) {
@@ -32521,7 +32521,8 @@ var colors = {
   wall: 11184810,
   floor: 5592405,
   knight: 16777215,
-  goblin: 8497218
+  goblin: 8497218,
+  blood: 12130566
 };
 var chars = {
   default: "?",
@@ -32804,7 +32805,7 @@ var addDebugSprite = ({texture, x, y}) => {
   return sprite;
 };
 var addSprite = ({
-  container: container2 = "map",
+  container: container4 = "map",
   texture = chars.default,
   tint = colors.default,
   options = {},
@@ -32824,73 +32825,79 @@ var addSprite = ({
     const pos = `${x},${y},${z}`;
     world.eAtPos[pos].forEach((e) => console.log(getEntityData(world, e)));
   });
-  containers[container2].addChild(world.sprites[eid]);
+  containers[container4].addChild(world.sprites[eid]);
 };
 var printCell = ({
-  container: container2,
+  container: container4,
   x = 0,
   y = 0,
   char,
   color = 13421772,
-  halfWidth = true
+  halfWidth = true,
+  alpha = 1
 }) => {
-  uiSprites[container2][y][x].tint = color;
+  uiSprites[container4][y][x].tint = color;
+  uiSprites[container4][y][x].alpha = alpha;
   const func = halfWidth ? getFontTexture : getAsciTexture;
-  uiSprites[container2][y][x].texture = func({char});
+  uiSprites[container4][y][x].texture = func({char});
 };
 var printRow = ({
-  container: container2,
+  container: container4,
   x = 0,
   y = 0,
   width = null,
   str,
   color = 13421772,
-  halfWidth = true
+  halfWidth = true,
+  alpha = 1
 }) => {
-  const len = width || uiSprites[container2][y].length;
+  const len = width || uiSprites[container4][y].length;
   for (let i = 0; i < len; i++) {
     printCell({
-      container: container2,
+      container: container4,
       x: x + i,
       y,
       char: str[i],
       color,
-      halfWidth
+      halfWidth,
+      alpha
     });
   }
 };
 var printTemplate = ({
-  container: container2,
+  container: container4,
   x = 0,
   y = 0,
   halfWidth = true,
-  template = []
+  template = [],
+  alpha = 1
 }) => {
   let curX = x;
   for (const [i, t] of template.entries()) {
     printRow({
-      container: container2,
+      container: container4,
       x: curX,
       y,
       str: t.str,
       color: t.color || 13421772,
       halfWidth,
-      width: t.str.length
+      width: t.str.length,
+      alpha
     });
     curX += t.str.length;
   }
 };
 var initUi = () => {
-  const initUiRow = ({container: container2, row, halfWidth = true}) => {
-    lodash_default.times(grid[container2].width * 2, (i) => {
+  const initUiRow = ({container: container4, row, halfWidth = true}) => {
+    lodash_default.times(grid[container4].width * 2, (i) => {
       const sprite = new Sprite(getFontTexture({char: ""}));
       const width = halfWidth ? cellHfW : cellW;
       sprite.width = width;
       sprite.height = cellW;
       sprite.x = i * width;
       sprite.y = row * cellW;
-      uiSprites[container2][row][i] = sprite;
-      containers[container2].addChild(sprite);
+      uiSprites[container4][row][i] = sprite;
+      containers[container4].addChild(sprite);
     });
   };
   uiSpriteContainerNames.forEach((name) => {
@@ -32904,17 +32911,17 @@ var initUi = () => {
   });
   printRow({container: "legend", str: "You are a Knight."});
 };
-var clearContainer = (container2) => {
-  const str = new Array(grid[container2].width).join(" ");
-  uiSprites[container2].forEach((row, i) => {
-    printRow({container: container2, y: i, str});
+var clearContainer = (container4) => {
+  const str = new Array(grid[container4].width).join(" ");
+  uiSprites[container4].forEach((row, i) => {
+    printRow({container: container4, y: i, str});
   });
 };
-var hideContainer = (container2) => {
-  containers[container2].visible = false;
+var hideContainer = (container4) => {
+  containers[container4].visible = false;
 };
-var showContainer = (container2) => {
-  containers[container2].visible = true;
+var showContainer = (container4) => {
+  containers[container4].visible = true;
 };
 
 // build/src/systems/debug.system.js
@@ -33112,9 +33119,9 @@ var kill = (world, eid) => {
   removeComponent(world, Forgettable, eid);
   Zindex.zIndex[eid] = 20;
 };
-var attack = (world, aggressor, target) => {
-  let damage = Strength.current[aggressor];
-  const wielders = getWielders(world, aggressor);
+var attack = ({world, aggEid, tarEid, pcEid}) => {
+  let damage = Strength.current[aggEid];
+  const wielders = getWielders(world, aggEid);
   lodash_default.each(wielders, (wielder) => {
     const itemEid = wielder[1];
     if (itemEid) {
@@ -33123,21 +33130,37 @@ var attack = (world, aggressor, target) => {
       }
     }
   });
-  setState((state2) => {
-    state2.log.unshift([
-      {
-        str: `${world.meta[aggressor].name} `
-      },
-      {
-        str: `hits ${world.meta[target].name} for ${damage} damage`,
-        color: 16711799
-      }
-    ]);
-  });
-  Health.current[target] -= damage;
-  if (Health.current[target] <= 0) {
-    kill(world, target);
+  const aggName = pcEid === aggEid ? "you" : world.meta[aggEid].name;
+  const tarName = pcEid === tarEid ? "you" : world.meta[tarEid].name;
+  const log = [
+    {
+      str: aggName,
+      color: `${world.sprites[aggEid].tint}`
+    },
+    {
+      str: ` ${pcEid === aggEid ? "hit" : "hits"}`
+    },
+    {
+      str: ` ${tarName}`,
+      color: world.sprites[tarEid].tint
+    },
+    {
+      str: ` for`
+    },
+    {
+      str: ` ${damage} damage`,
+      color: colors.blood
+    }
+  ];
+  Health.current[tarEid] -= damage;
+  if (Health.current[tarEid] <= 0) {
+    kill(world, tarEid);
+    log.push({
+      str: ` ${pcEid === tarEid ? "and kills you!" : "and kill it!"}`,
+      color: colors.blood
+    });
   }
+  addLog(log);
 };
 var movementSystem = (world) => {
   const ents = movementQuery(world);
@@ -33162,22 +33185,9 @@ var movementSystem = (world) => {
       if (hasComponent(world, Blocking, e)) {
         canMove = false;
         if (hasComponent(world, Health, e)) {
-          attack(world, eid, e);
-          if (pcEnts.includes(eid)) {
-            const msg = `You attack a ${world.meta[e].name}!`;
-            setState((state2) => {
-              state2.log = [msg, ...state2.log];
-            });
-          } else {
-            const msg = `A ${world.meta[eid].name} attacks you!`;
-            setState((state2) => {
-              state2.log = [msg, ...state2.log];
-            });
-          }
+          attack({world, aggEid: eid, tarEid: e, pcEid: pcEnts[0]});
         } else {
-          setState((state2) => {
-            state2.log = ["BUMP!", ...state2.log];
-          });
+          addLog("BUMP!");
         }
       }
     });
@@ -33190,36 +33200,28 @@ var movementSystem = (world) => {
 };
 
 // build/src/ui/ambiance.js
+var container = "ambiance";
 var renderAmbiance = (world, str) => {
-  if (str) {
-    printRow({container: "ambiance", str});
-  } else {
-    const log = getState().log[0];
-    if (Array.isArray(log)) {
-      printTemplate({
-        container: "ambiance",
-        template: log
-      });
-    } else {
-      printRow({container: "ambiance", str: log});
-    }
-  }
+  clearContainer(container);
+  const log = getState().log.log[0];
+  printTemplate({
+    container,
+    template: log.log
+  });
 };
 
 // build/src/ui/adventureLog.js
-var container = "adventureLog";
+var container2 = "adventureLog";
 var renderAdventureLog = (world) => {
-  const log = getState().log.slice(0, 3).reverse();
+  clearContainer(container2);
+  const log = getState().log.log.slice(0, 3).reverse();
   for (const [i, l] of log.entries()) {
-    if (Array.isArray(l)) {
-      printTemplate({
-        container,
-        template: l,
-        y: i
-      });
-    } else {
-      printRow({container, str: l, y: i});
-    }
+    printTemplate({
+      container: container2,
+      template: l.log,
+      y: i,
+      alpha: getState().tick === l.tick ? 1 : 0.5
+    });
   }
 };
 
@@ -34799,15 +34801,17 @@ var renderMenuInventory = (world, pcEid) => {
 };
 
 // build/src/ui/menuLog.js
+var container3 = "menu";
 var renderMenuLog = () => {
-  const arr = getState().log;
-  const visibleLog = arr.slice(0, grid.menu.height);
-  for (const [i, log] of visibleLog.entries()) {
-    if (Array.isArray(log)) {
-      printTemplate({container: "menu", y: i, template: log});
-    } else {
-      printRow({container: "menu", y: i, str: log});
-    }
+  const log = getState().log.log;
+  const logRowIndex = getState().log.rowIndex;
+  const visibleLog = log.slice(logRowIndex, logRowIndex + grid.menu.height);
+  for (const [i, l] of visibleLog.entries()) {
+    printTemplate({
+      container: container3,
+      template: l.log,
+      y: i
+    });
   }
 };
 
@@ -34975,9 +34979,7 @@ var get = (world, eid, itemEid) => {
   const locId = `${Position.x[eid]},${Position.y[eid]},${Position.z[eid]}`;
   const pickupEid = itemEid || [...world.eAtPos[locId]].find((id) => hasComponent(world, Pickupable, id));
   if (!pickupEid) {
-    setState((state2) => {
-      state2.log.unshift("There is nothing to pickup.");
-    });
+    addLog("There is nothing to pickup.");
   } else {
     const inventory = Inventory.slots[eid];
     const openSlot = lodash_default.findIndex(inventory, (slot) => slot === 0);
@@ -34993,22 +34995,16 @@ var get = (world, eid, itemEid) => {
         eid: pickupEid,
         remove: true
       });
-      setState((state2) => {
-        state2.log.unshift(`You pickup ${world.meta[pickupEid].name}.`);
-      });
+      addLog(`You pickup ${world.meta[pickupEid].name}.`);
     } else {
-      setState((state2) => {
-        state2.log.unshift("Your inventory is full.");
-      });
+      addLog("Your inventory is full.");
     }
   }
 };
 var drop = (world, eid, itemEid, dir) => {
   const isDroppable = hasComponent(world, Droppable, itemEid);
   if (!isDroppable) {
-    return setState((state2) => {
-      state2.log.unshift("You can't drop that!");
-    });
+    return addLog("You can't drop that!");
   }
   const isWieldable = hasComponent(world, Wieldable, itemEid);
   if (isWieldable) {
@@ -35032,9 +35028,7 @@ var drop = (world, eid, itemEid, dir) => {
   const newLoc = lodash_default.sample(lodash_default.compact(openNeighbors));
   const slotIndex = lodash_default.findIndex(Inventory.slots[eid], (x) => x === itemEid);
   Inventory.slots[eid][slotIndex] = 0;
-  setState((state2) => {
-    state2.log.unshift(`You drop a ${world.meta[itemEid].name}.`);
-  });
+  addLog(`You drop a ${world.meta[itemEid].name}.`);
   if (!hasComponent(world, Position, itemEid)) {
     addComponent(world, Position, itemEid);
   }
@@ -35045,9 +35039,7 @@ var drop = (world, eid, itemEid, dir) => {
 var quaff = (world, targetEid, itemEid) => {
   const isLiquid = hasComponent(world, Liquid, itemEid);
   if (!isLiquid) {
-    return setState((state2) => {
-      state2.log.unshift(`You can't drink that!`);
-    });
+    return addLog(`You can't drink that!`);
   }
   const components = Object.keys(Effects);
   for (const [i, c] of components.entries()) {
@@ -35060,9 +35052,7 @@ var quaff = (world, targetEid, itemEid) => {
   const slotIndex = lodash_default.findIndex(Inventory.slots[targetEid], (x) => x === itemEid);
   Inventory.slots[targetEid][slotIndex] = 0;
   deleteEntity(world, itemEid);
-  return setState((state2) => {
-    state2.log.unshift(`You drink a ${world.meta[itemEid].name}!`);
-  });
+  return addLog(`You drink a ${world.meta[itemEid].name}!`);
 };
 var unwield = (world, wielderEid) => {
   if (hasComponent(world, Wielding, wielderEid)) {
@@ -35072,28 +35062,20 @@ var unwield = (world, wielderEid) => {
 var wield = (world, targetEid, itemEid) => {
   const isWieldable = hasComponent(world, Wieldable, itemEid);
   if (!isWieldable) {
-    return setState((state2) => {
-      state2.log.unshift(`You can't wield that!`);
-    });
+    return addLog(`You can't wield that!`);
   }
   const wielders = getWielders(world, targetEid);
   if (!wielders.length) {
-    return setState((state2) => {
-      state2.log.unshift(`You cannot wield anything. (no wielders)`);
-    });
+    return addLog(`You cannot wield anything. (no wielders)`);
   }
   const hasFreeWielders = lodash_default.some(wielders, (wielder) => wielder.length < 2);
   if (!hasFreeWielders) {
-    return setState((state2) => {
-      state2.log.unshift(`You cannot wield anything. (wielders full)`);
-    });
+    return addLog(`You cannot wield anything. (wielders full)`);
   }
   const freeWielder = lodash_default.find(wielders, (wielder) => wielder.length < 2);
   const wielderEid = freeWielder[0];
   Wielding.slot[wielderEid] = itemEid;
-  return setState((state2) => {
-    state2.log.unshift(`You are wielding a ${world.meta[itemEid].name} in your ${world.meta[wielderEid].name}!`);
-  });
+  return addLog(`You are wielding a ${world.meta[itemEid].name} in your ${world.meta[wielderEid].name}!`);
 };
 
 // build/src/systems/userInput.system.js
@@ -35178,6 +35160,7 @@ var gameplayControls = [
   "g"
 ];
 var uiControls = ["Escape", "c", "i", "k", "l", "Shift"];
+var logControls = ["ArrowUp", "ArrowDown"];
 var lookingControls = ["ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft"];
 var inventoryControls = [
   "ArrowUp",
@@ -35192,7 +35175,7 @@ var inventoryControls = [
 ];
 var processUserInput = (world) => {
   const {userInput, mode, pcEnts} = getState();
-  const {key} = userInput;
+  const {key, shiftKey} = userInput;
   if (key === "Escape") {
     setState((state2) => {
       state2.mode = "GAME";
@@ -35223,6 +35206,33 @@ var processUserInput = (world) => {
       setState((state2) => {
         state2.userInput = userInput;
       });
+    }
+  }
+  if (["LOG"].includes(mode)) {
+    if (logControls.includes(key)) {
+      const increment = shiftKey ? 10 : 1;
+      if (key === "ArrowDown") {
+        const {rowIndex} = getState().log;
+        const newRowIndex = rowIndex - increment;
+        if (newRowIndex < 0) {
+          setState((state2) => state2.log.rowIndex = 0);
+        } else {
+          setState((state2) => state2.log.rowIndex = newRowIndex);
+        }
+      }
+      if (key === "ArrowUp") {
+        const logHeight = grid.menu.height;
+        const {log, rowIndex} = getState().log;
+        if (logHeight > log.length) {
+          return;
+        }
+        const newRowIndex = rowIndex + increment;
+        if (log.length - logHeight <= newRowIndex) {
+          setState((state2) => state2.log.rowIndex = log.length - logHeight);
+        } else {
+          setState((state2) => state2.log.rowIndex = newRowIndex);
+        }
+      }
     }
   }
   if (["INVENTORY"].includes(mode)) {
@@ -35731,8 +35741,8 @@ var initWorld = (loader3) => {
   setState((state2) => {
     state2.turn = "WORLD";
     state2.debug = false;
-    state2.log = [[{str: "Adventure, awaits!"}]];
   });
+  addLog([{str: "Adventure, awaits!"}]);
   const dungeon = buildDungeon({
     x: 0,
     y: 0,
@@ -35788,13 +35798,29 @@ var state = {
   userInput: "",
   turn: "",
   debug: false,
-  log: [],
+  log: {
+    log: [],
+    rowIndex: 0
+  },
+  tick: 0,
+  fps: 0,
   RESETTING_DEBUG: true
 };
 var setState = (callback) => {
   callback(state);
 };
 var getState = () => state;
+var addLog = (log) => {
+  if (!Array.isArray(log)) {
+    log = [{str: log}];
+  }
+  setState((state2) => {
+    state2.log.log.unshift({
+      tick: getState().tick,
+      log
+    });
+  });
+};
 function initGame() {
   setState((state2) => {
     state2.world = initWorld(loader2).world;
@@ -35803,7 +35829,6 @@ function initGame() {
   let fps = 0;
   let now = null;
   let fpsSamples = [];
-  const fpsEl = document.querySelector("#fps");
   const pcQuery6 = defineQuery([PC]);
   function gameLoop() {
     if (getState().mode === "GAMEOVER") {
@@ -35820,6 +35845,9 @@ function initGame() {
     }
     if (getState().mode === "GAME") {
       if (getState().userInput && getState().turn === "PLAYER") {
+        setState((state2) => {
+          state2.tick = state2.tick + 1;
+        });
         processUserInput(world);
         pipelinePlayerTurn(world);
         debugPipeline(world);
@@ -35841,10 +35869,15 @@ function initGame() {
       if (fpsSamples.length > 3) {
         fpsSamples.pop();
       }
-      fpsEl.innerHTML = Math.round(lodash_default.mean(fpsSamples));
+      printRow({
+        container: "legend",
+        y: grid.legend.height - 1,
+        str: `FPS: ${getState().fps}`
+      });
       now = Date.now();
       fps = 0;
     }
+    setState((state2) => state2.fps = Math.round(lodash_default.mean(fpsSamples)));
     fps++;
   }
   gameLoop();
@@ -35866,6 +35899,7 @@ function initGame() {
   });
 }
 export {
+  addLog,
   getState,
   setState
 };
