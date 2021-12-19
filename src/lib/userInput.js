@@ -82,41 +82,14 @@ export const processUserInput = (world) => {
   if (["LOG"].includes(mode)) {
     if (logControls.includes(key)) {
       const increment = shiftKey ? 10 : 1;
-
-      if (key === "ArrowDown") {
-        // decrease index to zero
-        const { rowIndex } = getState().log;
-
-        const newRowIndex = rowIndex - increment;
-
-        if (newRowIndex < 0) {
-          // trying to scroll past the top - so reset to top
-          setState((state) => (state.log.rowIndex = 0));
-        } else {
-          // scroll as normal
-          setState((state) => (state.log.rowIndex = newRowIndex));
-        }
-      }
+      const { rowIndex } = getState().log;
 
       if (key === "ArrowUp") {
-        // increase index until we have reached the bottom and don't need to scroll anymore
-        const logHeight = grid.menu.height;
-        const { log, rowIndex } = getState().log;
+        setState((state) => (state.log.rowIndex = rowIndex - increment));
+      }
 
-        // no need to scroll
-        if (logHeight > log.length) {
-          return;
-        }
-
-        const newRowIndex = rowIndex + increment;
-
-        // trying to scroll past the bottom so we just set rowIndex to bottom
-        if (log.length - logHeight <= newRowIndex) {
-          setState((state) => (state.log.rowIndex = log.length - logHeight));
-        } else {
-          // scroll as normal
-          setState((state) => (state.log.rowIndex = newRowIndex));
-        }
+      if (key === "ArrowDown") {
+        setState((state) => (state.log.rowIndex = rowIndex + increment));
       }
     }
   }
