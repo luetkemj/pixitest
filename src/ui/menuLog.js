@@ -3,15 +3,18 @@ import { printRow, printTemplate } from "../lib/canvas";
 import { grid } from "../lib/grid";
 import { getState } from "../index";
 
-export const renderMenuLog = () => {
-  const arr = getState().log;
-  const visibleLog = arr.slice(0, grid.menu.height);
+const container = "menu";
 
-  for (const [i, log] of visibleLog.entries()) {
-    if (Array.isArray(log)) {
-      printTemplate({ container: "menu", y: i, template: log });
-    } else {
-      printRow({ container: "menu", y: i, str: log });
-    }
+export const renderMenuLog = () => {
+  const log = getState().log.log;
+  const logRowIndex = getState().log.rowIndex;
+  const visibleLog = log.slice(logRowIndex, logRowIndex + grid.menu.height);
+
+  for (const [i, l] of visibleLog.entries()) {
+    printTemplate({
+      container,
+      template: l.log,
+      y: i,
+    });
   }
 };

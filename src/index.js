@@ -14,8 +14,6 @@ import { initWorld } from "./lib/initWorld";
 import { loadSprites, initUi, printRow } from "./lib/canvas";
 import { grid } from "./lib/grid";
 
-console.log(grid);
-
 // pixi loader load all the sprites and initialize game
 const loader = loadSprites(initGame);
 
@@ -34,7 +32,10 @@ const state = {
   userInput: "",
   turn: "",
   debug: false,
-  log: [],
+  log: {
+    log: [],
+    rowIndex: 0,
+  },
   tick: 0,
   fps: 0,
   RESETTING_DEBUG: true,
@@ -51,7 +52,7 @@ export const addLog = (log) => {
     log = [{ str: log }];
   }
   setState((state) => {
-    state.log.unshift({
+    state.log.log.unshift({
       tick: getState().tick,
       log,
     });
