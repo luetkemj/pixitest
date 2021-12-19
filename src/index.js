@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { defineQuery, pipe } from "bitecs";
+import { defineQuery } from "bitecs";
 import { PC } from "./components";
 import {
   pipelinePlayerTurn,
@@ -11,7 +11,10 @@ import {
 import { processUserInput } from "./lib/userInput";
 
 import { initWorld } from "./lib/initWorld";
-import { loadSprites, initUi } from "./lib/canvas";
+import { loadSprites, initUi, printRow } from "./lib/canvas";
+import { grid } from "./lib/grid";
+
+console.log(grid);
 
 // pixi loader load all the sprites and initialize game
 const loader = loadSprites(initGame);
@@ -33,6 +36,7 @@ const state = {
   debug: false,
   log: [],
   tick: 0,
+  fps: 0,
   RESETTING_DEBUG: true,
 };
 
@@ -65,7 +69,6 @@ function initGame() {
   let fps = 0;
   let now = null;
   let fpsSamples = [];
-  const fpsEl = document.querySelector("#fps");
 
   const pcQuery = defineQuery([PC]);
 
@@ -122,13 +125,18 @@ function initGame() {
       if (fpsSamples.length > 3) {
         fpsSamples.pop();
       }
-      fpsEl.innerHTML = `${Math.round(_.mean(fpsSamples))} [${state.tick}] [${
-        state.turn
-      }]`;
+
+      printRow({
+        container: "legend",
+        y: grid.legend.height - 1,
+        str: `FPS: ${getState().fps}`,
+      });
 
       now = Date.now();
       fps = 0;
     }
+
+    setState((state) => (state.fps = Math.round(_.mean(fpsSamples))));
     fps++;
   }
 
