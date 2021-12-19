@@ -7,7 +7,7 @@ const container = "adventureLog";
 export const renderAdventureLog = (world) => {
   clearContainer(container);
 
-  const log = getState().log.slice(0, 3).reverse();
+  const log = getState().log.log.slice(0, 3).reverse();
   for (const [i, l] of log.entries()) {
     printTemplate({
       container,

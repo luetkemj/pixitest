@@ -6,6 +6,7 @@ import {
   walkInventoryTree,
 } from "./ecsHelpers";
 import { drop, get, quaff, unwield, wield } from "./actions";
+import { grid } from "./grid";
 
 const gameplayControls = [
   "ArrowUp",
@@ -16,6 +17,8 @@ const gameplayControls = [
 ];
 
 const uiControls = ["Escape", "c", "i", "k", "l", "Shift"];
+
+const logControls = ["ArrowUp", "ArrowDown"];
 
 const lookingControls = ["ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft"];
 
@@ -34,7 +37,7 @@ const inventoryControls = [
 export const processUserInput = (world) => {
   const { userInput, mode, pcEnts } = getState();
 
-  const { key } = userInput;
+  const { key, shiftKey } = userInput;
 
   // Game modes must be used in the gameLoop() to processUserInput and call pipelines.
   // if you don't the game will hang and never process user input
@@ -73,6 +76,48 @@ export const processUserInput = (world) => {
       setState((state) => {
         state.userInput = userInput;
       });
+    }
+  }
+
+  if (["LOG"].includes(mode)) {
+    if (logControls.includes(key)) {
+      const increment = shiftKey ? 10 : 1;
+
+      if (key === "ArrowDown") {
+        // decrease index to zero
+        const { rowIndex } = getState().log;
+
+        const newRowIndex = rowIndex - increment;
+
+        if (newRowIndex < 0) {
+          // trying to scroll past the top - so reset to top
+          setState((state) => (state.log.rowIndex = 0));
+        } else {
+          // scroll as normal
+          setState((state) => (state.log.rowIndex = newRowIndex));
+        }
+      }
+
+      if (key === "ArrowUp") {
+        // increase index until we have reached the bottom and don't need to scroll anymore
+        const logHeight = grid.menu.height;
+        const { log, rowIndex } = getState().log;
+
+        // no need to scroll
+        if (logHeight > log.length) {
+          return;
+        }
+
+        const newRowIndex = rowIndex + increment;
+
+        // trying to scroll past the bottom so we just set rowIndex to bottom
+        if (log.length - logHeight <= newRowIndex) {
+          setState((state) => (state.log.rowIndex = log.length - logHeight));
+        } else {
+          // scroll as normal
+          setState((state) => (state.log.rowIndex = newRowIndex));
+        }
+      }
     }
   }
 
