@@ -50,16 +50,18 @@ const attack = ({ world, aggEid, tarEid, pcEid }) => {
     }
   });
 
-  addLog([
+  const aggName = pcEid === aggEid ? "you" : world.meta[aggEid].name;
+  const tarName = pcEid === tarEid ? "you" : world.meta[tarEid].name;
+  const log = [
     {
-      str: `${world.meta[aggEid].name} `,
+      str: aggName,
       color: `${world.sprites[aggEid].tint}`,
     },
     {
-      str: ` hits`,
+      str: ` ${pcEid === aggEid ? "hit" : "hits"}`,
     },
     {
-      str: ` ${world.meta[tarEid].name}`,
+      str: ` ${tarName}`,
       color: world.sprites[tarEid].tint,
     },
     {
@@ -69,12 +71,18 @@ const attack = ({ world, aggEid, tarEid, pcEid }) => {
       str: ` ${damage} damage`,
       color: gfx.colors.blood,
     },
-  ]);
+  ];
 
   Health.current[tarEid] -= damage;
   if (Health.current[tarEid] <= 0) {
     kill(world, tarEid);
+    log.push({
+      str: ` ${pcEid === tarEid ? "and kills you!" : "and kill it!"}`,
+      color: gfx.colors.blood,
+    });
   }
+
+  addLog(log);
 };
 
 export const movementSystem = (world) => {

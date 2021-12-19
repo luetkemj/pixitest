@@ -123,7 +123,7 @@ export const quaff = (world, targetEid, itemEid) => {
   const isLiquid = hasComponent(world, Liquid, itemEid);
 
   if (!isLiquid) {
-    return addLog.unshift(`You can't drink that!`);
+    return addLog(`You can't drink that!`);
   }
 
   const components = Object.keys(Effects);
