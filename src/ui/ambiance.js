@@ -1,22 +1,15 @@
 import _ from "lodash";
-import { printRow, printTemplate } from "../lib/canvas";
-import { grid } from "../lib/grid";
+import { clearContainer, printRow, printTemplate } from "../lib/canvas";
 import { getState } from "../index";
 
+const container = "ambiance";
 // TODO: add an ambiance field to world. It can be updated directly without a history
 export const renderAmbiance = (world, str) => {
-  if (str) {
-    printRow({ container: "ambiance", str });
-  } else {
-    const log = getState().log[0];
+  clearContainer(container);
 
-    if (Array.isArray(log)) {
-      printTemplate({
-        container: "ambiance",
-        template: log,
-      });
-    } else {
-      printRow({ container: "ambiance", str: log });
-    }
-  }
+  const log = getState().log[0];
+  printTemplate({
+    container,
+    template: log.log,
+  });
 };

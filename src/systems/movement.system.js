@@ -5,7 +5,7 @@ import {
   hasComponent,
   removeComponent,
 } from "bitecs";
-import { setState } from "../index";
+import { addLog, getState, setState } from "../index";
 import {
   Ai,
   Blocking,
@@ -22,6 +22,7 @@ import {
 } from "../components";
 import { getWielders, updatePosition } from "../lib/ecsHelpers";
 import { grid } from "../lib/grid";
+import * as gfx from "../lib/graphics";
 
 const movementQuery = defineQuery([Position, MoveTo]);
 const pcQuery = defineQuery([PC]);
@@ -36,10 +37,10 @@ const kill = (world, eid) => {
   Zindex.zIndex[eid] = 20;
 };
 
-const attack = (world, aggressor, target) => {
-  let damage = Strength.current[aggressor];
+const attack = ({ world, aggEid, tarEid, pcEid }) => {
+  let damage = Strength.current[aggEid];
 
-  const wielders = getWielders(world, aggressor);
+  const wielders = getWielders(world, aggEid);
   _.each(wielders, (wielder) => {
     const itemEid = wielder[1];
     if (itemEid) {
@@ -49,22 +50,39 @@ const attack = (world, aggressor, target) => {
     }
   });
 
-  setState((state) => {
-    state.log.unshift([
-      {
-        str: `${world.meta[aggressor].name} `,
-      },
-      {
-        str: `hits ${world.meta[target].name} for ${damage} damage`,
-        color: 0xff0077,
-      },
-    ]);
-  });
+  const aggName = pcEid === aggEid ? "you" : world.meta[aggEid].name;
+  const tarName = pcEid === tarEid ? "you" : world.meta[tarEid].name;
+  const log = [
+    {
+      str: aggName,
+      color: `${world.sprites[aggEid].tint}`,
+    },
+    {
+      str: ` ${pcEid === aggEid ? "hit" : "hits"}`,
+    },
+    {
+      str: ` ${tarName}`,
+      color: world.sprites[tarEid].tint,
+    },
+    {
+      str: ` for`,
+    },
+    {
+      str: ` ${damage} damage`,
+      color: gfx.colors.blood,
+    },
+  ];
 
-  Health.current[target] -= damage;
-  if (Health.current[target] <= 0) {
-    kill(world, target);
+  Health.current[tarEid] -= damage;
+  if (Health.current[tarEid] <= 0) {
+    kill(world, tarEid);
+    log.push({
+      str: ` ${pcEid === tarEid ? "and kills you!" : "and kill it!"}`,
+      color: gfx.colors.blood,
+    });
   }
+
+  addLog(log);
 };
 
 export const movementSystem = (world) => {
@@ -105,23 +123,9 @@ export const movementSystem = (world) => {
         // check if blocked by thing with health
         if (hasComponent(world, Health, e)) {
           // attack the thing!
-          attack(world, eid, e);
-
-          if (pcEnts.includes(eid)) {
-            const msg = `You attack a ${world.meta[e].name}!`;
-            setState((state) => {
-              state.log = [msg, ...state.log];
-            });
-          } else {
-            const msg = `A ${world.meta[eid].name} attacks you!`;
-            setState((state) => {
-              state.log = [msg, ...state.log];
-            });
-          }
+          attack({ world, aggEid: eid, tarEid: e, pcEid: pcEnts[0] });
         } else {
-          setState((state) => {
-            state.log = ["BUMP!", ...state.log];
-          });
+          addLog("BUMP!");
         }
       }
     });

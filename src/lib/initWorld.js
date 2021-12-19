@@ -2,7 +2,7 @@ import _ from "lodash";
 import { addComponent, createWorld } from "bitecs";
 import { grid } from "./grid";
 import { PC } from "../components";
-import { setState } from "../index";
+import { addLog, setState } from "../index";
 
 import { createFloor } from "../prefabs/floor";
 import { createGoblin } from "../prefabs/goblin";
@@ -22,8 +22,9 @@ export const initWorld = (loader) => {
   setState((state) => {
     state.turn = "WORLD";
     state.debug = false;
-    state.log = [[{ str: "Adventure, awaits!" }]];
   });
+
+  addLog([{ str: "Adventure, awaits!" }]);
 
   // create the dungeon
   const dungeon = buildDungeon({
