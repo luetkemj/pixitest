@@ -32,6 +32,7 @@ const state = {
   userInput: "",
   turn: "",
   debug: false,
+  ambientLog: [],
   log: {
     log: [],
     rowIndex: 0,

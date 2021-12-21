@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { defineQuery, hasComponent, Not } from "bitecs";
-import { getState } from "../index";
+import { getState, setState } from "../index";
 import {
   Dead,
   Forgettable,
@@ -66,22 +66,27 @@ export const renderSystem = (world) => {
   const pcEnts = pcQuery(world);
 
   // DO FIELD OF VISION THINGS
+  // Render revealed entities
+  // TODO: Should you be using isOnTop here???? yes dinkus
   for (let i = 0; i < revealedEnts.length; i++) {
     const eid = revealedEnts[i];
     renderEid({ world, eid, alpha: 0.23, renderable: true });
   }
 
+  // hide forgettable entities
   for (let i = 0; i < forgettableEnts.length; i++) {
     const eid = forgettableEnts[i];
     renderEid({ world, eid, renderable: false });
   }
 
+  // build alpha map for rendering light source fading from player
   const alphaMap = fovAlphaMap({
     range: FovRange.dist[pcEnts[0]],
     max: 1,
     min: 0.3,
   });
 
+  // check if entity at pos is top of zIndex layers (should it render)
   const isOnTop = (eid, eAtPos) => {
     let zIndex = 0;
     let eidOnTop = eid;
@@ -118,6 +123,16 @@ export const renderSystem = (world) => {
         world.sprites[eid].renderable = false;
       }
     }
+  }
+
+  // check location of player and set the ambient log render
+  // this should eventually be its own system so it can be more interesting
+  {
+    const locId = `${Position.x[pcEnts[0]]},${Position.y[pcEnts[0]]},0`;
+    const eAtPos = world.eAtPos[locId];
+    const stack = _.orderBy([...eAtPos], (eid) => Zindex.zIndex[eid], "desc");
+    const msg = world.meta[stack[1]].description;
+    setState((state) => (state.ambientLog = [{ str: msg }]));
   }
 
   // RENDER UI THINGS
