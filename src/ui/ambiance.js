@@ -7,9 +7,9 @@ const container = "ambiance";
 export const renderAmbiance = (world, str) => {
   clearContainer(container);
 
-  const log = getState().log.log[0];
+  const log = getState().ambientLog;
   printTemplate({
     container,
-    template: log.log,
+    template: log,
   });
 };

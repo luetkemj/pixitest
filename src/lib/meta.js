@@ -1,7 +1,7 @@
 export const meta = {
   floor: {
     name: "floor",
-    description: "The floor of the cave is flat hard and covered in dust.",
+    description: "The flagstone floor is covered in detritus.",
   },
   goblin: {
     name: "goblin",
