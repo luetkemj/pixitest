@@ -7,6 +7,7 @@ import {
   Droppable,
   Effects,
   Liquid,
+  Legendable,
   Pickupable,
   Position,
   Zindex,
@@ -22,6 +23,7 @@ export const createHealthPotion = (world, options) => {
   addComponent(world, Liquid, eid);
   addComponent(world, Droppable, eid);
   addComponent(world, Effects, eid);
+  addComponent(world, Legendable, eid);
   addComponent(world, Pickupable, eid);
   addComponent(world, Position, eid);
   addComponent(world, Zindex, eid);

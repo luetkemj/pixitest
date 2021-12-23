@@ -6,6 +6,7 @@ import { meta } from "../lib/meta";
 import {
   Damage,
   Droppable,
+  Legendable,
   Pickupable,
   Position,
   Wieldable,
@@ -21,6 +22,7 @@ export const createSword = (world, options) => {
   const eid = addEntity(world);
   addComponent(world, Damage, eid);
   addComponent(world, Droppable, eid);
+  addComponent(world, Legendable, eid);
   addComponent(world, Pickupable, eid);
   addComponent(world, Position, eid);
   addComponent(world, Wieldable, eid);
