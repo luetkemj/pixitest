@@ -5,6 +5,7 @@ import {
   Forgettable,
   InFov,
   Intelligence,
+  Legendable,
   MoveTo,
   Opaque,
   PC,
@@ -20,6 +21,7 @@ export const forgettableQuery = defineQuery([
   Forgettable,
 ]);
 export const inFovQuery = defineQuery([InFov, Position]);
+export const legendableQuery = defineQuery([InFov, Legendable]);
 export const movementQuery = defineQuery([Position, MoveTo]);
 export const opaqueQuery = defineQuery([Opaque]);
 export const pcQuery = defineQuery([PC]);
