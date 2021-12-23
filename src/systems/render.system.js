@@ -30,17 +30,48 @@ import { renderLooking } from "../ui/looking";
 let cellWidth;
 
 const inFovQuery = defineQuery([InFov, Position]);
-const revealedQuery = defineQuery([Revealed, Position]);
+const revealedQuery = defineQuery([Revealed, Not(InFov), Position]);
 const forgettableQuery = defineQuery([Revealed, Not(InFov), Forgettable]);
 const pcQuery = defineQuery([PC]);
 
-const fovAlphaMap = ({ range, max = 1, min = 0.3 }) => {
+const fovAlphaMap = ({ range, max = 1, min = 0.4 }) => {
   const step = (max - min) / range;
   const alphaMap = [1];
   for (let index = 0; index < range; index++) {
     alphaMap.push(alphaMap[alphaMap.length - 1] - step);
   }
   return alphaMap;
+};
+
+// check if entity at pos is top of zIndex layers (should it render)
+const isOnTop = (eid, eAtPos) => {
+  let zIndex = 0;
+  let eidOnTop = eid;
+  eAtPos.forEach((id) => {
+    if (Zindex.zIndex[id] > zIndex) {
+      zIndex = Zindex.zIndex[id];
+      eidOnTop = id;
+    }
+  });
+  return eidOnTop === eid;
+};
+
+const renderEidIfOnTop = ({ eid, world, alpha = 1 }) => {
+  const locId = `${Position.x[eid]},${Position.y[eid]},0`;
+  const eAtPos = world.eAtPos[locId];
+
+  // If only one item at location - render it
+  if (eAtPos.size === 1) {
+    renderEid({ world, eid, alpha, renderable: true });
+  } else {
+    // render if current eid is on top
+    if (isOnTop(eid, eAtPos)) {
+      renderEid({ world, eid, alpha, renderable: true });
+      // else hide it
+    } else {
+      world.sprites[eid].renderable = false;
+    }
+  }
 };
 
 const renderEid = ({ world, eid, renderable = true, alpha = 1 }) => {
@@ -65,12 +96,18 @@ export const renderSystem = (world) => {
   const forgettableEnts = forgettableQuery(world);
   const pcEnts = pcQuery(world);
 
+  // build alpha map for rendering light source fading from player
+  const alphaMap = fovAlphaMap({
+    range: FovRange.dist[pcEnts[0]],
+    max: 1,
+    min: 0.3,
+  });
+
   // DO FIELD OF VISION THINGS
   // Render revealed entities
-  // TODO: Should you be using isOnTop here???? yes dinkus
   for (let i = 0; i < revealedEnts.length; i++) {
     const eid = revealedEnts[i];
-    renderEid({ world, eid, alpha: 0.23, renderable: true });
+    renderEidIfOnTop({ eid, world, alpha: 0.2 });
   }
 
   // hide forgettable entities
@@ -79,50 +116,14 @@ export const renderSystem = (world) => {
     renderEid({ world, eid, renderable: false });
   }
 
-  // build alpha map for rendering light source fading from player
-  const alphaMap = fovAlphaMap({
-    range: FovRange.dist[pcEnts[0]],
-    max: 1,
-    min: 0.3,
-  });
-
-  // check if entity at pos is top of zIndex layers (should it render)
-  const isOnTop = (eid, eAtPos) => {
-    let zIndex = 0;
-    let eidOnTop = eid;
-    eAtPos.forEach((id) => {
-      if (Zindex.zIndex[id] > zIndex) {
-        zIndex = Zindex.zIndex[id];
-        eidOnTop = id;
-      }
-    });
-    return eidOnTop === eid;
-  };
-
   // RENDER OTHER MAP THINGS
   if (inFovEnts.length) {
     cellWidth = window.innerWidth / grid.width;
   }
   for (let i = 0; i < inFovEnts.length; i++) {
     const eid = inFovEnts[i];
-    const locId = `${Position.x[eid]},${Position.y[eid]},0`;
-    const eAtPos = world.eAtPos[locId];
-
     const alpha = alphaMap[FovDistance.dist[eid]] || 0.23;
-
-    // If only one item at location - render it
-    if (eAtPos.size === 1) {
-      renderEid({ world, eid, alpha });
-    } else {
-      // if more than one item at location
-      // render if current eid is on top
-      // else hide it
-      if (isOnTop(eid, eAtPos)) {
-        renderEid({ world, eid, alpha });
-      } else {
-        world.sprites[eid].renderable = false;
-      }
-    }
+    renderEidIfOnTop({ eid, world, alpha });
   }
 
   // check location of player and set the ambient log render
