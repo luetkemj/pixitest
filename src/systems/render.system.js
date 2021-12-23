@@ -1,17 +1,7 @@
 import _ from "lodash";
 import { defineQuery, hasComponent, Not } from "bitecs";
 import { getState, setState } from "../index";
-import {
-  Dead,
-  Forgettable,
-  FovDistance,
-  FovRange,
-  InFov,
-  PC,
-  Position,
-  Revealed,
-  Zindex,
-} from "../components";
+import { Dead, FovDistance, FovRange, Position, Zindex } from "../components";
 import { grid } from "../lib/grid";
 import {
   clearContainer,
@@ -26,13 +16,14 @@ import { renderMenuCharacter } from "../ui/menuCharacter";
 import { renderMenuInventory } from "../ui/menuInventory";
 import { renderMenuLog } from "../ui/menuLog";
 import { renderLooking } from "../ui/looking";
+import {
+  inFovQuery,
+  revealedQuery,
+  forgettableQuery,
+  pcQuery,
+} from "../queries";
 
 let cellWidth;
-
-const inFovQuery = defineQuery([InFov, Position]);
-const revealedQuery = defineQuery([Revealed, Not(InFov), Position]);
-const forgettableQuery = defineQuery([Revealed, Not(InFov), Forgettable]);
-const pcQuery = defineQuery([PC]);
 
 const fovAlphaMap = ({ range, max = 1, min = 0.4 }) => {
   const step = (max - min) / range;

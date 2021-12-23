@@ -1,10 +1,9 @@
-import { defineQuery, addComponent } from "bitecs";
-import { PC, Position, MoveTo } from "../components";
+import { addComponent } from "bitecs";
+import { Position, MoveTo } from "../components";
 import * as actions from "../lib/actions";
 import { grid } from "../lib/grid";
 import { getState, setState } from "../index";
-
-const pcQuery = defineQuery([PC]);
+import { pcQuery } from "../queries";
 
 export const userInputSystem = (world) => {
   const { userInput, mode } = getState();

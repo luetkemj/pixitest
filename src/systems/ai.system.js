@@ -1,9 +1,7 @@
-import { defineQuery, addComponent } from "bitecs";
-import { Ai, Intelligence, MoveTo, PC, Position } from "../components";
+import { addComponent } from "bitecs";
+import { MoveTo, Position } from "../components";
 import { aStar } from "../lib/pathfinding";
-
-const aiQuery = defineQuery([Ai, Intelligence]);
-const pcQuery = defineQuery([PC]);
+import { aiQuery, pcQuery } from "../queries";
 
 const moveToTarget = (world, eid, targetEid) => {
   const startPos = { x: Position.x[eid], y: Position.y[eid], z: 0 };

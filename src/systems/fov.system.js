@@ -1,19 +1,14 @@
-import { defineQuery, addComponent, removeComponent } from "bitecs";
+import { addComponent, removeComponent } from "bitecs";
 import {
   FovDistance,
   FovRange,
   InFov,
-  Opaque,
-  PC,
   Position,
   Revealed,
 } from "../components";
 import { grid } from "../lib/grid";
 import { createFOV } from "../lib/fov";
-
-const inFovQuery = defineQuery([InFov]);
-const opaqueQuery = defineQuery([Opaque]);
-const pcQuery = defineQuery([PC]);
+import { inFovQuery, opaqueQuery, pcQuery } from "../queries";
 
 export const fovSystem = (world) => {
   const pcEnts = pcQuery(world);
