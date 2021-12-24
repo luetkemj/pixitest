@@ -1,17 +1,7 @@
 import _ from "lodash";
 import { defineQuery, hasComponent, Not } from "bitecs";
 import { getState, setState } from "../index";
-import {
-  Dead,
-  Forgettable,
-  FovDistance,
-  FovRange,
-  InFov,
-  PC,
-  Position,
-  Revealed,
-  Zindex,
-} from "../components";
+import { Dead, FovDistance, FovRange, Position, Zindex } from "../components";
 import { grid } from "../lib/grid";
 import {
   clearContainer,
@@ -26,13 +16,15 @@ import { renderMenuCharacter } from "../ui/menuCharacter";
 import { renderMenuInventory } from "../ui/menuInventory";
 import { renderMenuLog } from "../ui/menuLog";
 import { renderLooking } from "../ui/looking";
+import {
+  inFovQuery,
+  revealedQuery,
+  forgettableQuery,
+  pcQuery,
+  legendableQuery,
+} from "../queries";
 
 let cellWidth;
-
-const inFovQuery = defineQuery([InFov, Position]);
-const revealedQuery = defineQuery([Revealed, Not(InFov), Position]);
-const forgettableQuery = defineQuery([Revealed, Not(InFov), Forgettable]);
-const pcQuery = defineQuery([PC]);
 
 const fovAlphaMap = ({ range, max = 1, min = 0.4 }) => {
   const step = (max - min) / range;
@@ -94,6 +86,7 @@ export const renderSystem = (world) => {
   const inFovEnts = inFovQuery(world);
   const revealedEnts = revealedQuery(world);
   const forgettableEnts = forgettableQuery(world);
+  const legendEnts = legendableQuery(world);
   const pcEnts = pcQuery(world);
 
   // build alpha map for rendering light source fading from player
@@ -139,7 +132,7 @@ export const renderSystem = (world) => {
   // RENDER UI THINGS
   renderAmbiance(world);
   renderAdventureLog(world);
-  renderLegend(world, pcEnts[0]);
+  renderLegend(world, pcEnts[0], legendEnts);
 
   // hide menu and overlay
   hideContainer("menu");

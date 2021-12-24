@@ -1,11 +1,6 @@
 import _ from "lodash";
-import {
-  defineQuery,
-  addComponent,
-  hasComponent,
-  removeComponent,
-} from "bitecs";
-import { addLog, getState, setState } from "../index";
+import { addComponent, hasComponent, removeComponent } from "bitecs";
+import { addLog } from "../index";
 import {
   Ai,
   Blocking,
@@ -13,7 +8,6 @@ import {
   Dead,
   Forgettable,
   Health,
-  PC,
   Pickupable,
   Position,
   Strength,
@@ -23,9 +17,7 @@ import {
 import { getWielders, updatePosition } from "../lib/ecsHelpers";
 import { grid } from "../lib/grid";
 import * as gfx from "../lib/graphics";
-
-const movementQuery = defineQuery([Position, MoveTo]);
-const pcQuery = defineQuery([PC]);
+import { movementQuery, pcQuery } from "../queries";
 
 const kill = (world, eid) => {
   addComponent(world, Dead, eid);
@@ -35,6 +27,7 @@ const kill = (world, eid) => {
   removeComponent(world, Blocking, eid);
   removeComponent(world, Forgettable, eid);
   Zindex.zIndex[eid] = 20;
+  world.sprites[eid].char = "%";
 };
 
 const attack = ({ world, aggEid, tarEid, pcEid }) => {

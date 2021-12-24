@@ -11,6 +11,7 @@ import {
   Health,
   Intelligence,
   Inventory,
+  Legendable,
   Position,
   Strength,
   Zindex,
@@ -33,6 +34,7 @@ export const createKnight = (world, options) => {
   addComponent(world, FovRange, eid);
   addComponent(world, Intelligence, eid);
   addComponent(world, Inventory, eid);
+  addComponent(world, Legendable, eid);
   addComponent(world, Strength, eid);
   addComponent(world, Zindex, eid);
 

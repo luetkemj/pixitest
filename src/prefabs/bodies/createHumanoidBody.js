@@ -5,6 +5,7 @@ import {
   Body,
   Droppable,
   Inventory,
+  Legendable,
   Pickupable,
   Position,
   Wieldable,
@@ -52,6 +53,7 @@ export const createHumanoidBody = (world, parentEid) => {
     addComponent(world, Body, partEid);
     addComponent(world, Droppable, partEid);
     addComponent(world, Inventory, partEid);
+    addComponent(world, Legendable, partEid);
     addComponent(world, Position, partEid);
     addComponent(world, Pickupable, partEid);
     addComponent(world, Wieldable, partEid);

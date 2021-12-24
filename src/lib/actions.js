@@ -1,13 +1,14 @@
 import _ from "lodash";
 import { addLog, getState, setState } from "../index";
 import { pipelineFovRender } from "../pipelines";
-import { addComponent, hasComponent } from "bitecs";
+import { addComponent, removeComponent, hasComponent } from "bitecs";
 import { deleteEntity, getWielders, updatePosition } from "./ecsHelpers";
 import { idToCell, getNeighborIds } from "./grid";
 import {
   Blocking,
   Droppable,
   Effects,
+  InFov,
   Inventory,
   Liquid,
   Pickupable,
@@ -42,7 +43,7 @@ export const get = (world, eid, itemEid) => {
     const openSlot = _.findIndex(inventory, (slot) => slot === 0);
     if (openSlot > -1) {
       Inventory.slots[eid][openSlot] = pickupEid;
-
+      removeComponent(world, InFov, pickupEid);
       updatePosition({
         world,
         oldPos: {

@@ -21,6 +21,7 @@ export const Health = defineComponent(MaxCurrent);
 export const Intelligence = defineComponent(MaxCurrent);
 export const InFov = defineComponent();
 export const Inventory = defineComponent({ slots: [Types.eid, 24] });
+export const Legendable = defineComponent();
 export const Liquid = defineComponent();
 export const MoveTo = defineComponent(Vector3);
 export const Opaque = defineComponent();

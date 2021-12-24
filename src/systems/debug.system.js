@@ -1,10 +1,7 @@
 import _ from "lodash";
-import { defineQuery, removeComponent, Not } from "bitecs";
-import { Position } from "../components";
 import { addDebugSprite } from "../lib/canvas";
 import { grid } from "../lib/grid";
-
-const positionQuery = defineQuery([Position]);
+import { positionQuery } from "../queries";
 
 export const debugSystem = (world) => {
   const positionEnts = positionQuery(world);

@@ -12,6 +12,7 @@ import {
   Forgettable,
   Health,
   Intelligence,
+  Legendable,
   Position,
   Strength,
   Wieldable,
@@ -34,6 +35,7 @@ export const createGoblin = (world, options) => {
   addComponent(world, Droppable, eid);
   addComponent(world, Forgettable, eid);
   addComponent(world, Health, eid);
+  addComponent(world, Legendable, eid);
   addComponent(world, Ai, eid);
   addComponent(world, Intelligence, eid);
   addComponent(world, Strength, eid);
