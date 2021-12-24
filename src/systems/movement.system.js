@@ -27,6 +27,7 @@ const kill = (world, eid) => {
   removeComponent(world, Blocking, eid);
   removeComponent(world, Forgettable, eid);
   Zindex.zIndex[eid] = 20;
+  world.sprites[eid].char = "%";
 };
 
 const attack = ({ world, aggEid, tarEid, pcEid }) => {

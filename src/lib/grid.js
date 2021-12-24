@@ -6,9 +6,16 @@ export const grid = {
 
   legend: {
     width: 12,
-    height: 44,
+    height: 42,
     x: 0,
     y: 0,
+  },
+
+  fps: {
+    width: 12,
+    height: 1,
+    x: 0,
+    y: 43,
   },
 
   map: {

@@ -21,6 +21,7 @@ import {
   revealedQuery,
   forgettableQuery,
   pcQuery,
+  legendableQuery,
 } from "../queries";
 
 let cellWidth;
@@ -85,6 +86,7 @@ export const renderSystem = (world) => {
   const inFovEnts = inFovQuery(world);
   const revealedEnts = revealedQuery(world);
   const forgettableEnts = forgettableQuery(world);
+  const legendEnts = legendableQuery(world);
   const pcEnts = pcQuery(world);
 
   // build alpha map for rendering light source fading from player
@@ -130,7 +132,7 @@ export const renderSystem = (world) => {
   // RENDER UI THINGS
   renderAmbiance(world);
   renderAdventureLog(world);
-  renderLegend(world, pcEnts[0]);
+  renderLegend(world, pcEnts[0], legendEnts);
 
   // hide menu and overlay
   hideContainer("menu");

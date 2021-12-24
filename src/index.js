@@ -128,11 +128,12 @@ function initGame() {
         fpsSamples.pop();
       }
 
-      printRow({
-        container: "legend",
-        y: grid.legend.height - 1,
-        str: `FPS: ${getState().fps}`,
-      });
+      if (!isNaN(getState().fps)) {
+        printRow({
+          container: "fps",
+          str: `FPS: ${getState().fps}`,
+        });
+      }
 
       now = Date.now();
       fps = 0;

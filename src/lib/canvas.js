@@ -49,6 +49,7 @@ export const getAsciTexture = ({ char }) => {
 const containers = {};
 const containerNames = [
   "legend",
+  "fps",
   "map",
   "ambiance",
   "adventureLog",
@@ -83,6 +84,7 @@ containerNames.forEach((name) => {
 const uiSprites = {};
 const uiSpriteContainerNames = [
   "legend",
+  "fps",
   "ambiance",
   "adventureLog",
   "menu",
@@ -119,7 +121,8 @@ export const addSprite = ({
       interactive: true,
       tint,
     },
-    options
+    options,
+    { char: texture, color: options.tint || tint }
   );
 
   world.sprites[eid].on("click", (ev) => {
@@ -222,7 +225,6 @@ export const initUi = () => {
       }
     });
   });
-  printRow({ container: "legend", str: "You are a Knight." });
 };
 
 export const clearContainer = (container) => {
