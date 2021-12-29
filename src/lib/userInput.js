@@ -14,6 +14,8 @@ const gameplayControls = [
   "ArrowDown",
   "ArrowLeft",
   "g",
+  "<",
+  ">",
 ];
 
 const uiControls = ["Escape", "c", "i", "k", "l", "Shift"];

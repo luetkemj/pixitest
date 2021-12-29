@@ -27,4 +27,14 @@ export const meta = {
     description:
       "One of the sides of a room or building connecting floor and ceiling or foundation and roof",
   },
+
+  stairsUp: {
+    name: "stairs up",
+    description: "Steps leading up",
+  },
+
+  stairsDown: {
+    name: "stairs down",
+    description: "Steps leading down",
+  },
 };

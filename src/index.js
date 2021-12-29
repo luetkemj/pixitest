@@ -39,7 +39,8 @@ const state = {
   turn: "",
   userInput: "",
   world: {},
-  z: -5,
+  z: 0,
+  floors: {},
   RESETTING_DEBUG: true,
 };
 

@@ -31,6 +31,7 @@ export const PC = defineComponent();
 export const Position = defineComponent(Vector3);
 export const Revealed = defineComponent();
 export const Show = defineComponent();
+export const Stairs = defineComponent({ toZ: Types.ui8 });
 export const Strength = defineComponent(MaxCurrent);
 export const Velocity = defineComponent(Vector3);
 export const Wieldable = defineComponent();

@@ -68,6 +68,12 @@ export const userInputSystem = (world) => {
       if (key === "g") {
         actions.get(world, eid);
       }
+      if (key === "<") {
+        actions.ascend(world, eid);
+      }
+      if (key === ">") {
+        actions.descend(world, eid);
+      }
     }
   }
 

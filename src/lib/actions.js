@@ -18,6 +18,46 @@ import {
 } from "../components";
 import * as Components from "../components";
 
+export const ascend = (world, eid) => {
+  const { floors, z } = getState();
+  const locId = `${Position.x[eid]},${Position.y[eid]},${Position.z[eid]}`;
+
+  const floor = floors[z];
+  if (!floor) {
+    return console.log(`no floor at ${z}`);
+  }
+
+  if (!floor.stairsUp) {
+    return console.log(`no stairs up on this floor`);
+  }
+
+  if (locId !== floor.stairsUp) {
+    return console.log(`no stairs up at ${locId}`);
+  }
+
+  console.log("ascend");
+};
+
+export const descend = (world, eid) => {
+  const { floors, z } = getState();
+  const locId = `${Position.x[eid]},${Position.y[eid]},${Position.z[eid]}`;
+
+  const floor = floors[z];
+  if (!floor) {
+    return console.log(`no floor at ${z}`);
+  }
+
+  if (!floor.stairsDown) {
+    return console.log(`no stairs down on this floor`);
+  }
+
+  if (locId !== floor.stairsDown) {
+    return console.log(`no stairs down at ${locId}`);
+  }
+
+  console.log("descend");
+};
+
 export const get = (world, eid, itemEid) => {
   if (!hasComponent(world, Inventory, eid)) {
     return console.log(`Cannot pickup - ${eid} has no Inventory`);
