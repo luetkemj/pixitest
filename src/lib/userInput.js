@@ -8,6 +8,8 @@ import {
 import { drop, get, quaff, unwield, wield } from "./actions";
 import { grid } from "./grid";
 
+import { save, load } from "./savenload";
+
 const gameplayControls = [
   "ArrowUp",
   "ArrowRight",
@@ -38,6 +40,16 @@ export const processUserInput = (world) => {
   const { userInput, mode, pcEnts } = getState();
 
   const { key, shiftKey } = userInput;
+
+  // SAVING AND LOADING WIP
+  if (key === "S") {
+    console.log("save game");
+    save(world);
+  }
+  if (key === "L") {
+    console.log("load game");
+    load();
+  }
 
   // Game modes must be used in the gameLoop() to processUserInput and call pipelines.
   // if you don't the game will hang and never process user input

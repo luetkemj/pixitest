@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bitecs": "0.3.21",
+    "bitecs": "0.3.34",
     "lodash": "4.17.21",
     "pathfinding": "0.4.18",
     "pixi.js": "6.1.2",
