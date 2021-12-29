@@ -18,8 +18,9 @@ import { grid } from "./lib/grid";
 const loader = loadSprites(initGame);
 
 const state = {
-  mode: "GAME",
-  looking: null,
+  ambientLog: [],
+  debug: false,
+  fps: 0,
   inventory: {
     columnIndex: 0,
     inventoryListIndex: 0,
@@ -27,18 +28,18 @@ const state = {
     selectedInventoryItemEid: "",
     selectedInReachItemEid: "",
   },
-  world: {},
-  pcEnts: [],
-  userInput: "",
-  turn: "",
-  debug: false,
-  ambientLog: [],
   log: {
     log: [],
     rowIndex: 0,
   },
+  looking: null,
+  mode: "GAME",
+  pcEnts: [],
   tick: 0,
-  fps: 0,
+  turn: "",
+  userInput: "",
+  world: {},
+  z: -5,
   RESETTING_DEBUG: true,
 };
 
@@ -151,17 +152,17 @@ function initGame() {
     });
   });
 
-  document.querySelector("#debug").addEventListener("click", () => {
-    setState((state) => {
-      state.debug = !state.debug;
-    });
+  // document.querySelector("#debug").addEventListener("click", () => {
+  //   setState((state) => {
+  //     state.debug = !state.debug;
+  //   });
 
-    const { debug } = getState();
+  //   const { debug } = getState();
 
-    if (!debug) {
-      setState((state) => {
-        state.RESETTING_DEBUG = true;
-      });
-    }
-  });
+  //   if (!debug) {
+  //     setState((state) => {
+  //       state.RESETTING_DEBUG = true;
+  //     });
+  //   }
+  // });
 }

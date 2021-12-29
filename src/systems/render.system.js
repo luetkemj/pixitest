@@ -49,7 +49,8 @@ const isOnTop = (eid, eAtPos) => {
 };
 
 const renderEidIfOnTop = ({ eid, world, alpha = 1 }) => {
-  const locId = `${Position.x[eid]},${Position.y[eid]},0`;
+  const { z } = getState();
+  const locId = `${Position.x[eid]},${Position.y[eid]},${z}`;
   const eAtPos = world.eAtPos[locId];
 
   // If only one item at location - render it
@@ -122,7 +123,9 @@ export const renderSystem = (world) => {
   // check location of player and set the ambient log render
   // this should eventually be its own system so it can be more interesting
   {
-    const locId = `${Position.x[pcEnts[0]]},${Position.y[pcEnts[0]]},0`;
+    const locId = `${Position.x[pcEnts[0]]},${Position.y[pcEnts[0]]},${
+      Position.z[pcEnts[0]]
+    }`;
     const eAtPos = world.eAtPos[locId];
     const stack = _.orderBy([...eAtPos], (eid) => Zindex.zIndex[eid], "desc");
     const msg = world.meta[stack[1]].description;

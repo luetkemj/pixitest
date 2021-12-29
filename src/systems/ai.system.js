@@ -4,11 +4,15 @@ import { aStar } from "../lib/pathfinding";
 import { aiQuery, pcQuery } from "../queries";
 
 const moveToTarget = (world, eid, targetEid) => {
-  const startPos = { x: Position.x[eid], y: Position.y[eid], z: 0 };
+  const startPos = {
+    x: Position.x[eid],
+    y: Position.y[eid],
+    z: Position.z[eid],
+  };
   const targetPos = {
     x: Position.x[targetEid],
     y: Position.y[targetEid],
-    z: 0,
+    z: Position.z[targetEid],
   };
   const path = aStar(world, startPos, targetPos);
   world.meta[eid].ai.path = path;

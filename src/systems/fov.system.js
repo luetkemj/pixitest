@@ -9,6 +9,7 @@ import {
 import { grid } from "../lib/grid";
 import { createFOV } from "../lib/fov";
 import { inFovQuery, opaqueQuery, pcQuery } from "../queries";
+import { getState } from "../index";
 
 export const fovSystem = (world) => {
   const pcEnts = pcQuery(world);
@@ -41,8 +42,9 @@ export const fovSystem = (world) => {
     removeComponent(world, InFov, eid);
   }
 
+  const { z } = getState();
   FOV.fov.forEach((locId) => {
-    const eAtPos = world.eAtPos[`${locId},0`];
+    const eAtPos = world.eAtPos[`${locId},${z}`];
 
     if (eAtPos) {
       eAtPos.forEach((eidAtPos) => {
