@@ -20,7 +20,7 @@ import {
 import { createHumanoidBody } from "./bodies/createHumanoidBody";
 
 import { addSprite } from "../lib/canvas";
-import { updatePosition } from "../lib/ecsHelpers";
+import { updatePosition } from "../ecs/ecsHelpers";
 
 export const createKnight = (world, options) => {
   const { x, y, z } = options;

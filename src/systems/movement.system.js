@@ -14,7 +14,7 @@ import {
   MoveTo,
   Zindex,
 } from "../ecs/components";
-import { getWielders, updatePosition } from "../lib/ecsHelpers";
+import { getWielders, updatePosition } from "../ecs/ecsHelpers";
 import { grid } from "../lib/grid";
 import * as gfx from "../lib/graphics";
 import { movementQuery, pcQuery } from "../queries";

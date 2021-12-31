@@ -14,7 +14,7 @@ import {
 } from "../ecs/components";
 
 import { addSprite } from "../lib/canvas";
-import { updatePosition } from "../lib/ecsHelpers";
+import { updatePosition } from "../ecs/ecsHelpers";
 
 export const createSword = (world, options) => {
   const { x, y, z } = options;

@@ -1,7 +1,7 @@
 import _ from "lodash";
 import * as PIXI from "pixi.js";
 import { Position } from "../ecs/components";
-import { getEntityData } from "./ecsHelpers";
+import { getEntityData } from "../ecs/ecsHelpers";
 import { grid } from "./grid";
 import * as gfx from "./graphics";
 import { menloBoldAlphaMap } from "../../static/fonts/menlo-bold.map";

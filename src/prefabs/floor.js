@@ -6,7 +6,7 @@ import { meta } from "../lib/meta";
 import { Position, Zindex } from "../ecs/components";
 
 import { addSprite } from "../lib/canvas";
-import { updatePosition } from "../lib/ecsHelpers";
+import { updatePosition } from "../ecs/ecsHelpers";
 
 export const createFloor = (world, options) => {
   const { x, y, z } = options;

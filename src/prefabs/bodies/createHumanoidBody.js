@@ -1,5 +1,5 @@
 import { addComponent, addEntity } from "bitecs";
-import { fillFirstEmptySlot } from "../../lib/ecsHelpers";
+import { fillFirstEmptySlot } from "../../ecs/ecsHelpers";
 import {
   BelongsTo,
   Body,

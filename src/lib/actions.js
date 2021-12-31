@@ -2,7 +2,7 @@ import _ from "lodash";
 import { addLog, getState, setState } from "../index";
 import { pipelineFovRender } from "../pipelines";
 import { addComponent, removeComponent, hasComponent } from "bitecs";
-import { deleteEntity, getWielders, updatePosition } from "./ecsHelpers";
+import { deleteEntity, getWielders, updatePosition } from "../ecs/ecsHelpers";
 import { idToCell, getNeighborIds } from "./grid";
 import {
   Blocking,

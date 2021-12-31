@@ -4,7 +4,7 @@ import {
   getWielder,
   gettableEntitiesInReach,
   walkInventoryTree,
-} from "./ecsHelpers";
+} from "../ecs/ecsHelpers";
 import { drop, get, quaff, unwield, wield } from "./actions";
 import { grid } from "./grid";
 

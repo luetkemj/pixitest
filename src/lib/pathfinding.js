@@ -39,12 +39,5 @@ export const aStar = (world, start, goal) => {
 
   const path = finder.findPath(start.x, start.y, goal.x, goal.y, pfGrid);
 
-  console.log({
-    path,
-    start,
-    goal,
-    locIds,
-    pfGrid,
-  });
   return path;
 };

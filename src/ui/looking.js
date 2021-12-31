@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { Position } from "../ecs/components";
 import { clearContainer, printRow } from "../lib/canvas";
-import { getEntityData } from "../lib/ecsHelpers";
+import { getEntityData } from "../ecs/ecsHelpers";
 import { renderAmbiance } from "./ambiance";
 
 export const renderLooking = (world, pcEid) => {
