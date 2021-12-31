@@ -11,7 +11,7 @@ import {
   PC,
   Position,
   Revealed,
-} from "./components";
+} from "./ecs/components";
 
 export const aiQuery = defineQuery([Ai, Intelligence]);
 export const deadPCQuery = defineQuery([Dead, PC]);

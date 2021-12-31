@@ -15,7 +15,7 @@ import {
   Position,
   Strength,
   Zindex,
-} from "../components";
+} from "../ecs/components";
 
 import { createHumanoidBody } from "./bodies/createHumanoidBody";
 

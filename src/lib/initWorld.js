@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { addComponent, createWorld } from "bitecs";
-import { PC } from "../components";
+import { PC } from "../ecs/components";
 import { addLog, getState, setState } from "../index";
 import { createKnight } from "../prefabs/knight";
 import { generateDungeonFloor } from "./generators/dungeonfloor";

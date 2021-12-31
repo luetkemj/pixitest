@@ -13,7 +13,7 @@ import {
   Inventory,
   Position,
   Wieldable,
-} from "../components";
+} from "../ecs/components";
 
 const renderInventoryList = (world, pcEid) => {
   const { inventory } = getState();

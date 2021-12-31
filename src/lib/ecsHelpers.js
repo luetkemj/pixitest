@@ -1,6 +1,6 @@
 import _ from "lodash";
-import * as Components from "../components";
-import { Body, Pickupable, Position, Wielding } from "../components";
+import * as Components from "../ecs/components";
+import { Body, Pickupable, Position, Wielding } from "../ecs/components";
 import { hasComponent, removeComponent, removeEntity } from "bitecs";
 import { getNeighborIds } from "../lib/grid";
 

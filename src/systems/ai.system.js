@@ -1,5 +1,5 @@
 import { addComponent } from "bitecs";
-import { MoveTo, Position } from "../components";
+import { MoveTo, Position } from "../ecs/components";
 import { aStar } from "../lib/pathfinding";
 import { aiQuery, pcQuery } from "../queries";
 

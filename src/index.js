@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { defineQuery } from "bitecs";
-import { PC } from "./components";
+import { PC } from "./ecs/components";
 import {
   pipelinePlayerTurn,
   pipelineWorldTurn,

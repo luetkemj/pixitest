@@ -11,7 +11,7 @@ import {
   Wieldable,
   Wielding,
   Zindex,
-} from "../../components";
+} from "../../ecs/components";
 
 const createEntity = (world, name, description) => {
   const eid = addEntity(world);

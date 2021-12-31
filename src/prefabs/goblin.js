@@ -17,7 +17,7 @@ import {
   Strength,
   Wieldable,
   Zindex,
-} from "../components";
+} from "../ecs/components";
 
 import { createHumanoidBody } from "./bodies/createHumanoidBody";
 

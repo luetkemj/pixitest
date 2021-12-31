@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { Position } from "../components";
+import { Position } from "../ecs/components";
 import { clearContainer, printRow } from "../lib/canvas";
 import { getEntityData } from "../lib/ecsHelpers";
 import { renderAmbiance } from "./ambiance";

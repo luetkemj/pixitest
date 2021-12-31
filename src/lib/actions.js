@@ -15,8 +15,8 @@ import {
   Position,
   Wieldable,
   Wielding,
-} from "../components";
-import * as Components from "../components";
+} from "../ecs/components";
+import * as Components from "../ecs/components";
 import { generateDungeonFloor } from "./generators/dungeonfloor";
 import { clearContainer } from "./canvas";
 

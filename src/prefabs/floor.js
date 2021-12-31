@@ -3,7 +3,7 @@ import { addComponent, addEntity } from "bitecs";
 import * as gfx from "../lib/graphics";
 import { meta } from "../lib/meta";
 
-import { Position, Zindex } from "../components";
+import { Position, Zindex } from "../ecs/components";
 
 import { addSprite } from "../lib/canvas";
 import { updatePosition } from "../lib/ecsHelpers";

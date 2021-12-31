@@ -11,7 +11,7 @@ import {
   Pickupable,
   Position,
   Zindex,
-} from "../components";
+} from "../ecs/components";
 
 import { addSprite } from "../lib/canvas";
 import { updatePosition } from "../lib/ecsHelpers";

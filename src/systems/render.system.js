@@ -1,7 +1,13 @@
 import _ from "lodash";
 import { defineQuery, hasComponent, Not } from "bitecs";
 import { getState, setState } from "../index";
-import { Dead, FovDistance, FovRange, Position, Zindex } from "../components";
+import {
+  Dead,
+  FovDistance,
+  FovRange,
+  Position,
+  Zindex,
+} from "../ecs/components";
 import { grid } from "../lib/grid";
 import {
   clearContainer,

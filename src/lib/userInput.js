@@ -1,5 +1,5 @@
 import { getState, setState } from "../index";
-import { Inventory, Position } from "../components";
+import { Inventory, Position } from "../ecs/components";
 import {
   getWielder,
   gettableEntitiesInReach,

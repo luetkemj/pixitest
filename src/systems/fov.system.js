@@ -5,7 +5,7 @@ import {
   InFov,
   Position,
   Revealed,
-} from "../components";
+} from "../ecs/components";
 import { grid } from "../lib/grid";
 import { createFOV } from "../lib/fov";
 import { inFovQuery, opaqueQuery, pcQuery } from "../queries";

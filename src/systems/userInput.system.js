@@ -1,5 +1,5 @@
 import { addComponent } from "bitecs";
-import { Position, MoveTo } from "../components";
+import { Position, MoveTo } from "../ecs/components";
 import * as actions from "../lib/actions";
 import { grid } from "../lib/grid";
 import { getState, setState } from "../index";

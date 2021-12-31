@@ -13,7 +13,7 @@ import {
   Strength,
   MoveTo,
   Zindex,
-} from "../components";
+} from "../ecs/components";
 import { getWielders, updatePosition } from "../lib/ecsHelpers";
 import { grid } from "../lib/grid";
 import * as gfx from "../lib/graphics";

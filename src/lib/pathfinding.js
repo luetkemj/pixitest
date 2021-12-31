@@ -1,7 +1,7 @@
 import PF from "pathfinding";
 import { some, times } from "lodash";
 
-import { Ai, Blocking } from "../components";
+import { Ai, Blocking } from "../ecs/components";
 
 import { grid, toCell } from "./grid";
 import { hasComponent } from "bitecs";
