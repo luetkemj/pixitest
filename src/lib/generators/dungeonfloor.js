@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { grid } from "../grid";
-
+import { setState } from "../../index";
 import { createFloor } from "../../prefabs/floor";
 import { createGoblin } from "../../prefabs/goblin";
 import { createHealthPotion } from "../../prefabs/healthPotion";
@@ -32,23 +32,23 @@ export const generateDungeonFloor = ({ world, z, stairsUp, stairsDown }) => {
 
   const openTiles = _.filter(dungeon.tiles, (tile) => tile.sprite === "FLOOR");
 
-  // // spawn weapons
-  // _.times(10, () => {
-  //   const { x, y } = _.sample(openTiles);
-  //   createSword(world, { x, y, z });
-  // });
+  // spawn weapons
+  _.times(10, () => {
+    const { x, y } = _.sample(openTiles);
+    createSword(world, { x, y, z });
+  });
 
-  // // spawn potions
-  // _.times(10, () => {
-  //   const { x, y } = _.sample(openTiles);
-  //   createHealthPotion(world, { x, y, z });
-  // });
+  // spawn potions
+  _.times(10, () => {
+    const { x, y } = _.sample(openTiles);
+    createHealthPotion(world, { x, y, z });
+  });
 
-  // // spawn baddies
-  // _.times(10, () => {
-  //   const { x, y } = _.sample(openTiles);
-  //   createGoblin(world, { x, y, z });
-  // });
+  // spawn baddies
+  _.times(10, () => {
+    const { x, y } = _.sample(openTiles);
+    createGoblin(world, { x, y, z });
+  });
 
   const floor = { z };
 
@@ -63,6 +63,8 @@ export const generateDungeonFloor = ({ world, z, stairsUp, stairsDown }) => {
     createStairs(world, { x, y, z, dir: "DOWN" });
     floor.stairsDown = `${x},${y},${z}`;
   }
+
+  setState((state) => (state.floors[z] = floor));
 
   return { dungeon, floor };
 };

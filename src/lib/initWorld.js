@@ -19,14 +19,12 @@ export const initWorld = (loader) => {
 
   addLog([{ str: "Adventure, awaits!" }]);
 
-  const { dungeon, floor } = generateDungeonFloor({
+  const { dungeon } = generateDungeonFloor({
     world,
     z,
     stairsUp: true,
     stairsDown: true,
   });
-
-  setState((state) => (state.floors[z] = floor));
 
   // create the knight
   const knightEid = createKnight(world, {

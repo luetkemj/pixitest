@@ -17,45 +17,90 @@ import {
   Wielding,
 } from "../components";
 import * as Components from "../components";
+import { generateDungeonFloor } from "./generators/dungeonfloor";
+import { clearContainer } from "./canvas";
 
-export const ascend = (world, eid) => {
+const useStairs = (world, eid, dir) => {
   const { floors, z } = getState();
   const locId = `${Position.x[eid]},${Position.y[eid]},${Position.z[eid]}`;
+  const stairsUpOrDown = `stairs${dir}`;
 
   const floor = floors[z];
   if (!floor) {
     return console.log(`no floor at ${z}`);
   }
 
-  if (!floor.stairsUp) {
+  if (!floor[stairsUpOrDown]) {
     return console.log(`no stairs up on this floor`);
   }
 
-  if (locId !== floor.stairsUp) {
-    return console.log(`no stairs up at ${locId}`);
+  if (locId !== floor[stairsUpOrDown]) {
+    return console.log(`no stairs ${dir} at ${locId}`);
   }
 
-  console.log("ascend");
+  if (dir === "Up") {
+    const newZ = z + 1;
+    setState((state) => (state.z = newZ));
+
+    if (floors[newZ]) {
+      updatePosition({
+        world,
+        eid,
+        oldPos: idToCell(locId),
+        newPos: idToCell(floors[newZ].stairsDown),
+      });
+    } else {
+      const { floor } = generateDungeonFloor({
+        world,
+        z: newZ,
+        stairsUp: true,
+        stairsDown: true,
+      });
+      updatePosition({
+        world,
+        eid,
+        oldPos: idToCell(locId),
+        newPos: idToCell(floor.stairsDown),
+      });
+    }
+  }
+
+  if (dir === "Down") {
+    const newZ = z - 1;
+    setState((state) => (state.z = newZ));
+
+    if (floors[newZ]) {
+      updatePosition({
+        world,
+        eid,
+        oldPos: idToCell(locId),
+        newPos: idToCell(floors[newZ].stairsUp),
+      });
+    } else {
+      const { floor } = generateDungeonFloor({
+        world,
+        z: newZ,
+        stairsUp: true,
+        stairsDown: true,
+      });
+      updatePosition({
+        world,
+        eid,
+        oldPos: idToCell(locId),
+        newPos: idToCell(floor.stairsUp),
+      });
+    }
+  }
+
+  console.log({ floors: getState().floors, z: getState().z });
+};
+
+export const ascend = (world, eid) => {
+  useStairs(world, eid, "Up");
 };
 
 export const descend = (world, eid) => {
-  const { floors, z } = getState();
-  const locId = `${Position.x[eid]},${Position.y[eid]},${Position.z[eid]}`;
-
-  const floor = floors[z];
-  if (!floor) {
-    return console.log(`no floor at ${z}`);
-  }
-
-  if (!floor.stairsDown) {
-    return console.log(`no stairs down on this floor`);
-  }
-
-  if (locId !== floor.stairsDown) {
-    return console.log(`no stairs down at ${locId}`);
-  }
-
-  console.log("descend");
+  useStairs(world, eid, "Down");
 };
 
 export const get = (world, eid, itemEid) => {

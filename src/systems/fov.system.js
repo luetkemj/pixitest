@@ -13,6 +13,7 @@ import { getState } from "../index";
 
 export const fovSystem = (world) => {
   const pcEnts = pcQuery(world);
+  const { z } = getState();
 
   // Create FOV schema
   const { width, height } = grid;
@@ -23,7 +24,10 @@ export const fovSystem = (world) => {
   const blockingEnts = opaqueQuery(world);
   for (let i = 0; i < blockingEnts.length; i++) {
     const eid = blockingEnts[i];
-    blockingLocations.add(`${Position.x[eid]},${Position.y[eid]}`);
+
+    if (Position.z[eid] === z) {
+      blockingLocations.add(`${Position.x[eid]},${Position.y[eid]}`);
+    }
   }
 
   const FOV = createFOV({
@@ -42,7 +46,6 @@ export const fovSystem = (world) => {
     removeComponent(world, InFov, eid);
   }
 
-  const { z } = getState();
   FOV.fov.forEach((locId) => {
     const eAtPos = world.eAtPos[`${locId},${z}`];
 

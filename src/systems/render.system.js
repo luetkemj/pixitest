@@ -50,6 +50,11 @@ const isOnTop = (eid, eAtPos) => {
 
 const renderEidIfOnTop = ({ eid, world, alpha = 1 }) => {
   const { z } = getState();
+  // only render if the entity is on current z level
+  if (z !== Position.z[eid]) {
+    return (world.sprites[eid].renderable = false);
+  }
+
   const locId = `${Position.x[eid]},${Position.y[eid]},${z}`;
   const eAtPos = world.eAtPos[locId];
 
