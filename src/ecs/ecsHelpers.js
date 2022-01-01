@@ -1,8 +1,20 @@
 import _ from "lodash";
 import { getState, setState } from "../index";
 import * as Components from "./components";
-import { Body, Pickupable, Position, Wielding } from "./components";
-import { addEntity, hasComponent, removeComponent, removeEntity } from "bitecs";
+import {
+  Body,
+  OnCurrentMap,
+  Pickupable,
+  Position,
+  Wielding,
+} from "./components";
+import {
+  addComponent,
+  addEntity,
+  hasComponent,
+  removeComponent,
+  removeEntity,
+} from "bitecs";
 import { getNeighborIds } from "../lib/grid";
 
 export const findEmptySlot = ({ component, containerEid }) => {
@@ -72,6 +84,7 @@ export const createEntity = (world) => {
     setState((state) => (state.maps[zoom][mapId] = new Set()));
   }
   setState((state) => state.maps[zoom][mapId].add(eid));
+  addComponent(world, OnCurrentMap, eid);
 
   return eid;
 };
