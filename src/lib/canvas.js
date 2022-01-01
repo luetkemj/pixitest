@@ -49,6 +49,7 @@ export const getAsciTexture = ({ char }) => {
 const containers = {};
 const containerNames = [
   "legend",
+  "build",
   "fps",
   "map",
   "ambiance",
@@ -84,6 +85,7 @@ containerNames.forEach((name) => {
 const uiSprites = {};
 const uiSpriteContainerNames = [
   "legend",
+  "build",
   "fps",
   "ambiance",
   "adventureLog",
@@ -224,6 +226,11 @@ export const initUi = () => {
         initUiRow({ container: name, row: i });
       }
     });
+  });
+
+  printRow({
+    container: "build",
+    str: `TAG: ${process.env.GIT_REV}`,
   });
 };
 

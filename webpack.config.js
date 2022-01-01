@@ -1,11 +1,9 @@
+const webpack = require("webpack");
 const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
-const GitRevisionPlugin = require("git-revision-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
-
-const gitRevisionPlugin = new GitRevisionPlugin();
 
 const mode = () => {
   if (process.env.NODE_ENV === "development") {
@@ -69,10 +67,12 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: "Scrimshank",
       template: "index.html",
-      version: gitRevisionPlugin.commithash().slice(0, 7),
     }),
     new CopyPlugin({
       patterns: [{ from: "static", to: "static" }],
+    }),
+    new webpack.DefinePlugin({
+      "process.env.GIT_REV": JSON.stringify(process.env.GIT_REV),
     }),
   ],
   output: {
