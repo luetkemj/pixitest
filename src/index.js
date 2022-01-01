@@ -6,7 +6,7 @@ import {
   pipelineWorldTurn,
   uiPipeline,
   debugPipeline,
-} from "./pipelines";
+} from "./ecs/pipelines";
 
 import { processUserInput } from "./lib/userInput";
 
@@ -20,6 +20,7 @@ const loader = loadSprites(initGame);
 const state = {
   ambientLog: [],
   debug: false,
+  floors: {},
   fps: 0,
   inventory: {
     columnIndex: 0,
@@ -33,6 +34,11 @@ const state = {
     rowIndex: 0,
   },
   looking: null,
+  maps: {
+    zoom: "local",
+    mapId: "0,0,0",
+    local: {},
+  },
   mode: "GAME",
   pcEnts: [],
   tick: 0,
@@ -40,9 +46,10 @@ const state = {
   userInput: "",
   world: {},
   z: -1,
-  floors: {},
   RESETTING_DEBUG: true,
 };
+
+window.state = state;
 
 export const setState = (callback) => {
   callback(state);
