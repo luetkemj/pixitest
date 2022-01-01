@@ -1,27 +1,21 @@
 import _ from "lodash";
 import { defineQuery, hasComponent, Not } from "bitecs";
-import { getState, setState } from "../index";
-import {
-  Dead,
-  FovDistance,
-  FovRange,
-  Position,
-  Zindex,
-} from "../ecs/components";
-import { grid } from "../lib/grid";
+import { getState, setState } from "../../index";
+import { Dead, FovDistance, FovRange, Position, Zindex } from "../components";
+import { grid } from "../../lib/grid";
 import {
   clearContainer,
   hideContainer,
   showContainer,
   getAsciTexture,
-} from "../lib/canvas";
-import { renderAmbiance } from "../ui/ambiance";
-import { renderAdventureLog } from "../ui/adventureLog";
-import { renderLegend } from "../ui/legend";
-import { renderMenuCharacter } from "../ui/menuCharacter";
-import { renderMenuInventory } from "../ui/menuInventory";
-import { renderMenuLog } from "../ui/menuLog";
-import { renderLooking } from "../ui/looking";
+} from "../../lib/canvas";
+import { renderAmbiance } from "../../ui/ambiance";
+import { renderAdventureLog } from "../../ui/adventureLog";
+import { renderLegend } from "../../ui/legend";
+import { renderMenuCharacter } from "../../ui/menuCharacter";
+import { renderMenuInventory } from "../../ui/menuInventory";
+import { renderMenuLog } from "../../ui/menuLog";
+import { renderLooking } from "../../ui/looking";
 import {
   inFovQuery,
   revealedQuery,

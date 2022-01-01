@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { addLog, getState, setState } from "../index";
-import { pipelineFovRender } from "../pipelines";
+import { pipelineFovRender } from "../ecs/pipelines";
 import { addComponent, removeComponent, hasComponent } from "bitecs";
 import { deleteEntity, getWielders, updatePosition } from "../ecs/ecsHelpers";
 import { idToCell, getNeighborIds } from "./grid";

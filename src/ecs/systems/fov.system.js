@@ -5,11 +5,11 @@ import {
   InFov,
   Position,
   Revealed,
-} from "../ecs/components";
-import { grid } from "../lib/grid";
-import { createFOV } from "../lib/fov";
+} from "../components";
+import { grid } from "../../lib/grid";
+import { createFOV } from "../../lib/fov";
 import { inFovQuery, opaqueQuery, pcQuery } from "../queries";
-import { getState } from "../index";
+import { getState } from "../../index";
 
 export const fovSystem = (world) => {
   const pcEnts = pcQuery(world);

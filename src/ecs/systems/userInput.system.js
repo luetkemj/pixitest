@@ -1,8 +1,8 @@
 import { addComponent } from "bitecs";
-import { Position, MoveTo } from "../ecs/components";
-import * as actions from "../lib/actions";
-import { grid } from "../lib/grid";
-import { getState, setState } from "../index";
+import { Position, MoveTo } from "../components";
+import * as actions from "../../lib/actions";
+import { grid } from "../../lib/grid";
+import { getState, setState } from "../../index";
 import { pcQuery } from "../queries";
 
 export const userInputSystem = (world) => {
