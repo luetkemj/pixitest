@@ -7,23 +7,30 @@ import {
   Intelligence,
   Legendable,
   MoveTo,
+  OnCurrentMap,
   Opaque,
   PC,
   Position,
   Revealed,
 } from "./components";
 
-export const aiQuery = defineQuery([Ai, Intelligence]);
-export const deadPCQuery = defineQuery([Dead, PC]);
+export const aiQuery = defineQuery([OnCurrentMap, Ai, Intelligence]);
+export const deadPCQuery = defineQuery([OnCurrentMap, Dead, PC]);
 export const forgettableQuery = defineQuery([
+  OnCurrentMap,
   Revealed,
   Not(InFov),
   Forgettable,
 ]);
-export const inFovQuery = defineQuery([InFov, Position]);
-export const legendableQuery = defineQuery([InFov, Legendable]);
-export const movementQuery = defineQuery([Position, MoveTo]);
-export const opaqueQuery = defineQuery([Opaque]);
-export const pcQuery = defineQuery([PC]);
-export const positionQuery = defineQuery([Position]);
-export const revealedQuery = defineQuery([Revealed, Not(InFov), Position]);
+export const inFovQuery = defineQuery([OnCurrentMap, InFov, Position]);
+export const legendableQuery = defineQuery([OnCurrentMap, InFov, Legendable]);
+export const movementQuery = defineQuery([OnCurrentMap, Position, MoveTo]);
+export const opaqueQuery = defineQuery([OnCurrentMap, Opaque]);
+export const pcQuery = defineQuery([OnCurrentMap, PC]);
+export const positionQuery = defineQuery([OnCurrentMap, Position]);
+export const revealedQuery = defineQuery([
+  OnCurrentMap,
+  Revealed,
+  Not(InFov),
+  Position,
+]);

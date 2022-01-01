@@ -24,6 +24,7 @@ export const Inventory = defineComponent({ slots: [Types.eid, 24] });
 export const Legendable = defineComponent();
 export const Liquid = defineComponent();
 export const MoveTo = defineComponent(Vector3);
+export const OnCurrentMap = defineComponent();
 export const Opaque = defineComponent();
 export const BelongsTo = defineComponent({ eid: Types.eid });
 export const Pickupable = defineComponent();
