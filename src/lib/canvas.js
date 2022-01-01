@@ -1,5 +1,5 @@
 import _ from "lodash";
-import * as PIXI from "pixi.js";
+import * as PIXI from "pixi.js-legacy";
 import { Position } from "../ecs/components";
 import { getEntityData } from "../ecs/ecsHelpers";
 import { grid } from "./grid";
