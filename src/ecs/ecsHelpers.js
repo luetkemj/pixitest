@@ -93,7 +93,7 @@ export const deleteEntity = (world, eid) => {
   const {
     maps: { mapId, zoom },
   } = getState();
-  const currentMap = getState().maps[mapId][zoom];
+  const currentMap = getState().maps[zoom][mapId];
   currentMap.delete(eid);
 
   removeEntity(world, eid);
