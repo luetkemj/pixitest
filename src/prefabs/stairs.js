@@ -1,17 +1,17 @@
 import _ from "lodash";
-import { addComponent, addEntity } from "bitecs";
+import { addComponent } from "bitecs";
 import * as gfx from "../lib/graphics";
 import { meta } from "../lib/meta";
 
 import { Legendable, Stairs, Position, Zindex } from "../ecs/components";
 
 import { addSprite } from "../lib/canvas";
-import { updatePosition } from "../ecs/ecsHelpers";
+import { createEntity, updatePosition } from "../ecs/ecsHelpers";
 
 export const createStairs = (world, options) => {
   const { x, y, z, toZ, dir = "DOWN" } = options;
 
-  const eid = addEntity(world);
+  const eid = createEntity(world);
   addComponent(world, Legendable, eid);
   addComponent(world, Position, eid);
 

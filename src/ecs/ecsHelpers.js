@@ -1,7 +1,8 @@
 import _ from "lodash";
+import { getState, setState } from "../index";
 import * as Components from "./components";
 import { Body, Pickupable, Position, Wielding } from "./components";
-import { hasComponent, removeComponent, removeEntity } from "bitecs";
+import { addEntity, hasComponent, removeComponent, removeEntity } from "bitecs";
 import { getNeighborIds } from "../lib/grid";
 
 export const findEmptySlot = ({ component, containerEid }) => {
@@ -60,7 +61,28 @@ export const updatePosition = ({
   Position.z[eid] = newPos.z;
 };
 
+export const createEntity = (world) => {
+  const {
+    maps: { mapId, zoom },
+  } = getState();
+
+  const eid = addEntity(world);
+
+  if (!getState().maps[zoom][mapId]) {
+    setState((state) => (state.maps[zoom][mapId] = new Set()));
+  }
+  setState((state) => state.maps[zoom][mapId].add(eid));
+
+  return eid;
+};
+
 export const deleteEntity = (world, eid) => {
+  const {
+    maps: { mapId, zoom },
+  } = getState();
+  const currentMap = getState().maps[mapId][zoom];
+  currentMap.delete(eid);
+
   removeEntity(world, eid);
 };
 

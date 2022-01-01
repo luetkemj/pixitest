@@ -1,8 +1,7 @@
 import _ from "lodash";
-import { addComponent, addEntity } from "bitecs";
+import { addComponent } from "bitecs";
 import * as gfx from "../lib/graphics";
 import { meta } from "../lib/meta";
-
 import {
   Droppable,
   Effects,
@@ -12,14 +11,13 @@ import {
   Position,
   Zindex,
 } from "../ecs/components";
-
 import { addSprite } from "../lib/canvas";
-import { updatePosition } from "../ecs/ecsHelpers";
+import { createEntity, updatePosition } from "../ecs/ecsHelpers";
 
 export const createHealthPotion = (world, options) => {
   const { x, y, z } = options;
 
-  const eid = addEntity(world);
+  const eid = createEntity(world);
   addComponent(world, Liquid, eid);
   addComponent(world, Droppable, eid);
   addComponent(world, Effects, eid);
