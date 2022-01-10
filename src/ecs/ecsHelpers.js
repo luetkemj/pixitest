@@ -3,6 +3,7 @@ import { getState, setState } from "../index";
 import * as Components from "./components";
 import {
   Body,
+  Inventory,
   OnCurrentMap,
   Pickupable,
   Position,
@@ -116,6 +117,28 @@ export const walkInventoryTree = (world, eid, inventoryComponent, func) => {
   walkTree(eid);
 };
 
+// return all eids in rootEid inventory with all associated body parts
+export const getRelatedEids = (world, eid) => {
+  const eids = new Set();
+  eids.add(eid);
+
+  // get all inventory items recursively
+  walkInventoryTree(world, eid, Inventory, (currentEid) => {
+    // eids.push(currentEid);
+    eids.add(currentEid);
+  });
+
+  // get all body parts or all collected eids
+  eids.forEach((iEid) => {
+    walkInventoryTree(world, iEid, Body, (currentEid) => {
+      // eids.push(currentEid);
+      eids.add(currentEid);
+    });
+  });
+
+  return [...eids];
+};
+
 export const getEntityAnatomy = (world, eid) => {
   if (!hasComponent(world, Body, eid)) return;
   const anatomy = [];
@@ -203,44 +226,8 @@ export const getEquipped = (world, eid) => {
 
 // change current map
 // remove OnCurrentMap Component from entities on current map
-// collect eids for any entity moving across maps (player and inventory)
-// remove collected entities from old map
-// update state at maps.zoom and maps.mapId
-// check if new map exists at maps[zoom][mapId]
-// if new map does not exist, generate it
-// add entities moving across maps to new map
-// add OnCurrentMap to entities in new map
-
-// export const updateCurrentMapId = (world, newMapId, newZoom) => {
-//   {
-//     // get all entities from currentMapId
-//     const {
-//       maps: { zoom, mapId },
-//     } = getState();
-//     const entities = getState().maps[zoom][mapId];
-
-//     // remove OnCurrentMap component from all of them
-//     for (const eid of entities.entries()) {
-//       removeComponent(world, OnCurrentMap, eid);
-//     }
-
-//     // update MapState
-//     setState((state) => {
-//       state.maps.zoom = newZoom;
-//       state.maps.mapId = newMapId;
-//     });
-//   }
-
-//   {
-//     // get all entities from new currentMapId
-//     const {
-//       maps: { zoom, mapId },
-//     } = getState();
-//     const entities = getState().maps[zoom][mapId];
-
-//     // add OnCurrentMap component to all of them
-//     for (const eid of entities.entries()) {
-//       addComponent(world, OnCurrentMap, eid);
-//     }
-//   }
-// };
+export const removeComponentFromEntities = (world, component, eids) => {
+  for (const eid of eids) {
+    removeComponent(world, component, eid);
+  }
+};
