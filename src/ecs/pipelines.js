@@ -18,7 +18,8 @@ export const pipelinePlayerTurn = pipe(
 );
 
 export const pipelineWorldTurn = pipe(
-  aiSystem,
+  // aiSystem has some sort of SLOOOOOOW down. Looks like aStar. (time to look at dikstra?)
+  // aiSystem,
   movementSystem,
   fovSystem,
   renderSystem
