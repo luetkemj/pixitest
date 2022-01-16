@@ -120,7 +120,7 @@ export const addSprite = ({
     sprite,
     {
       renderable: false,
-      interactive: true,
+      interactive: false,
       tint,
     },
     options,
