@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { defineQuery } from "bitecs";
+import { defineQuery, setDefaultSize } from "bitecs";
 import { PC } from "./ecs/components";
 import {
   pipelinePlayerTurn,
@@ -13,6 +13,9 @@ import { processUserInput } from "./lib/userInput";
 import { initWorld } from "./lib/initWorld";
 import { loadSprites, initUi, printRow } from "./lib/canvas";
 import { grid } from "./lib/grid";
+
+// set max world size (entity count and component stores)
+setDefaultSize(1000000);
 
 // pixi loader load all the sprites and initialize game
 const loader = loadSprites(initGame);
@@ -45,7 +48,7 @@ const state = {
   turn: "",
   userInput: "",
   world: {},
-  z: -1,
+  z: 0,
   RESETTING_DEBUG: true,
 };
 

@@ -4,6 +4,7 @@ import { PC } from "../ecs/components";
 import { addLog, getState, setState } from "../index";
 import { createKnight } from "../prefabs/knight";
 import { generateDungeonFloor } from "./generators/dungeonfloor";
+import { idToCell } from "./grid";
 
 export const initWorld = (loader) => {
   const { z } = getState();
@@ -19,7 +20,7 @@ export const initWorld = (loader) => {
 
   addLog([{ str: "Adventure, awaits!" }]);
 
-  const { dungeon } = generateDungeonFloor({
+  const { dungeon, floor } = generateDungeonFloor({
     world,
     z,
     stairsUp: true,
@@ -28,8 +29,10 @@ export const initWorld = (loader) => {
 
   // create the knight
   const knightEid = createKnight(world, {
-    x: dungeon.rooms[0].center.x,
-    y: dungeon.rooms[0].center.y,
+    // x: dungeon.rooms[0].center.x,
+    // y: dungeon.rooms[0].center.y,
+    x: idToCell(floor.stairsDown).x,
+    y: idToCell(floor.stairsDown).y,
     z,
   });
   // player is the knight
