@@ -1,17 +1,18 @@
 import _ from "lodash";
-import { addComponent, addEntity } from "bitecs";
+import { createEntity } from "../ecs/ecsHelpers";
+import { addComponent } from "bitecs";
 import * as gfx from "../lib/graphics";
 import { meta } from "../lib/meta";
 
-import { Position, Zindex } from "../components";
+import { Position, Zindex } from "../ecs/components";
 
 import { addSprite } from "../lib/canvas";
-import { updatePosition } from "../lib/ecsHelpers";
+import { updatePosition } from "../ecs/ecsHelpers";
 
 export const createFloor = (world, options) => {
   const { x, y, z } = options;
 
-  const eid = addEntity(world);
+  const eid = createEntity(world);
   addComponent(world, Position, eid);
 
   addComponent(world, Zindex, eid);

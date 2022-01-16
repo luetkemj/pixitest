@@ -1,4 +1,4 @@
-import { setState } from "../index";
+import { setState } from "../../index";
 import { deadPCQuery } from "../queries";
 
 export const gameOverSystem = (world) => {

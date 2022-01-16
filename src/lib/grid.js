@@ -6,12 +6,19 @@ export const grid = {
 
   legend: {
     width: 12,
-    height: 42,
+    height: 41,
     x: 0,
     y: 0,
   },
 
   fps: {
+    width: 12,
+    height: 1,
+    x: 0,
+    y: 42,
+  },
+
+  build: {
     width: 12,
     height: 1,
     x: 0,
@@ -163,11 +170,11 @@ export const idToCell = (id) => {
   return {
     x: parseInt(coords[0], 10),
     y: parseInt(coords[1], 10),
-    z: parseInt(coords[2], 10) || 0,
+    z: parseInt(coords[2], 10),
   };
 };
 
-export const cellToId = ({ x, y, z }) => `${x},${y},${z || 0}`;
+export const cellToId = ({ x, y, z }) => `${x},${y},${z}`;
 
 export const isOnMapEdge = (x, y) => {
   const { width, height, x: mapX, y: mapY } = grid.map;
@@ -179,12 +186,13 @@ export const isOnMapEdge = (x, y) => {
   return false;
 };
 
-export const getNeighbors = ({ x, y }, direction = CARDINAL) => {
+export const getNeighbors = ({ x, y, z }, direction = CARDINAL) => {
   const points = [];
   for (let dir of direction) {
     let candidate = {
       x: x + dir.x,
       y: y + dir.y,
+      z,
     };
     if (
       candidate.x >= 0 &&

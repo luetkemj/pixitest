@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { addComponent, hasComponent, removeComponent } from "bitecs";
-import { addLog } from "../index";
+import { addLog } from "../../index";
 import {
   Ai,
   Blocking,
@@ -14,9 +14,9 @@ import {
   MoveTo,
   Zindex,
 } from "../components";
-import { getWielders, updatePosition } from "../lib/ecsHelpers";
-import { grid } from "../lib/grid";
-import * as gfx from "../lib/graphics";
+import { getWielders, updatePosition } from "../ecsHelpers";
+import { grid } from "../../lib/grid";
+import * as gfx from "../../lib/graphics";
 import { movementQuery, pcQuery } from "../queries";
 
 const kill = (world, eid) => {

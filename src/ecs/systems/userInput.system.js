@@ -1,8 +1,8 @@
 import { addComponent } from "bitecs";
 import { Position, MoveTo } from "../components";
-import * as actions from "../lib/actions";
-import { grid } from "../lib/grid";
-import { getState, setState } from "../index";
+import * as actions from "../../lib/actions";
+import { grid } from "../../lib/grid";
+import { getState, setState } from "../../index";
 import { pcQuery } from "../queries";
 
 export const userInputSystem = (world) => {
@@ -67,6 +67,12 @@ export const userInputSystem = (world) => {
       }
       if (key === "g") {
         actions.get(world, eid);
+      }
+      if (key === "<") {
+        actions.ascend(world, eid);
+      }
+      if (key === ">") {
+        actions.descend(world, eid);
       }
     }
   }

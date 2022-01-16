@@ -1,10 +1,9 @@
 <!doctype html>
 
 <head>
-  <title>Pixi Test</title>
+  <title><%= htmlWebpackPlugin.options.title %></title>
 
-  <meta id="viewport" name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="apple-mobile-web-app-capable" content="yes">
 
   <style>
@@ -13,6 +12,7 @@
       margin: 0;
       padding: 0;
       height: 100%;
+      background: black;
     }
 
     canvas {
@@ -27,11 +27,11 @@
 <body>
   <noscript>Please enable JavaScript in your web browser to view this page.</noscript>
   <div id="pixi-content"><canvas id="pixi-canvas" /></div>
-  <div>
+  <!-- <div>
     <input type="checkbox" id="debug" name="debug">
     <label for="debug">Debug</label>
-  </div>
+  </div> -->
 </body>
-<script type="module" src="./src/index.js"></script>
+<!-- <script type="module" src="./src/index.js"></script> -->
 
 </html>

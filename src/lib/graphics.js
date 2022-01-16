@@ -3,6 +3,7 @@ export const colors = {
   potion: 0xdaa520,
   weapon: 0xdaa520,
   wall: 0xaaaaaa,
+  stairs: 0xaaaaaa,
   floor: 0x555555,
   knight: 0xffffff,
   goblin: 0x81a842,
@@ -17,6 +18,8 @@ export const chars = {
   floor: "•",
   knight: "@",
   goblin: "g",
+  stairsUp: "<",
+  stairsDown: ">",
 };
 
 // defaultBGColor: 0x000,

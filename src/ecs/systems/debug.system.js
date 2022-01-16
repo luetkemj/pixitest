@@ -1,6 +1,6 @@
 import _ from "lodash";
-import { addDebugSprite } from "../lib/canvas";
-import { grid } from "../lib/grid";
+import { addDebugSprite } from "../../lib/canvas";
+import { grid } from "../../lib/grid";
 import { positionQuery } from "../queries";
 
 export const debugSystem = (world) => {

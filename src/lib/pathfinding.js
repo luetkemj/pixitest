@@ -1,12 +1,15 @@
 import PF from "pathfinding";
 import { some, times } from "lodash";
 
-import { Ai, Blocking } from "../components";
+import { Ai, Blocking } from "../ecs/components";
 
 import { grid, toCell } from "./grid";
 import { hasComponent } from "bitecs";
 
 export const aStar = (world, start, goal) => {
+  // bail if not on the same floor
+  if (start.z !== goal.z) return;
+
   const matrix = [];
   times(grid.height, () => matrix.push(new Array(grid.width).fill(0)));
 

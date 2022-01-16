@@ -1,7 +1,7 @@
 import _ from "lodash";
-import * as PIXI from "pixi.js";
-import { Position } from "../components";
-import { getEntityData } from "./ecsHelpers";
+import * as PIXI from "pixi.js-legacy";
+import { Position } from "../ecs/components";
+import { getEntityData } from "../ecs/ecsHelpers";
 import { grid } from "./grid";
 import * as gfx from "./graphics";
 import { menloBoldAlphaMap } from "../../static/fonts/menlo-bold.map";
@@ -49,6 +49,7 @@ export const getAsciTexture = ({ char }) => {
 const containers = {};
 const containerNames = [
   "legend",
+  "build",
   "fps",
   "map",
   "ambiance",
@@ -84,6 +85,7 @@ containerNames.forEach((name) => {
 const uiSprites = {};
 const uiSpriteContainerNames = [
   "legend",
+  "build",
   "fps",
   "ambiance",
   "adventureLog",
@@ -118,7 +120,7 @@ export const addSprite = ({
     sprite,
     {
       renderable: false,
-      interactive: true,
+      interactive: false,
       tint,
     },
     options,
@@ -224,6 +226,11 @@ export const initUi = () => {
         initUiRow({ container: name, row: i });
       }
     });
+  });
+
+  printRow({
+    container: "build",
+    str: `TAG: ${process.env.GIT_REV}`,
   });
 };
 

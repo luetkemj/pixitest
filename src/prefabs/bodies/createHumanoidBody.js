@@ -1,5 +1,5 @@
-import { addComponent, addEntity } from "bitecs";
-import { fillFirstEmptySlot } from "../../lib/ecsHelpers";
+import { addComponent } from "bitecs";
+import { fillFirstEmptySlot } from "../../ecs/ecsHelpers";
 import {
   BelongsTo,
   Body,
@@ -11,10 +11,11 @@ import {
   Wieldable,
   Wielding,
   Zindex,
-} from "../../components";
+} from "../../ecs/components";
+import { createEntity } from "../../ecs/ecsHelpers";
 
-const createEntity = (world, name, description) => {
-  const eid = addEntity(world);
+const makeEntity = (world, name, description) => {
+  const eid = createEntity(world);
   world.meta[eid] = {};
   world.meta[eid].name = name;
   world.meta[eid].description = description;
@@ -23,16 +24,16 @@ const createEntity = (world, name, description) => {
 
 export const createHumanoidBody = (world, parentEid) => {
   // create part entities
-  const torsoEid = createEntity(world, "Torso", "A torso");
-  const headEid = createEntity(world, "Head", "A head");
-  const armLeftEid = createEntity(world, "Left Arm", "A left arm");
-  const armRightEid = createEntity(world, "Right Arm", "A right arm");
-  const legLeftEid = createEntity(world, "Left Leg", "A left leg");
-  const legRightEid = createEntity(world, "Right Leg", "A right leg");
-  const handLeftEid = createEntity(world, "Left Hand", "A left hand");
-  const handRightEid = createEntity(world, "Right Hand", "A right hand");
-  const footLeftEid = createEntity(world, "Left Foot", "A left foot");
-  const footRightEid = createEntity(world, "Right Foot", "A right foot");
+  const torsoEid = makeEntity(world, "Torso", "A torso");
+  const headEid = makeEntity(world, "Head", "A head");
+  const armLeftEid = makeEntity(world, "Left Arm", "A left arm");
+  const armRightEid = makeEntity(world, "Right Arm", "A right arm");
+  const legLeftEid = makeEntity(world, "Left Leg", "A left leg");
+  const legRightEid = makeEntity(world, "Right Leg", "A right leg");
+  const handLeftEid = makeEntity(world, "Left Hand", "A left hand");
+  const handRightEid = makeEntity(world, "Right Hand", "A right hand");
+  const footLeftEid = makeEntity(world, "Left Foot", "A left foot");
+  const footRightEid = makeEntity(world, "Right Foot", "A right foot");
 
   // add components to each part
   const bodyParts = [

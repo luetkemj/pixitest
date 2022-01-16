@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { addComponent, addEntity } from "bitecs";
+import { addComponent } from "bitecs";
 import * as gfx from "../lib/graphics";
 import { meta } from "../lib/meta";
 
@@ -17,17 +17,17 @@ import {
   Strength,
   Wieldable,
   Zindex,
-} from "../components";
+} from "../ecs/components";
 
 import { createHumanoidBody } from "./bodies/createHumanoidBody";
 
 import { addSprite } from "../lib/canvas";
-import { updatePosition } from "../lib/ecsHelpers";
+import { createEntity, updatePosition } from "../ecs/ecsHelpers";
 
 export const createGoblin = (world, options) => {
   const { x, y, z } = options;
 
-  const eid = addEntity(world);
+  const eid = createEntity(world);
   addComponent(world, Position, eid);
   addComponent(world, Blocking, eid);
   addComponent(world, Body, eid);

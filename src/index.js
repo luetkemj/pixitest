@@ -1,12 +1,12 @@
 import _ from "lodash";
-import { defineQuery } from "bitecs";
-import { PC } from "./components";
+import { defineQuery, setDefaultSize } from "bitecs";
+import { PC } from "./ecs/components";
 import {
   pipelinePlayerTurn,
   pipelineWorldTurn,
   uiPipeline,
   debugPipeline,
-} from "./pipelines";
+} from "./ecs/pipelines";
 
 import { processUserInput } from "./lib/userInput";
 
@@ -14,12 +14,17 @@ import { initWorld } from "./lib/initWorld";
 import { loadSprites, initUi, printRow } from "./lib/canvas";
 import { grid } from "./lib/grid";
 
+// set max world size (entity count and component stores)
+setDefaultSize(1000000);
+
 // pixi loader load all the sprites and initialize game
 const loader = loadSprites(initGame);
 
 const state = {
-  mode: "GAME",
-  looking: null,
+  ambientLog: [],
+  debug: false,
+  floors: {},
+  fps: 0,
   inventory: {
     columnIndex: 0,
     inventoryListIndex: 0,
@@ -27,20 +32,27 @@ const state = {
     selectedInventoryItemEid: "",
     selectedInReachItemEid: "",
   },
-  world: {},
-  pcEnts: [],
-  userInput: "",
-  turn: "",
-  debug: false,
-  ambientLog: [],
   log: {
     log: [],
     rowIndex: 0,
   },
+  looking: null,
+  maps: {
+    zoom: "local",
+    mapId: "0,0,0",
+    local: {},
+  },
+  mode: "GAME",
+  pcEnts: [],
   tick: 0,
-  fps: 0,
+  turn: "",
+  userInput: "",
+  world: {},
+  z: 0,
   RESETTING_DEBUG: true,
 };
+
+window.state = state;
 
 export const setState = (callback) => {
   callback(state);
@@ -151,17 +163,17 @@ function initGame() {
     });
   });
 
-  document.querySelector("#debug").addEventListener("click", () => {
-    setState((state) => {
-      state.debug = !state.debug;
-    });
+  // document.querySelector("#debug").addEventListener("click", () => {
+  //   setState((state) => {
+  //     state.debug = !state.debug;
+  //   });
 
-    const { debug } = getState();
+  //   const { debug } = getState();
 
-    if (!debug) {
-      setState((state) => {
-        state.RESETTING_DEBUG = true;
-      });
-    }
-  });
+  //   if (!debug) {
+  //     setState((state) => {
+  //       state.RESETTING_DEBUG = true;
+  //     });
+  //   }
+  // });
 }

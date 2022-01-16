@@ -1,19 +1,27 @@
 import { addComponent } from "bitecs";
 import { MoveTo, Position } from "../components";
-import { aStar } from "../lib/pathfinding";
+import { aStar } from "../../lib/pathfinding";
 import { aiQuery, pcQuery } from "../queries";
 
 const moveToTarget = (world, eid, targetEid) => {
-  const startPos = { x: Position.x[eid], y: Position.y[eid], z: 0 };
+  const startPos = {
+    x: Position.x[eid],
+    y: Position.y[eid],
+    z: Position.z[eid],
+  };
   const targetPos = {
     x: Position.x[targetEid],
     y: Position.y[targetEid],
-    z: 0,
+    z: Position.z[targetEid],
   };
   const path = aStar(world, startPos, targetPos);
+  // for debugging that is currently disabled/broken
   world.meta[eid].ai.path = path;
   world.meta[eid].ai.pathAlgo = "aStar";
 
+  // !!todo BUG
+  // There is a bug where path can undefined and everything blows up
+  if (!path) return;
   const newLoc = path[1];
 
   if (newLoc) {
@@ -28,6 +36,8 @@ const moveToTarget = (world, eid, targetEid) => {
 export const aiSystem = (world) => {
   const ents = aiQuery(world);
   const pcEnts = pcQuery(world);
+
+  console.log(ents.length);
 
   for (let i = 0; i < ents.length; i++) {
     const eid = ents[i];

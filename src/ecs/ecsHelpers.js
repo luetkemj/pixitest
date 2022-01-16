@@ -1,7 +1,21 @@
 import _ from "lodash";
-import * as Components from "../components";
-import { Body, Pickupable, Position, Wielding } from "../components";
-import { hasComponent, removeComponent, removeEntity } from "bitecs";
+import { getState, setState } from "../index";
+import * as Components from "./components";
+import {
+  Body,
+  Inventory,
+  OnCurrentMap,
+  Pickupable,
+  Position,
+  Wielding,
+} from "./components";
+import {
+  addComponent,
+  addEntity,
+  hasComponent,
+  removeComponent,
+  removeEntity,
+} from "bitecs";
 import { getNeighborIds } from "../lib/grid";
 
 export const findEmptySlot = ({ component, containerEid }) => {
@@ -60,7 +74,29 @@ export const updatePosition = ({
   Position.z[eid] = newPos.z;
 };
 
+export const createEntity = (world) => {
+  const {
+    maps: { mapId, zoom },
+  } = getState();
+
+  const eid = addEntity(world);
+
+  if (!getState().maps[zoom][mapId]) {
+    setState((state) => (state.maps[zoom][mapId] = new Set()));
+  }
+  setState((state) => state.maps[zoom][mapId].add(eid));
+  addComponent(world, OnCurrentMap, eid);
+
+  return eid;
+};
+
 export const deleteEntity = (world, eid) => {
+  const {
+    maps: { mapId, zoom },
+  } = getState();
+  const currentMap = getState().maps[zoom][mapId];
+  currentMap.delete(eid);
+
   removeEntity(world, eid);
 };
 
@@ -79,6 +115,28 @@ export const walkInventoryTree = (world, eid, inventoryComponent, func) => {
     });
   };
   walkTree(eid);
+};
+
+// return all eids in rootEid inventory with all associated body parts
+export const getRelatedEids = (world, eid) => {
+  const eids = new Set();
+  eids.add(eid);
+
+  // get all inventory items recursively
+  walkInventoryTree(world, eid, Inventory, (currentEid) => {
+    // eids.push(currentEid);
+    eids.add(currentEid);
+  });
+
+  // get all body parts or all collected eids
+  eids.forEach((iEid) => {
+    walkInventoryTree(world, iEid, Body, (currentEid) => {
+      // eids.push(currentEid);
+      eids.add(currentEid);
+    });
+  });
+
+  return [...eids];
 };
 
 export const getEntityAnatomy = (world, eid) => {
@@ -164,4 +222,12 @@ export const getEquipped = (world, eid) => {
     }
   });
   return equipped;
+};
+
+// change current map
+// remove OnCurrentMap Component from entities on current map
+export const removeComponentFromEntities = (world, component, eids) => {
+  for (const eid of eids) {
+    removeComponent(world, component, eid);
+  }
 };

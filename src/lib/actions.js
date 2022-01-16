@@ -1,9 +1,15 @@
 import _ from "lodash";
 import { addLog, getState, setState } from "../index";
-import { pipelineFovRender } from "../pipelines";
+import { pipelineFovRender } from "../ecs/pipelines";
 import { addComponent, removeComponent, hasComponent } from "bitecs";
-import { deleteEntity, getWielders, updatePosition } from "./ecsHelpers";
-import { idToCell, getNeighborIds } from "./grid";
+import {
+  deleteEntity,
+  getRelatedEids,
+  getWielders,
+  removeComponentFromEntities,
+  updatePosition,
+} from "../ecs/ecsHelpers";
+import { cellToId, idToCell, getNeighborIds } from "./grid";
 import {
   Blocking,
   Droppable,
@@ -11,12 +17,115 @@ import {
   InFov,
   Inventory,
   Liquid,
+  OnCurrentMap,
   Pickupable,
   Position,
   Wieldable,
   Wielding,
-} from "../components";
-import * as Components from "../components";
+} from "../ecs/components";
+import * as Components from "../ecs/components";
+import { generateDungeonFloor } from "./generators/dungeonfloor";
+
+const useStairs = (world, eid, dir) => {
+  const { floors, z } = getState();
+  const locId = `${Position.x[eid]},${Position.y[eid]},${Position.z[eid]}`;
+  const stairsUpOrDown = `stairs${dir}`;
+
+  const floor = floors[z];
+  if (!floor) {
+    return console.log(`no floor at ${z}`);
+  }
+
+  if (!floor[stairsUpOrDown]) {
+    return console.log(`no stairs up on this floor`);
+  }
+
+  if (locId !== floor[stairsUpOrDown]) {
+    return console.log(`no stairs ${dir} at ${locId}`);
+  }
+
+  // to change map
+
+  // add one to z if going up, subtract if going down
+  // !!TODO get rid of storing z in state here - just get it from mapId
+  const newZ = dir === "Up" ? z + 1 : z - 1;
+  const stairs = dir === "Up" ? "stairsUp" : "stairsDown";
+
+  // remove OnCurrentMap component from all eids on current level
+  const currentMapId = getState().maps.mapId;
+  const currentMapZoom = getState().maps.zoom;
+  const eidsOnCurrentMap = getState().maps[currentMapZoom][currentMapId];
+  removeComponentFromEntities(world, OnCurrentMap, [...eidsOnCurrentMap]);
+
+  // hide sprites on previous floor
+  eidsOnCurrentMap.forEach((id) => {
+    if (world.sprites[id]) {
+      world.sprites[id].renderable = false;
+    }
+  });
+
+  // get relatedEids for any root entities (player or monsters) moving from one map to another
+  const relatedEids = getRelatedEids(world, eid);
+
+  // remove all relatedEids from previous map
+  relatedEids.forEach((rEid) => eidsOnCurrentMap.delete(rEid));
+
+  // update mapId in state
+  setState((state) => {
+    const oldMapId = idToCell(currentMapId);
+    oldMapId.z = newZ;
+    const newMapId = cellToId(oldMapId);
+    state.maps.mapId = newMapId;
+  });
+
+  // create new map if needed
+  if (floors[newZ]) {
+    updatePosition({
+      world,
+      eid,
+      oldPos: idToCell(locId),
+      newPos: idToCell(floors[newZ][stairs]),
+    });
+  } else {
+    const { floor } = generateDungeonFloor({
+      world,
+      z: newZ,
+      stairsUp: true,
+      stairsDown: true,
+    });
+    updatePosition({
+      world,
+      eid,
+      oldPos: idToCell(locId),
+      newPos: idToCell(floor[stairs]),
+    });
+  }
+
+  // add all relatedEids to new map
+  const newMapId = getState().maps.mapId;
+  const newMapZoom = getState().maps.zoom;
+  const eidsOnNewMap = getState().maps[newMapZoom][newMapId];
+  relatedEids.forEach((rEid) => {
+    eidsOnNewMap.add(rEid);
+  });
+
+  // update the currentMap id in state
+  eidsOnNewMap.forEach((id) => {
+    addComponent(world, OnCurrentMap, id);
+  });
+
+  // update z in state
+  // !!todo: don't read z from state here - do it from the current mapId (don't store this is multiple places)
+  setState((state) => (state.z = newZ));
+};
+
+export const ascend = (world, eid) => {
+  useStairs(world, eid, "Up");
+};
+
+export const descend = (world, eid) => {
+  useStairs(world, eid, "Down");
+};
 
 export const get = (world, eid, itemEid) => {
   if (!hasComponent(world, Inventory, eid)) {

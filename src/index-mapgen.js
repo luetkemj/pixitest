@@ -1,4 +1,4 @@
-import * as PIXI from "pixi.js";
+import * as PIXI from "pixi.js-legacy";
 import _ from "lodash";
 import { grid } from "./lib/grid";
 import { makeNoise } from "./lib/worldgen";

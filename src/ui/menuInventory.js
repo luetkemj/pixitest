@@ -3,7 +3,7 @@ import { getState, setState } from "../index";
 import wrapAnsi from "wrap-ansi";
 import { hasComponent } from "bitecs";
 import { printRow } from "../lib/canvas";
-import { getEquipped, gettableEntitiesInReach } from "../lib/ecsHelpers";
+import { getEquipped, gettableEntitiesInReach } from "../ecs/ecsHelpers";
 import { getNeighborIds } from "../lib/grid";
 import {
   BelongsTo,
@@ -13,7 +13,7 @@ import {
   Inventory,
   Position,
   Wieldable,
-} from "../components";
+} from "../ecs/components";
 
 const renderInventoryList = (world, pcEid) => {
   const { inventory } = getState();

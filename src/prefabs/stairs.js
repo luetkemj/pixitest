@@ -2,33 +2,24 @@ import _ from "lodash";
 import { addComponent } from "bitecs";
 import * as gfx from "../lib/graphics";
 import { meta } from "../lib/meta";
-import {
-  Droppable,
-  Effects,
-  Liquid,
-  Legendable,
-  Pickupable,
-  Position,
-  Zindex,
-} from "../ecs/components";
+
+import { Legendable, Stairs, Position, Zindex } from "../ecs/components";
+
 import { addSprite } from "../lib/canvas";
 import { createEntity, updatePosition } from "../ecs/ecsHelpers";
 
-export const createHealthPotion = (world, options) => {
-  const { x, y, z } = options;
+export const createStairs = (world, options) => {
+  const { x, y, z, toZ, dir = "DOWN" } = options;
 
   const eid = createEntity(world);
-  addComponent(world, Liquid, eid);
-  addComponent(world, Droppable, eid);
-  addComponent(world, Effects, eid);
   addComponent(world, Legendable, eid);
-  addComponent(world, Pickupable, eid);
   addComponent(world, Position, eid);
-  addComponent(world, Zindex, eid);
-  Zindex.zIndex[eid] = 20;
 
-  Effects.Health[eid] = 5;
-  Effects.Strength[eid] = 0;
+  addComponent(world, Zindex, eid);
+  Zindex.zIndex[eid] = 11;
+
+  addComponent(world, Stairs, eid);
+  Stairs.toZ[eid] = toZ;
 
   updatePosition({
     world,
@@ -36,14 +27,16 @@ export const createHealthPotion = (world, options) => {
     eid: eid,
   });
 
+  const stairsUpOrDown = dir === "DOWN" ? "stairsDown" : "stairsUp";
+
   addSprite({
-    texture: gfx.chars.potion,
+    texture: gfx.chars[stairsUpOrDown],
     world,
     eid: eid,
     options: {
-      tint: gfx.colors.potion,
+      tint: gfx.colors.stairs,
     },
   });
 
-  world.meta[eid] = meta.healthPotion;
+  world.meta[eid] = meta[stairsUpOrDown];
 };

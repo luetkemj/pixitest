@@ -1,10 +1,10 @@
 import { getState, setState } from "../index";
-import { Inventory, Position } from "../components";
+import { Inventory, Position } from "../ecs/components";
 import {
   getWielder,
   gettableEntitiesInReach,
   walkInventoryTree,
-} from "./ecsHelpers";
+} from "../ecs/ecsHelpers";
 import { drop, get, quaff, unwield, wield } from "./actions";
 import { grid } from "./grid";
 
@@ -14,6 +14,8 @@ const gameplayControls = [
   "ArrowDown",
   "ArrowLeft",
   "g",
+  "<",
+  ">",
 ];
 
 const uiControls = ["Escape", "c", "i", "k", "l", "Shift"];

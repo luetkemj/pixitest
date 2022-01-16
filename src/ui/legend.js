@@ -1,8 +1,8 @@
 import _ from "lodash";
 import { clearContainer, printRow, printTemplate } from "../lib/canvas";
 import { distance } from "../lib/grid";
-import { getEntityData } from "../lib/ecsHelpers";
-import { Health, Position } from "../components";
+import { getEntityData } from "../ecs/ecsHelpers";
+import { Health, Position } from "../ecs/components";
 
 const container = "legend";
 
