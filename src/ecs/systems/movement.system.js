@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { addComponent, hasComponent, removeComponent } from "bitecs";
-import { addLog } from "../../index";
+import { addLog, getState } from "../../index";
 import {
   Ai,
   Blocking,
@@ -109,7 +109,7 @@ export const movementSystem = (world) => {
     }
 
     // check if blocked
-    world.eAtPos[`${newPos.x},${newPos.y},${newPos.z}`].forEach((e) => {
+    getState().eAtPos[`${newPos.x},${newPos.y},${newPos.z}`].forEach((e) => {
       if (hasComponent(world, Blocking, e)) {
         canMove = false;
 

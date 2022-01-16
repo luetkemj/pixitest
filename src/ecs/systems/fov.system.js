@@ -47,7 +47,7 @@ export const fovSystem = (world) => {
   }
 
   FOV.fov.forEach((locId) => {
-    const eAtPos = world.eAtPos[`${locId},${z}`];
+    const eAtPos = getState().eAtPos[`${locId},${z}`];
 
     if (eAtPos) {
       eAtPos.forEach((eidAtPos) => {

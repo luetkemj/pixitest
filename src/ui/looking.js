@@ -3,6 +3,7 @@ import { Position } from "../ecs/components";
 import { clearContainer, printRow } from "../lib/canvas";
 import { getEntityData } from "../ecs/ecsHelpers";
 import { renderAmbiance } from "./ambiance";
+import { getState } from "../index";
 
 export const renderLooking = (world, pcEid) => {
   let x;
@@ -33,7 +34,7 @@ export const renderLooking = (world, pcEid) => {
   const pos = `${x},${y},0`;
   let str = "";
 
-  world.eAtPos[pos].forEach((e) => {
+  getState().eAtPos[pos].forEach((e) => {
     const entityData = getEntityData(world, e);
 
     if (!entityData.components.InFov && !entityData.components.Revealed) {

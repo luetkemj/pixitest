@@ -8,7 +8,7 @@ import {
   getEntityComponents,
   hasComponent,
 } from "bitecs";
-import { getState } from "../index";
+import { getState, setState } from "../index";
 import {
   createEntity,
   deleteEntity,
@@ -73,14 +73,17 @@ describe("updatePosition", () => {
   beforeEach(() => {
     world = createWorld();
     eid = createEntity(world);
+    setState((state) => (state = { eAtPos: {} }));
   });
 
   afterEach(() => {
     resetWorld(world);
     deleteWorld(world);
+    setState((state) => (state = { eAtPos: {} }));
   });
 
-  describe("when world.eAtPos doesn't exist yet", () => {
+  // is this test still needed? eAtPos is initiated in state...
+  describe("when getState().eAtPos doesn't exist yet", () => {
     it("should work", () => {
       const newPos = { x: 1, y: 1, z: 0 };
       const newLocId = `1,1,0`;
@@ -90,7 +93,7 @@ describe("updatePosition", () => {
       const p = { x: Position.x[eid], y: Position.y[eid], z: Position.z[eid] };
 
       expect(p).toEqual(newPos);
-      expect(world.eAtPos[newLocId].has(eid)).toBe(true);
+      expect(getState().eAtPos[newLocId].has(eid)).toBe(true);
     });
   });
 
@@ -106,8 +109,8 @@ describe("updatePosition", () => {
       const p = { x: Position.x[eid], y: Position.y[eid], z: Position.z[eid] };
 
       expect(p).toEqual(newPos);
-      expect(world.eAtPos[oldLocId].has(eid)).toBe(false);
-      expect(world.eAtPos[newLocId].has(eid)).toBe(true);
+      expect(getState().eAtPos[oldLocId].has(eid)).toBe(false);
+      expect(getState().eAtPos[newLocId].has(eid)).toBe(true);
     });
   });
 
@@ -123,8 +126,7 @@ describe("updatePosition", () => {
       updatePosition({ world, oldPos, eid, remove: true });
 
       expect(hasComponent(world, Position, eid)).toBe(false);
-      expect(world.eAtPos[oldLocId].has(eid)).toBe(false);
-      expect(world.sprites[eid].renderable).toBe(false);
+      expect(getState().eAtPos[oldLocId].has(eid)).toBe(false);
     });
   });
 });

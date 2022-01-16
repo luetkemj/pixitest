@@ -6,6 +6,7 @@ import { grid } from "./grid";
 import * as gfx from "./graphics";
 import { menloBoldAlphaMap } from "../../static/fonts/menlo-bold.map";
 import { menloBoldHalfAlphaMap } from "../../static/fonts/menlo-bold-half.map";
+import { getState } from "../index";
 
 // add PIXI to the window so the devtools work
 window.PIXI = PIXI;
@@ -132,7 +133,7 @@ export const addSprite = ({
     const y = Position.y[eid];
     const z = Position.z[eid];
     const pos = `${x},${y},${z}`;
-    world.eAtPos[pos].forEach((e) => console.log(getEntityData(world, e)));
+    getState().eAtPos[pos].forEach((e) => console.log(getEntityData(world, e)));
   });
 
   containers[container].addChild(world.sprites[eid]);

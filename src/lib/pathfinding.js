@@ -13,14 +13,14 @@ export const aStar = (world, start, goal) => {
   const matrix = [];
   times(grid.height, () => matrix.push(new Array(grid.width).fill(0)));
 
-  const locIds = Object.keys(world.eAtPos);
+  const locIds = Object.keys(getState().eAtPos);
 
   locIds.forEach((locId) => {
     const pos = toCell(locId);
 
     // need a way to optionally add remove blockers - like doors or other goblins.
     if (
-      some([...world.eAtPos[`${pos.x},${pos.y},${pos.z}`]], (eid) => {
+      some([...getState().eAtPos[`${pos.x},${pos.y},${pos.z}`]], (eid) => {
         return hasComponent(world, Blocking, eid);
       })
     ) {
