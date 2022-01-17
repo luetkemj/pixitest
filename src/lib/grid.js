@@ -225,19 +225,16 @@ export const getNeighborIds = (cellOrId, direction = "CARDINAL") => {
   }
 };
 
-export const isNeighbor = (a, b) => {
-  let posA = a;
-  if (typeof posA === "string") {
-    posA = idToCell(a);
+export const isNeighbor = (cell1, cell2) => {
+  const c1 = toCell(cell1);
+  const c2 = toCell(cell2);
+
+  if (c1.z !== c2.z) {
+    return false;
   }
 
-  let posB = b;
-  if (typeof posB === "string") {
-    posB = idToCell(b);
-  }
-
-  const { x: ax, y: ay } = posA;
-  const { x: bx, y: by } = posB;
+  const { x: ax, y: ay } = c1;
+  const { x: bx, y: by } = c2;
 
   if (
     (ax - bx === 1 && ay - by === 0) ||
@@ -251,19 +248,22 @@ export const isNeighbor = (a, b) => {
   return false;
 };
 
-export const randomNeighbor = (startX, startY) => {
+export const randomNeighbor = (cellOrId) => {
+  const cell = toCell(cellOrId);
   const direction = sample(CARDINAL);
-  const x = startX + direction.x;
-  const y = startY + direction.y;
-  return { x, y };
+  const x = cell.x + direction.x;
+  const y = cell.y + direction.y;
+  return { x, y, z: cell.z };
 };
 
-export const getNeighbor = (x, y, dir) => {
-  const dirMap = { N: 0, E: 1, S: 2, W: 3 };
-  const direction = CARDINAL[dirMap[dir]];
+export const getNeighbor = (cellOrId, dir) => {
+  const cell = toCell(cellOrId);
+  const dirMap = { N: 0, E: 1, S: 2, W: 3, NE: 4, SE: 5, SW: 6, NW: 7 };
+  const direction = ALL[dirMap[dir]];
   return {
-    x: x + direction.x,
-    y: y + direction.y,
+    x: cell.x + direction.x,
+    y: cell.y + direction.y,
+    z: cell.z,
   };
 };
 
