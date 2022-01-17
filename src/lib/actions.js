@@ -142,7 +142,9 @@ export const get = (world, eid, itemEid) => {
   // if itemEid pickup that, else attempt to pickup something at currrent location
   const pickupEid =
     itemEid ||
-    [...world.eAtPos[locId]].find((id) => hasComponent(world, Pickupable, id));
+    [...getState().eAtPos[locId]].find((id) =>
+      hasComponent(world, Pickupable, id)
+    );
 
   if (!pickupEid) {
     addLog("There is nothing to pickup.");
@@ -200,7 +202,7 @@ export const drop = (world, eid, itemEid, dir) => {
 
   const neighbors = getNeighborIds(currentLocId, "ALL");
   const openNeighbors = neighbors.map((neighbor) => {
-    const nEids = [...world.eAtPos[neighbor]];
+    const nEids = [...getState().eAtPos[neighbor]];
     const isBlocked = _.some(nEids, (e) => hasComponent(world, Blocking, e));
     if (!isBlocked) {
       return neighbor;

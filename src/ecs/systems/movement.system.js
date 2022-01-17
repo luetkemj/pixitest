@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { addComponent, hasComponent, removeComponent } from "bitecs";
-import { addLog } from "../../index";
+import { addLog, getState, setState } from "../../index";
 import {
   Ai,
   Blocking,
@@ -18,6 +18,7 @@ import { getWielders, updatePosition } from "../ecsHelpers";
 import { grid } from "../../lib/grid";
 import * as gfx from "../../lib/graphics";
 import { movementQuery, pcQuery } from "../queries";
+import { dijkstra } from "../../lib/dijkstra";
 
 const kill = (world, eid) => {
   addComponent(world, Dead, eid);
@@ -109,7 +110,7 @@ export const movementSystem = (world) => {
     }
 
     // check if blocked
-    world.eAtPos[`${newPos.x},${newPos.y},${newPos.z}`].forEach((e) => {
+    getState().eAtPos[`${newPos.x},${newPos.y},${newPos.z}`].forEach((e) => {
       if (hasComponent(world, Blocking, e)) {
         canMove = false;
 
@@ -126,6 +127,12 @@ export const movementSystem = (world) => {
     // update position
     if (canMove) {
       updatePosition({ world, oldPos, newPos, eid });
+      // if moved and is player recalc the player dijkstra map
+      if (eid === pcEnts[0]) {
+        setState(
+          (state) => (state.dijkstra.player = dijkstra(world, [newPos]))
+        );
+      }
     }
 
     removeComponent(world, MoveTo, eid);

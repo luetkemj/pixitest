@@ -56,7 +56,7 @@ const renderEidIfOnTop = ({ eid, world, alpha = 1 }) => {
   }
 
   const locId = `${Position.x[eid]},${Position.y[eid]},${z}`;
-  const eAtPos = world.eAtPos[locId];
+  const eAtPos = getState().eAtPos[locId];
 
   // If only one item at location - render it
   if (eAtPos.size === 1) {
@@ -131,7 +131,7 @@ export const renderSystem = (world) => {
     const locId = `${Position.x[pcEnts[0]]},${Position.y[pcEnts[0]]},${
       Position.z[pcEnts[0]]
     }`;
-    const eAtPos = world.eAtPos[locId];
+    const eAtPos = getState().eAtPos[locId];
     const stack = _.orderBy([...eAtPos], (eid) => Zindex.zIndex[eid], "desc");
     const msg = world.meta[stack[1]].description;
     setState((state) => (state.ambientLog = [{ str: msg }]));

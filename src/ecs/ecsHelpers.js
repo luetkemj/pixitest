@@ -42,16 +42,13 @@ export const updatePosition = ({
   eid,
   remove = false,
 }) => {
-  if (!world.eAtPos) {
-    world.eAtPos = {};
-  }
-
+  const { eAtPos } = getState();
   const newLoc = `${newPos.x},${newPos.y},${newPos.z}`;
   const oldLoc = `${oldPos.x},${oldPos.y},${oldPos.z}`;
 
   // remove old pos
-  if (world.eAtPos[oldLoc]) {
-    world.eAtPos[oldLoc].delete(eid);
+  if (eAtPos[oldLoc]) {
+    eAtPos[oldLoc].delete(eid);
   }
 
   if (remove) {
@@ -62,11 +59,11 @@ export const updatePosition = ({
   }
 
   // add / update new position
-  if (world.eAtPos[newLoc]) {
-    world.eAtPos[newLoc].add(eid);
+  if (eAtPos[newLoc]) {
+    eAtPos[newLoc].add(eid);
   } else {
-    world.eAtPos[newLoc] = new Set();
-    world.eAtPos[newLoc].add(eid);
+    eAtPos[newLoc] = new Set();
+    eAtPos[newLoc].add(eid);
   }
 
   Position.x[eid] = newPos.x;
@@ -178,7 +175,7 @@ export const gettableEntitiesInReach = (world, locId) => {
   const neighbors = [...getNeighborIds(locId, "ALL"), locId];
   return _.flatMap(
     neighbors.map((lId) => {
-      const eAtLoc = [...world.eAtPos[lId]];
+      const eAtLoc = [...getState().eAtPos[lId]];
       return eAtLoc.filter((eid) => hasComponent(world, Pickupable, eid));
     })
   );

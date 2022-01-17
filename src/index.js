@@ -23,6 +23,10 @@ const loader = loadSprites(initGame);
 const state = {
   ambientLog: [],
   debug: false,
+  dijkstra: {
+    player: {},
+  },
+  eAtPos: {},
   floors: {},
   fps: 0,
   inventory: {
