@@ -47,6 +47,7 @@ const state = {
     local: {},
   },
   mode: "GAME",
+  debugMode: "",
   pcEnts: [],
   tick: 0,
   turn: "",

@@ -16,6 +16,7 @@ import { renderMenuCharacter } from "../../ui/menuCharacter";
 import { renderMenuInventory } from "../../ui/menuInventory";
 import { renderMenuLog } from "../../ui/menuLog";
 import { renderLooking } from "../../ui/looking";
+import { renderDijkstraViz } from "../../ui/dijkstraViz";
 import {
   inFovQuery,
   revealedQuery,
@@ -145,6 +146,15 @@ export const renderSystem = (world) => {
   // hide menu and overlay
   hideContainer("menu");
   hideContainer("overlay");
+
+  // render DijkstraViz
+  if (getState().debugMode === "DIJKSTRA") {
+    clearContainer("overlay");
+    showContainer("overlay");
+    renderDijkstraViz();
+  } else {
+    clearContainer("overlay");
+  }
 
   // do overlay things
   if (["LOOKING"].includes(mode)) {

@@ -139,7 +139,7 @@ export const addSprite = ({
   containers[container].addChild(world.sprites[eid]);
 };
 
-const printCell = ({
+export const printCell = ({
   container,
   x = 0,
   y = 0,
