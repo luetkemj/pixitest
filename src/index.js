@@ -24,7 +24,10 @@ const state = {
   ambientLog: [],
   debug: false,
   dijkstra: {
-    player: {},
+    player: {
+      goals: [],
+      map: {},
+    },
   },
   eAtPos: {},
   floors: {},

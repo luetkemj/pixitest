@@ -16,7 +16,7 @@ import {
   removeComponent,
   removeEntity,
 } from "bitecs";
-import { getNeighborIds } from "../lib/grid";
+import { getNeighborIds, toLocId } from "../lib/grid";
 
 export const findEmptySlot = ({ component, containerEid }) => {
   const slots = component.slots[containerEid];
@@ -227,4 +227,8 @@ export const removeComponentFromEntities = (world, component, eids) => {
   for (const eid of eids) {
     removeComponent(world, component, eid);
   }
+};
+
+export const queryAtLoc = (cellOrId, func) => {
+  getState().eAtPos[toLocId(cellOrId)].forEach(func);
 };

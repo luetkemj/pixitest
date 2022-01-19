@@ -129,9 +129,12 @@ export const movementSystem = (world) => {
       updatePosition({ world, oldPos, newPos, eid });
       // if moved and is player recalc the player dijkstra map
       if (eid === pcEnts[0]) {
-        setState(
-          (state) => (state.dijkstra.player = dijkstra(world, [newPos]))
-        );
+        setState((state) => {
+          state.dijkstra.player = {
+            map: dijkstra(world, [newPos]),
+            goals: [newPos],
+          };
+        });
       }
     }
 

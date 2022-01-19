@@ -6,7 +6,7 @@ import { aiQuery, pcQuery } from "../queries";
 const moveToTarget = (world, eid, targetEid) => {
   const locId = `${Position.x[eid]},${Position.y[eid]},${Position.z[eid]}`;
 
-  const newLoc = walkDijkstra(locId, "player");
+  const newLoc = walkDijkstra(world, locId, "player");
 
   if (newLoc.hasOwnProperty("x")) {
     addComponent(world, MoveTo, eid);
