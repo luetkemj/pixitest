@@ -41,6 +41,18 @@ export const processUserInput = (world) => {
 
   const { key, shiftKey } = userInput;
 
+  // DEBUG VIZ DIJKSTRA
+  // Might be nice to have a debug menu at some point for tweaking values in game...
+  if (key === "D") {
+    setState((state) => {
+      if (getState().debugMode === "DIJKSTRA") {
+        state.debugMode = "";
+      } else {
+        state.debugMode = "DIJKSTRA";
+      }
+    });
+  }
+
   // Game modes must be used in the gameLoop() to processUserInput and call pipelines.
   // if you don't the game will hang and never process user input
   if (key === "Escape") {
