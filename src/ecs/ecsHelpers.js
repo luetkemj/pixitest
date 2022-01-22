@@ -16,7 +16,7 @@ import {
   removeComponent,
   removeEntity,
 } from "bitecs";
-import { getNeighborIds } from "../lib/grid";
+import { getNeighborIds, toLocId } from "../lib/grid";
 
 export const findEmptySlot = ({ component, containerEid }) => {
   const slots = component.slots[containerEid];
@@ -69,6 +69,15 @@ export const updatePosition = ({
   Position.x[eid] = newPos.x;
   Position.y[eid] = newPos.y;
   Position.z[eid] = newPos.z;
+
+  // store location history on meta
+  if (!_.get(world, `meta[${eid}].locHistory`)) {
+    _.set(world, `meta[${eid}].locHistory`, []);
+  }
+  world.meta[eid].locHistory.push(newLoc);
+  if (world.meta[eid].locHistory.length > 2) {
+    world.meta[eid].locHistory.shift();
+  }
 };
 
 export const createEntity = (world) => {
@@ -227,4 +236,8 @@ export const removeComponentFromEntities = (world, component, eids) => {
   for (const eid of eids) {
     removeComponent(world, component, eid);
   }
+};
+
+export const queryAtLoc = (cellOrId, func) => {
+  getState().eAtPos[toLocId(cellOrId)].forEach(func);
 };

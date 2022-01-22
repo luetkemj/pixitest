@@ -1,23 +1,29 @@
 import _ from "lodash";
 import { getState } from "../index";
 import { printCell } from "../lib/canvas";
-import { toCell } from "../lib/grid";
+import { toCell, toLocId } from "../lib/grid";
 import * as gfx from "../lib/graphics";
 
 const container = "overlay";
 
 export const renderDijkstraViz = () => {
-  _.each(getState().dijkstra.player, (val, locId) => {
+  const { map, goals } = getState().dijkstra.player;
+
+  const goalIds = goals.map(toLocId);
+
+  _.each(map, (val, locId) => {
     const { x, y } = toCell(locId);
 
-    printCell({
-      container,
-      x,
-      y,
-      char: charMap[val] || "*",
-      halfWidth: false,
-      color: colorMap[val] || gfx.colors.default,
-    });
+    if (!goalIds.includes(toLocId(locId))) {
+      printCell({
+        container,
+        x,
+        y,
+        char: charMap[val] || "*",
+        halfWidth: false,
+        color: colorMap[val] || gfx.colors.default,
+      });
+    }
   });
 };
 
