@@ -6,6 +6,14 @@ import { aiQuery, pcQuery } from "../queries";
 const moveToTarget = (world, eid, targetEid) => {
   const locId = `${Position.x[eid]},${Position.y[eid]},${Position.z[eid]}`;
 
+  // check locHistory - don't move if newLoc was moved just moved to.
+  // may this when it's time to astar?
+  const locHistory = _.get(world, `meta[${eid}].locHistory`, []);
+  if (locHistory[1] === locId) {
+    // console.log({ locHistory, locId });
+    return;
+  }
+
   const newLoc = walkDijkstra(world, locId, "player");
 
   if (newLoc.hasOwnProperty("x")) {

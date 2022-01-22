@@ -69,6 +69,15 @@ export const updatePosition = ({
   Position.x[eid] = newPos.x;
   Position.y[eid] = newPos.y;
   Position.z[eid] = newPos.z;
+
+  // store location history on meta
+  if (!_.get(world, `meta[${eid}].locHistory`)) {
+    _.set(world, `meta[${eid}].locHistory`, []);
+  }
+  world.meta[eid].locHistory.push(newLoc);
+  if (world.meta[eid].locHistory.length > 2) {
+    world.meta[eid].locHistory.shift();
+  }
 };
 
 export const createEntity = (world) => {

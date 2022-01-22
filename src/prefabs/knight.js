@@ -36,8 +36,8 @@ export const createKnight = (world, options) => {
   addComponent(world, Zindex, eid);
 
   FovRange.dist[eid] = 10;
-  Health.max[eid] = 10;
-  Health.current[eid] = 10;
+  Health.max[eid] = 1000;
+  Health.current[eid] = 1000;
   Intelligence.max[eid] = 10;
   Intelligence.current[eid] = 10;
   Strength.max[eid] = 5;
