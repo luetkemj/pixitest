@@ -15,6 +15,8 @@ export const Effects = defineComponent({
   Strength: Types.i16,
 });
 export const Forgettable = defineComponent();
+
+// FovDistance and FovRange should use maxCurrent
 export const FovDistance = defineComponent({ dist: Types.ui8 });
 export const FovRange = defineComponent({ dist: Types.ui8 });
 export const Health = defineComponent(MaxCurrent);
@@ -22,7 +24,9 @@ export const Intelligence = defineComponent(MaxCurrent);
 export const InFov = defineComponent();
 export const Inventory = defineComponent({ slots: [Types.eid, 24] });
 export const Legendable = defineComponent();
+export const Lumens = defineComponent(MaxCurrent);
 export const Liquid = defineComponent();
+export const Lux = defineComponent(MaxCurrent);
 export const MoveTo = defineComponent(Vector3);
 export const OnCurrentMap = defineComponent();
 export const Opaque = defineComponent();

@@ -1,7 +1,14 @@
 import _ from "lodash";
 import { defineQuery, hasComponent, Not } from "bitecs";
 import { getState, setState } from "../../index";
-import { Dead, FovDistance, FovRange, Position, Zindex } from "../components";
+import {
+  Dead,
+  FovDistance,
+  FovRange,
+  Lux,
+  Position,
+  Zindex,
+} from "../components";
 import { grid } from "../../lib/grid";
 import {
   clearContainer,
@@ -103,6 +110,8 @@ export const renderSystem = (world) => {
     min: 0.3,
   });
 
+  // without revealed component - not resetting to 0.2 only showing at full alpha
+
   // DO FIELD OF VISION THINGS
   // Render revealed entities
   for (let i = 0; i < revealedEnts.length; i++) {
@@ -122,8 +131,15 @@ export const renderSystem = (world) => {
   }
   for (let i = 0; i < inFovEnts.length; i++) {
     const eid = inFovEnts[i];
-    const alpha = alphaMap[FovDistance.dist[eid]] || 0.23;
-    renderEidIfOnTop({ eid, world, alpha });
+
+    // if hasLux render
+    // else hide
+    if (hasComponent(world, Lux, eid)) {
+      const alpha = Lux.current[eid];
+      renderEidIfOnTop({ eid, world, alpha });
+    } else {
+      renderEid({ world, eid, renderable: false });
+    }
   }
 
   // check location of player and set the ambient log render

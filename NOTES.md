@@ -40,3 +40,28 @@ V2:
 - Getting items from backpack requires in game time where the game ticks on - can be interrupted. So not useful to try and grab something during a fight - should look instead to your belt
 - Money has weight
 - Will need to find a way to get vast sums of gold back to civilization where you can actually make use of it...
+
+## LIGHTING
+
+Lighting...
+give entities a light component.
+do a first pass lighting of all light sources on map
+only recalc for lightsources that have moved
+player has full map fov but only things that are lit should be visible.
+what to do about discovered tiles...
+lighting should play a part in if a player is spotted by a monster or not.
+remembered tiles can be navigated in pitchblack
+undiscovered can be navigated but you won't discover new things
+
+Lumens component
+a number that describes the output of a lightsources
+
+Lux component
+a number that describes the ambient light of a location
+
+store lighting in a locId map
+locId: { sources: [eid...], lux: n }
+
+just do the damn thing and worry about perfing later.
+
+Fuckit. Just light the whole damn map every damn time. Only calculating the alpha. See how that goes. perf later.

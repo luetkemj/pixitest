@@ -11,6 +11,7 @@ import {
   Intelligence,
   Inventory,
   Legendable,
+  Lumens,
   Position,
   Strength,
   Zindex,
@@ -32,10 +33,12 @@ export const createKnight = (world, options) => {
   addComponent(world, Intelligence, eid);
   addComponent(world, Inventory, eid);
   addComponent(world, Legendable, eid);
+  addComponent(world, Lumens, eid);
   addComponent(world, Strength, eid);
   addComponent(world, Zindex, eid);
 
-  FovRange.dist[eid] = 10;
+  // range is full width of map
+  FovRange.dist[eid] = 87;
   Health.max[eid] = 1000;
   Health.current[eid] = 1000;
   Intelligence.max[eid] = 10;
@@ -43,6 +46,9 @@ export const createKnight = (world, options) => {
   Strength.max[eid] = 5;
   Strength.current[eid] = 5;
   Zindex.zIndex[eid] = 30;
+
+  Lumens.max[eid] = 10;
+  Lumens.current[eid] = 10;
 
   createHumanoidBody(world, eid);
 

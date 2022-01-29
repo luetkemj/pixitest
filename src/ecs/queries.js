@@ -6,6 +6,8 @@ import {
   InFov,
   Intelligence,
   Legendable,
+  Lumens,
+  Lux,
   MoveTo,
   OnCurrentMap,
   Opaque,
@@ -24,6 +26,8 @@ export const forgettableQuery = defineQuery([
 ]);
 export const inFovQuery = defineQuery([OnCurrentMap, InFov, Position]);
 export const legendableQuery = defineQuery([OnCurrentMap, InFov, Legendable]);
+export const lumensQuery = defineQuery([OnCurrentMap, Lumens]);
+export const luxQuery = defineQuery([OnCurrentMap, Lux]);
 export const movementQuery = defineQuery([OnCurrentMap, Position, MoveTo]);
 export const opaqueQuery = defineQuery([OnCurrentMap, Opaque]);
 export const pcQuery = defineQuery([OnCurrentMap, PC]);
