@@ -117,7 +117,7 @@ export const renderSystem = (world) => {
     }
 
     if (isLit) {
-      const alpha = Lux.current[eid];
+      const alpha = Lux.current[eid] / 100;
       renderEidIfOnTop({ eid, world, alpha });
     }
 

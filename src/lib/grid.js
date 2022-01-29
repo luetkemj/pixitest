@@ -1,4 +1,4 @@
-import { sample } from "lodash";
+import _ from "lodash";
 
 export const grid = {
   width: 100,
@@ -250,7 +250,7 @@ export const isNeighbor = (cell1, cell2) => {
 
 export const randomNeighbor = (cellOrId) => {
   const cell = toCell(cellOrId);
-  const direction = sample(CARDINAL);
+  const direction = _.sample(CARDINAL);
   const x = cell.x + direction.x;
   const y = cell.y + direction.y;
   return { x, y, z: cell.z };

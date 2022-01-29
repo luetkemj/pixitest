@@ -1,10 +1,17 @@
-import { addComponent, removeComponent, removeEntity } from "bitecs";
+import _ from "lodash";
+import { addComponent, removeComponent } from "bitecs";
 import { Light, Lux, Position } from "../components";
 import { grid } from "../../lib/grid";
 import { createFOV } from "../../lib/fov";
 import { lightQuery, luxQuery, opaqueQuery } from "../queries";
 import { getState } from "../../index";
 import { queryAtLoc } from "../ecsHelpers";
+
+export const getLux = ({ dist, beam, lumens }) => {
+  const lm = lumens;
+  const step = lm / beam;
+  return lm - dist * step;
+};
 
 export const lightingSystem = (world) => {
   const lightSourceEnts = lightQuery(world);
@@ -48,7 +55,13 @@ export const lightingSystem = (world) => {
     FOV.fov.forEach((locId) => {
       queryAtLoc(`${locId},${z}`, (eidAtLoc) => {
         addComponent(world, Lux, eidAtLoc);
-        Lux.current[eidAtLoc] = 1;
+
+        const dist = FOV.distance[locId];
+        const beam = Light.beam[eid].current;
+        const lumens = Light.lumens[eid].current;
+
+        Lux.current[eidAtLoc] =
+          Lux.current[eidAtLoc] + getLux({ dist, beam, lumens });
       });
     });
   }

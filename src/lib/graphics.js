@@ -8,6 +8,8 @@ export const colors = {
   knight: 0xffffff,
   goblin: 0x81a842,
   blood: 0xb91906,
+  torchLit: 0xffd00e,
+  torchUnlit: 0x71331e,
 };
 
 export const chars = {
@@ -20,6 +22,7 @@ export const chars = {
   goblin: "g",
   stairsUp: "<",
   stairsDown: ">",
+  torch: "~",
 };
 
 // defaultBGColor: 0x000,

@@ -37,4 +37,9 @@ export const meta = {
     name: "stairs down",
     description: "Steps leading down",
   },
+
+  torch: {
+    name: "torch",
+    description: "A torch",
+  },
 };
