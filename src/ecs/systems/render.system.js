@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { hasComponent } from "bitecs";
 import { getState, setState } from "../../index";
-import { Dead, Lux, Position, Zindex } from "../components";
+import { Dead, Lux, Position, Revealed, Zindex } from "../components";
 import { grid } from "../../lib/grid";
 import {
   clearContainer,
@@ -17,7 +17,13 @@ import { renderMenuInventory } from "../../ui/menuInventory";
 import { renderMenuLog } from "../../ui/menuLog";
 import { renderLooking } from "../../ui/looking";
 import { renderDijkstraViz } from "../../ui/dijkstraViz";
-import { inFovQuery, pcQuery, legendableQuery } from "../queries";
+import {
+  inFovQuery,
+  revealedQuery,
+  forgettableQuery,
+  pcQuery,
+  legendableQuery,
+} from "../queries";
 
 let cellWidth;
 
@@ -76,8 +82,25 @@ const renderEid = ({ world, eid, renderable = true, alpha = 1 }) => {
 export const renderSystem = (world) => {
   const { mode } = getState();
   const inFovEnts = inFovQuery(world);
+
+  const revealedEnts = revealedQuery(world);
+  const forgettableEnts = forgettableQuery(world);
+
   const legendEnts = legendableQuery(world);
   const pcEnts = pcQuery(world);
+
+  // DO FIELD OF VISION THINGS
+  // Render revealed entities
+  for (let i = 0; i < revealedEnts.length; i++) {
+    const eid = revealedEnts[i];
+    renderEidIfOnTop({ eid, world, alpha: 0.2 });
+  }
+
+  // hide forgettable entities
+  for (let i = 0; i < forgettableEnts.length; i++) {
+    const eid = forgettableEnts[i];
+    renderEid({ world, eid, renderable: false });
+  }
 
   // RENDER OTHER MAP THINGS
   if (inFovEnts.length) {
@@ -86,12 +109,19 @@ export const renderSystem = (world) => {
   for (let i = 0; i < inFovEnts.length; i++) {
     const eid = inFovEnts[i];
 
-    // if hasLux render
-    // else hide
-    if (hasComponent(world, Lux, eid)) {
+    const isRevealed = hasComponent(world, Revealed, eid);
+    const isLit = hasComponent(world, Lux, eid);
+
+    if (isRevealed) {
+      renderEidIfOnTop({ eid, world, alpha: 0.2 });
+    }
+
+    if (isLit) {
       const alpha = Lux.current[eid];
       renderEidIfOnTop({ eid, world, alpha });
-    } else {
+    }
+
+    if (!isLit && !isRevealed) {
       renderEid({ world, eid, renderable: false });
     }
   }
