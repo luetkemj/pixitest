@@ -1,13 +1,13 @@
 import { addComponent, removeComponent, removeEntity } from "bitecs";
-import { Lumens, Lux, Position } from "../components";
+import { Light, Lux, Position } from "../components";
 import { grid } from "../../lib/grid";
 import { createFOV } from "../../lib/fov";
-import { lumensQuery, luxQuery, opaqueQuery, pcQuery } from "../queries";
+import { lightQuery, luxQuery, opaqueQuery } from "../queries";
 import { getState } from "../../index";
 import { queryAtLoc } from "../ecsHelpers";
 
 export const lightingSystem = (world) => {
-  const lightSourceEnts = lumensQuery(world);
+  const lightSourceEnts = lightQuery(world);
   const litEnts = luxQuery(world);
   const { z } = getState();
 
@@ -24,7 +24,7 @@ export const lightingSystem = (world) => {
     // Create FOV schema
     const { width, height } = grid;
     const origin = { x: Position.x[eid], y: Position.y[eid] };
-    const radius = Lumens.current[eid];
+    const radius = Light.beam[eid].current;
     const blockingLocations = new Set();
 
     const blockingEnts = opaqueQuery(world);

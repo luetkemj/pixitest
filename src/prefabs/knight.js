@@ -11,7 +11,7 @@ import {
   Intelligence,
   Inventory,
   Legendable,
-  Lumens,
+  Light,
   Position,
   Strength,
   Zindex,
@@ -33,7 +33,7 @@ export const createKnight = (world, options) => {
   addComponent(world, Intelligence, eid);
   addComponent(world, Inventory, eid);
   addComponent(world, Legendable, eid);
-  addComponent(world, Lumens, eid);
+  addComponent(world, Light, eid);
   addComponent(world, Strength, eid);
   addComponent(world, Zindex, eid);
 
@@ -47,8 +47,9 @@ export const createKnight = (world, options) => {
   Strength.current[eid] = 5;
   Zindex.zIndex[eid] = 30;
 
-  Lumens.max[eid] = 10;
-  Lumens.current[eid] = 10;
+  Light.lumens[eid] = { max: 100, current: 100 };
+  Light.beam[eid] = { max: 5, current: 5 };
+  Light.runtime[eid] = { max: 100, current: 100 };
 
   createHumanoidBody(world, eid);
 
