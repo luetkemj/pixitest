@@ -45,10 +45,6 @@ export const fovSystem = (world) => {
   for (let i = 0; i < inFovEnts.length; i++) {
     const eid = inFovEnts[i];
     removeComponent(world, InFov, eid);
-
-    if (!hasComponent(world, Revealed, eid)) {
-      world.sprites[eid].renderable = false;
-    }
   }
 
   FOV.fov.forEach((locId) => {
