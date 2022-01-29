@@ -1,14 +1,7 @@
 import _ from "lodash";
-import { defineQuery, hasComponent, Not } from "bitecs";
+import { hasComponent } from "bitecs";
 import { getState, setState } from "../../index";
-import {
-  Dead,
-  FovDistance,
-  FovRange,
-  Lux,
-  Position,
-  Zindex,
-} from "../components";
+import { Dead, Lux, Position, Zindex } from "../components";
 import { grid } from "../../lib/grid";
 import {
   clearContainer,
@@ -24,24 +17,9 @@ import { renderMenuInventory } from "../../ui/menuInventory";
 import { renderMenuLog } from "../../ui/menuLog";
 import { renderLooking } from "../../ui/looking";
 import { renderDijkstraViz } from "../../ui/dijkstraViz";
-import {
-  inFovQuery,
-  revealedQuery,
-  forgettableQuery,
-  pcQuery,
-  legendableQuery,
-} from "../queries";
+import { inFovQuery, pcQuery, legendableQuery } from "../queries";
 
 let cellWidth;
-
-const fovAlphaMap = ({ range, max = 1, min = 0.4 }) => {
-  const step = (max - min) / range;
-  const alphaMap = [1];
-  for (let index = 0; index < range; index++) {
-    alphaMap.push(alphaMap[alphaMap.length - 1] - step);
-  }
-  return alphaMap;
-};
 
 // check if entity at pos is top of zIndex layers (should it render)
 const isOnTop = (eid, eAtPos) => {
@@ -98,32 +76,8 @@ const renderEid = ({ world, eid, renderable = true, alpha = 1 }) => {
 export const renderSystem = (world) => {
   const { mode } = getState();
   const inFovEnts = inFovQuery(world);
-  const revealedEnts = revealedQuery(world);
-  const forgettableEnts = forgettableQuery(world);
   const legendEnts = legendableQuery(world);
   const pcEnts = pcQuery(world);
-
-  // build alpha map for rendering light source fading from player
-  const alphaMap = fovAlphaMap({
-    range: FovRange.dist[pcEnts[0]],
-    max: 1,
-    min: 0.3,
-  });
-
-  // without revealed component - not resetting to 0.2 only showing at full alpha
-
-  // DO FIELD OF VISION THINGS
-  // Render revealed entities
-  for (let i = 0; i < revealedEnts.length; i++) {
-    const eid = revealedEnts[i];
-    renderEidIfOnTop({ eid, world, alpha: 0.2 });
-  }
-
-  // hide forgettable entities
-  for (let i = 0; i < forgettableEnts.length; i++) {
-    const eid = forgettableEnts[i];
-    renderEid({ world, eid, renderable: false });
-  }
 
   // RENDER OTHER MAP THINGS
   if (inFovEnts.length) {
