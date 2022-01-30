@@ -123,7 +123,7 @@ export const addSprite = ({
       renderable: false,
       // interactive is DEBUG ONLY
       // big cause of slowdown in pixijs when ALL sprites are interactive
-      interactive: true,
+      interactive: false,
       tint,
     },
     options,
