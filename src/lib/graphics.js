@@ -10,6 +10,7 @@ export const colors = {
   blood: 0xb91906,
   torchLit: 0xffd00e,
   torchUnlit: 0x71331e,
+  tool: 0xdaa520,
 };
 
 export const chars = {
@@ -23,6 +24,7 @@ export const chars = {
   stairsUp: "<",
   stairsDown: ">",
   torch: "~",
+  tool: "~",
 };
 
 // defaultBGColor: 0x000,
