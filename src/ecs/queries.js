@@ -2,8 +2,8 @@ import { defineQuery, Not } from "bitecs";
 import {
   Ai,
   Broken,
+  Burning,
   Dead,
-  Durability,
   Forgettable,
   InFov,
   Intelligence,
@@ -20,8 +20,8 @@ import {
 } from "./components";
 
 export const aiQuery = defineQuery([OnCurrentMap, Ai, Intelligence]);
+export const burningQuery = defineQuery([OnCurrentMap, Burning]);
 export const deadPCQuery = defineQuery([OnCurrentMap, Dead, PC]);
-export const durabilityQuery = defineQuery([OnCurrentMap, Durability]);
 export const forgettableQuery = defineQuery([
   OnCurrentMap,
   Revealed,
