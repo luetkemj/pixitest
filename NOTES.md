@@ -65,3 +65,34 @@ locId: { sources: [eid...], lux: n }
 just do the damn thing and worry about perfing later.
 
 Fuckit. Just light the whole damn map every damn time. Only calculating the alpha. See how that goes. perf later.
+
+## EFFECTS
+
+effects array in meta that stores eids and their relevant components.
+
+```
+[
+  {
+    eid: torchEid
+    components: ['Lighting']
+  }
+]
+```
+
+on addEffect
+Add the component with params
+
+on removeEffect
+Remove component
+
+AFFECT / EFFECT
+Affects and Effects map one to one. Every entity has the same list of Effects (unless they are immune to something) but affects are the things an entity does to another.
+
+Affects on an entity denote what it can do to another Entity
+Effects on an entity denote what
+
+Looks to Effects array and
+Affects: {
+component: cName
+
+}

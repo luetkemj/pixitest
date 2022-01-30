@@ -18,8 +18,6 @@ import { addSprite } from "../lib/canvas";
 import { createEntity, updatePosition } from "../ecs/ecsHelpers";
 
 export const createTorch = (world, options) => {
-  const { x, y, z } = options;
-
   const eid = createEntity(world);
   addComponent(world, Damage, eid);
   addComponent(world, Droppable, eid);
@@ -36,13 +34,16 @@ export const createTorch = (world, options) => {
 
   Light.lumens[eid] = { max: 100, current: 100 };
   Light.beam[eid] = { max: 5, current: 5 };
-  Light.runtime[eid] = { max: 100, current: 100 };
 
-  updatePosition({
-    world,
-    newPos: { x, y, z },
-    eid: eid,
-  });
+  if (options) {
+    const { x, y, z } = options;
+
+    updatePosition({
+      world,
+      newPos: { x, y, z },
+      eid: eid,
+    });
+  }
 
   addSprite({
     texture: gfx.chars.torch,
@@ -54,4 +55,6 @@ export const createTorch = (world, options) => {
   });
 
   world.meta[eid] = meta.torch;
+
+  return eid;
 };

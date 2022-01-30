@@ -136,6 +136,18 @@ export const movementSystem = (world) => {
           };
         });
       }
+
+      // update position of items wielded
+      const wielders = getWielders(world, eid);
+      wielders.forEach((w) => {
+        const wieldedEid = w[1];
+        if (wieldedEid) {
+          addComponent(world, Position, wieldedEid);
+          Position.x[wieldedEid] = newPos.x;
+          Position.y[wieldedEid] = newPos.y;
+          Position.z[wieldedEid] = newPos.z;
+        }
+      });
     }
 
     removeComponent(world, MoveTo, eid);

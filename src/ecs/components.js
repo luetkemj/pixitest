@@ -25,13 +25,10 @@ export const InFov = defineComponent();
 export const Inventory = defineComponent({ slots: [Types.eid, 24] });
 export const Legendable = defineComponent();
 export const Lumens = defineComponent(MaxCurrent);
-
 export const Light = defineComponent({
   lumens: MaxCurrent,
   beam: MaxCurrent,
-  runtime: MaxCurrent,
 });
-
 export const Liquid = defineComponent();
 export const Lux = defineComponent(MaxCurrent);
 export const MoveTo = defineComponent(Vector3);
