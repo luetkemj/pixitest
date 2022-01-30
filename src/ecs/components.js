@@ -25,6 +25,7 @@ export const InFov = defineComponent();
 export const Inventory = defineComponent({ slots: [Types.eid, 24] });
 export const Legendable = defineComponent();
 export const Lumens = defineComponent(MaxCurrent);
+// todo: Break light up into seperate components
 export const Light = defineComponent({
   lumens: MaxCurrent,
   beam: MaxCurrent,
