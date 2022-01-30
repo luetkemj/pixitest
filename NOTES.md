@@ -92,7 +92,31 @@ Affects on an entity denote what it can do to another Entity
 Effects on an entity denote what
 
 Looks to Effects array and
-Affects: {
-component: cName
 
+```
+Affects: {
+  affectName: {
+    duration: 1 // n turns that effect takes place
+    componentName: { ...props }
+  }
 }
+
+Effects: {
+  effectName: {
+    duration: 1 // n turns that effect takes place
+  }
+}
+```
+
+burning
+
+resistance: burning
+
+durability: 100
+
+entropy system
+
+- check for burning items (reduce durability)
+- check for decaying items
+- check age of food items etc
+- check age of player etc

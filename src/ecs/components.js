@@ -7,9 +7,12 @@ export const Ai = defineComponent();
 export const Attack = defineComponent(MaxCurrent);
 export const Blocking = defineComponent();
 export const Body = defineComponent({ slots: [Types.eid, 5] });
+export const Burning = defineComponent();
+export const Broken = defineComponent();
 export const Damage = defineComponent(MaxCurrent);
 export const Dead = defineComponent();
 export const Droppable = defineComponent();
+export const Durability = defineComponent(MaxCurrent);
 export const Effects = defineComponent({
   Health: Types.i16,
   Strength: Types.i16,
@@ -24,12 +27,10 @@ export const Intelligence = defineComponent(MaxCurrent);
 export const InFov = defineComponent();
 export const Inventory = defineComponent({ slots: [Types.eid, 24] });
 export const Legendable = defineComponent();
+
 export const Lumens = defineComponent(MaxCurrent);
-// todo: Break light up into seperate components
-export const Light = defineComponent({
-  lumens: MaxCurrent,
-  beam: MaxCurrent,
-});
+export const Beam = defineComponent(MaxCurrent);
+
 export const Liquid = defineComponent();
 export const Lux = defineComponent(MaxCurrent);
 export const MoveTo = defineComponent(Vector3);
@@ -39,6 +40,7 @@ export const BelongsTo = defineComponent({ eid: Types.eid });
 export const Pickupable = defineComponent();
 export const PC = defineComponent();
 export const Position = defineComponent(Vector3);
+export const ResistBurning = defineComponent(MaxCurrent);
 export const Revealed = defineComponent();
 export const Show = defineComponent();
 export const Stairs = defineComponent({ toZ: Types.ui8 });

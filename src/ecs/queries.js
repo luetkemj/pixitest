@@ -1,12 +1,15 @@
 import { defineQuery, Not } from "bitecs";
 import {
   Ai,
+  Broken,
   Dead,
+  Durability,
   Forgettable,
   InFov,
   Intelligence,
   Legendable,
-  Light,
+  Lumens,
+  Beam,
   Lux,
   MoveTo,
   OnCurrentMap,
@@ -18,6 +21,7 @@ import {
 
 export const aiQuery = defineQuery([OnCurrentMap, Ai, Intelligence]);
 export const deadPCQuery = defineQuery([OnCurrentMap, Dead, PC]);
+export const durabilityQuery = defineQuery([OnCurrentMap, Durability]);
 export const forgettableQuery = defineQuery([
   OnCurrentMap,
   Revealed,
@@ -31,7 +35,13 @@ export const legendableQuery = defineQuery([
   Legendable,
   Lux,
 ]);
-export const lightQuery = defineQuery([OnCurrentMap, Light, Position]);
+export const lightQuery = defineQuery([
+  OnCurrentMap,
+  Lumens,
+  Beam,
+  Position,
+  Not(Broken),
+]);
 export const luxQuery = defineQuery([OnCurrentMap, Lux]);
 export const movementQuery = defineQuery([OnCurrentMap, Position, MoveTo]);
 export const opaqueQuery = defineQuery([OnCurrentMap, Opaque]);

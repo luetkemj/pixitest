@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { addComponent, removeComponent } from "bitecs";
-import { Light, Lux, Position } from "../components";
+import { Beam, Lumens, Lux, Position } from "../components";
 import { grid } from "../../lib/grid";
 import { createFOV } from "../../lib/fov";
 import { lightQuery, luxQuery, opaqueQuery } from "../queries";
@@ -31,7 +31,7 @@ export const lightingSystem = (world) => {
     // Create FOV schema
     const { width, height } = grid;
     const origin = { x: Position.x[eid], y: Position.y[eid] };
-    const radius = Light.beam[eid].current;
+    const radius = Beam.current[eid];
     const blockingLocations = new Set();
 
     const blockingEnts = opaqueQuery(world);
@@ -57,8 +57,8 @@ export const lightingSystem = (world) => {
         addComponent(world, Lux, eidAtLoc);
 
         const dist = FOV.distance[locId];
-        const beam = Light.beam[eid].current;
-        const lumens = Light.lumens[eid].current;
+        const beam = Beam.current[eid];
+        const lumens = Lumens.current[eid];
 
         Lux.current[eidAtLoc] =
           Lux.current[eidAtLoc] + getLux({ dist, beam, lumens });
