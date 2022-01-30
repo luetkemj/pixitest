@@ -27,6 +27,8 @@ import {
 
 let cellWidth;
 
+const minAlpha = 0.1;
+
 // check if entity at pos is top of zIndex layers (should it render)
 const isOnTop = (eid, eAtPos) => {
   let zIndex = 0;
@@ -93,7 +95,7 @@ export const renderSystem = (world) => {
   // Render revealed entities
   for (let i = 0; i < revealedEnts.length; i++) {
     const eid = revealedEnts[i];
-    renderEidIfOnTop({ eid, world, alpha: 0.2 });
+    renderEidIfOnTop({ eid, world, alpha: minAlpha });
   }
 
   // hide forgettable entities
@@ -113,11 +115,12 @@ export const renderSystem = (world) => {
     const isLit = hasComponent(world, Lux, eid);
 
     if (isRevealed) {
-      renderEidIfOnTop({ eid, world, alpha: 0.2 });
+      renderEidIfOnTop({ eid, world, alpha: minAlpha });
     }
 
     if (isLit) {
-      const alpha = Lux.current[eid] / 100;
+      const lx = Lux.current[eid] / 100;
+      const alpha = lx > minAlpha ? lx : minAlpha;
       renderEidIfOnTop({ eid, world, alpha });
     }
 
