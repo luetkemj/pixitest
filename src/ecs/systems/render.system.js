@@ -18,6 +18,7 @@ import { renderMenuInventory } from "../../ui/menuInventory";
 import { renderMenuLog } from "../../ui/menuLog";
 import { renderLooking } from "../../ui/looking";
 import { renderDijkstraViz } from "../../ui/dijkstraViz";
+import { renderWithinReach } from "../../ui/withinReach";
 import {
   inFovQuery,
   revealedQuery,
@@ -192,6 +193,7 @@ export const renderSystem = (world) => {
   renderAmbiance(world);
   renderAdventureLog(world);
   renderLegend(world, pcEid, legendEnts);
+  renderWithinReach();
 
   // hide menu and overlay
   hideContainer("menu");

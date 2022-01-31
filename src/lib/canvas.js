@@ -53,6 +53,7 @@ const containerNames = [
   "build",
   "fps",
   "map",
+  "withinReach",
   "ambiance",
   "adventureLog",
   "menu",
@@ -92,6 +93,7 @@ const uiSpriteContainerNames = [
   "adventureLog",
   "menu",
   "overlay",
+  "withinReach",
 ];
 uiSpriteContainerNames.forEach((name) => {
   // create array structure for storing uiSprites for later use
@@ -223,7 +225,7 @@ export const initUi = () => {
 
   uiSpriteContainerNames.forEach((name) => {
     _.times(grid[name].height, (i) => {
-      if (name === "overlay") {
+      if (["overlay", "withinReach"].includes(name)) {
         initUiRow({ container: name, row: i, halfWidth: false });
       } else {
         initUiRow({ container: name, row: i });

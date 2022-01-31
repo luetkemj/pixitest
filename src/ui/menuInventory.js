@@ -261,14 +261,6 @@ const renderInReachList = (world, pcEid) => {
     y: 1,
   });
 
-  getState().withinReachPreview.forEach((template, idx) => {
-    printTemplate({
-      ...options,
-      y: 10 + idx,
-      template,
-    });
-  });
-
   if (!entitiesInReach.length) {
     // clear out selected item
     setState((state) => {

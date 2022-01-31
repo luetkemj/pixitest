@@ -32,6 +32,13 @@ export const grid = {
     y: 3,
   },
 
+  withinReach: {
+    width: 3,
+    height: 3,
+    x: 97,
+    y: 0,
+  },
+
   overlay: {
     width: 87,
     height: 40,
