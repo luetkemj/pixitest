@@ -36,8 +36,8 @@ export const createTorch = (world, options) => {
   Durability.current[eid] = 1000;
   Durability.max[eid] = 1000;
 
-  ResistBurning.current[eid] = 1;
-  ResistBurning.max[eid] = 1;
+  ResistBurning.current[eid] = 4;
+  ResistBurning.max[eid] = 4;
 
   Zindex.zIndex[eid] = 20;
 
