@@ -199,7 +199,7 @@ export const printTemplate = ({
       color: t.color || 0xcccccc,
       halfWidth,
       width: t.str.length,
-      alpha,
+      alpha: t.alpha || alpha,
     });
     curX += t.str.length;
   }
