@@ -2,13 +2,14 @@ import _ from "lodash";
 import { hasComponent } from "bitecs";
 import { getState, setState } from "../../index";
 import { Dead, Lux, Position, Revealed, Zindex } from "../components";
-import { grid } from "../../lib/grid";
+import { distance, getDirection, grid } from "../../lib/grid";
 import {
   clearContainer,
   hideContainer,
   showContainer,
   getAsciTexture,
 } from "../../lib/canvas";
+import { getPosition } from "../ecsHelpers";
 import { renderAmbiance } from "../../ui/ambiance";
 import { renderAdventureLog } from "../../ui/adventureLog";
 import { renderLegend } from "../../ui/legend";
@@ -42,23 +43,61 @@ const isOnTop = (eid, eAtPos) => {
   return eidOnTop === eid;
 };
 
-const renderEidIfOnTop = ({ eid, world, alpha = 1 }) => {
+// add to inreach template in state
+// need to calc position of item and put in the correct location in template
+// [NW,N,NE] [00,01,02]
+// [W, X, E] [10,11,12]
+// [SW,S,SE] [20,21,22]
+const dirMap = {
+  NW: "00",
+  N: "01",
+  NE: "02",
+  W: "10",
+  X: "11",
+  E: "12",
+  SW: "20",
+  S: "21",
+  SE: "22",
+};
+
+const maybeAddToInReachPreview = ({ world, eid, pcEid, sprite }) => {
+  // if dist from eid to pcEid is <= 1
+  const pos1 = getPosition(eid);
+  const pos2 = getPosition(pcEid);
+
+  if (distance(pos1, pos2) <= 1) {
+    const { dir } = getDirection(pos1, pos2);
+    setState((state) => {
+      const dirPath = dirMap[dir];
+      const { char, color, alpha } = sprite;
+      state.withinReachPreview[dirPath[0]][dirPath[1]] = {
+        str: `${char}`,
+        color: color,
+        alpha,
+      };
+    });
+  }
+};
+
+const renderEidIfOnTop = ({ eid, world, alpha = 1, pcEid }) => {
   const { z } = getState();
+  const pos = getPosition(eid);
+
   // only render if the entity is on current z level
-  if (z !== Position.z[eid]) {
+  if (z !== pos.z) {
     return (world.sprites[eid].renderable = false);
   }
 
-  const locId = `${Position.x[eid]},${Position.y[eid]},${z}`;
-  const eAtPos = getState().eAtPos[locId];
+  // const locId = `${Position.x[eid]},${Position.y[eid]},${z}`;
+  const eAtPos = getState().eAtPos[pos.locId];
 
   // If only one item at location - render it
   if (eAtPos.size === 1) {
-    renderEid({ world, eid, alpha, renderable: true });
+    renderEid({ world, eid, alpha, renderable: true, pcEid });
   } else {
     // render if current eid is on top
     if (isOnTop(eid, eAtPos)) {
-      renderEid({ world, eid, alpha, renderable: true });
+      renderEid({ world, eid, alpha, renderable: true, pcEid });
       // else hide it
     } else {
       world.sprites[eid].renderable = false;
@@ -66,7 +105,7 @@ const renderEidIfOnTop = ({ eid, world, alpha = 1 }) => {
   }
 };
 
-const renderEid = ({ world, eid, renderable = true, alpha = 1 }) => {
+const renderEid = ({ world, eid, renderable = true, alpha = 1, pcEid }) => {
   if (!world.sprites[eid]) return;
 
   world.sprites[eid].width = cellWidth;
@@ -79,6 +118,14 @@ const renderEid = ({ world, eid, renderable = true, alpha = 1 }) => {
   if (hasComponent(world, Dead, eid)) {
     world.sprites[eid].texture = getAsciTexture({ char: "%" });
   }
+
+  // check if eid is within reach. If so add to inReach template for use in the withinReach menu
+  maybeAddToInReachPreview({
+    world,
+    eid,
+    pcEid,
+    sprite: world.sprites[eid],
+  });
 };
 
 export const renderSystem = (world) => {
@@ -91,17 +138,19 @@ export const renderSystem = (world) => {
   const legendEnts = legendableQuery(world);
   const pcEnts = pcQuery(world);
 
+  const pcEid = pcEnts[0];
+
   // DO FIELD OF VISION THINGS
   // Render revealed entities
   for (let i = 0; i < revealedEnts.length; i++) {
     const eid = revealedEnts[i];
-    renderEidIfOnTop({ eid, world, alpha: minAlpha });
+    renderEidIfOnTop({ eid, world, alpha: minAlpha, pcEid });
   }
 
   // hide forgettable entities
   for (let i = 0; i < forgettableEnts.length; i++) {
     const eid = forgettableEnts[i];
-    renderEid({ world, eid, renderable: false });
+    renderEid({ world, eid, renderable: false, pcEid });
   }
 
   // RENDER OTHER MAP THINGS
@@ -115,26 +164,24 @@ export const renderSystem = (world) => {
     const isLit = hasComponent(world, Lux, eid);
 
     if (isRevealed) {
-      renderEidIfOnTop({ eid, world, alpha: minAlpha });
+      renderEidIfOnTop({ eid, world, alpha: minAlpha, pcEid });
     }
 
     if (isLit) {
       const lx = Lux.current[eid] / 100;
       const alpha = lx > minAlpha ? lx : minAlpha;
-      renderEidIfOnTop({ eid, world, alpha });
+      renderEidIfOnTop({ eid, world, alpha, pcEid });
     }
 
     if (!isLit && !isRevealed) {
-      renderEid({ world, eid, renderable: false });
+      renderEid({ world, eid, renderable: false, pcEid });
     }
   }
 
   // check location of player and set the ambient log render
   // this should eventually be its own system so it can be more interesting
   {
-    const locId = `${Position.x[pcEnts[0]]},${Position.y[pcEnts[0]]},${
-      Position.z[pcEnts[0]]
-    }`;
+    const locId = `${Position.x[pcEid]},${Position.y[pcEid]},${Position.z[pcEid]}`;
     const eAtPos = getState().eAtPos[locId];
     const stack = _.orderBy([...eAtPos], (eid) => Zindex.zIndex[eid], "desc");
     const msg = world.meta[stack[1]].description;
@@ -144,7 +191,7 @@ export const renderSystem = (world) => {
   // RENDER UI THINGS
   renderAmbiance(world);
   renderAdventureLog(world);
-  renderLegend(world, pcEnts[0], legendEnts);
+  renderLegend(world, pcEid, legendEnts);
 
   // hide menu and overlay
   hideContainer("menu");
@@ -167,7 +214,7 @@ export const renderSystem = (world) => {
     switch (mode) {
       case "LOOKING":
         showContainer("overlay");
-        renderLooking(world, pcEnts[0]);
+        renderLooking(world, pcEid);
         break;
     }
   }
@@ -189,11 +236,11 @@ export const renderSystem = (world) => {
         break;
       case "INVENTORY":
         showContainer("menu");
-        renderMenuInventory(world, pcEnts[0]);
+        renderMenuInventory(world, pcEid);
         break;
       case "CHARACTER_MENU":
         showContainer("menu");
-        renderMenuCharacter(world, pcEnts[0]);
+        renderMenuCharacter(world, pcEid);
         break;
     }
   }

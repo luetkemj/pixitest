@@ -5,7 +5,6 @@ import { hasComponent } from "bitecs";
 import { printRow, printTemplate } from "../lib/canvas";
 import { getEquipped, gettableEntitiesInReach } from "../ecs/ecsHelpers";
 import * as gfx from "../lib/graphics";
-import { getNeighborIds } from "../lib/grid";
 import {
   BelongsTo,
   Broken,
@@ -260,6 +259,14 @@ const renderInReachList = (world, pcEid) => {
     ...options,
     str: " -- WITHIN REACH --",
     y: 1,
+  });
+
+  getState().withinReachPreview.forEach((template, idx) => {
+    printTemplate({
+      ...options,
+      y: 10 + idx,
+      template,
+    });
   });
 
   if (!entitiesInReach.length) {

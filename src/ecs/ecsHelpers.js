@@ -35,6 +35,14 @@ export const fillFirstEmptySlot = ({ component, containerEid, itemEid }) => {
   }
 };
 
+export const getPosition = (eid) => {
+  const x = Position.x[eid];
+  const y = Position.y[eid];
+  const z = Position.z[eid];
+
+  return { x, y, z, locId: toLocId({ x, y, z }) };
+};
+
 export const updatePosition = ({
   world,
   oldPos = {},

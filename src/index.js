@@ -55,6 +55,7 @@ const state = {
   tick: 0,
   turn: "",
   userInput: "",
+  withinReachPreview: [[], [], []],
   world: {},
   z: 0,
   RESETTING_DEBUG: true,
