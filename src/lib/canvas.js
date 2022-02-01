@@ -201,7 +201,7 @@ export const printTemplate = ({
       color: t.color || 0xcccccc,
       halfWidth,
       width: t.str.length,
-      alpha: t.alpha || alpha,
+      alpha: t.alpha || t.alpha === 0 ? t.alpha : alpha,
     });
     curX += t.str.length;
   }

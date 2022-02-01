@@ -70,12 +70,13 @@ const maybeAddToInReachPreview = ({ world, eid, pcEid, sprite }) => {
     const { dir } = getDirection(pos1, pos2);
     setState((state) => {
       const dirPath = dirMap[dir];
-      const { char, color, alpha } = sprite;
-      state.withinReachPreview[dirPath[0]][dirPath[1]] = {
+      const { char, color, alpha, renderable } = sprite;
+      const template = {
         str: `${char}`,
         color: color,
-        alpha,
+        alpha: renderable ? alpha : 0,
       };
+      state.withinReachPreview[dirPath[0]][dirPath[1]] = template;
     });
   }
 };
