@@ -17,6 +17,10 @@ export const Effects = defineComponent({
   Health: Types.i16,
   Strength: Types.i16,
 });
+
+export const FireStarter = defineComponent();
+export const Flammable = defineComponent();
+
 export const Forgettable = defineComponent();
 
 // FovDistance and FovRange should use maxCurrent

@@ -4,6 +4,7 @@ import { pipelineFovRender } from "../ecs/pipelines";
 import { addComponent, removeComponent, hasComponent } from "bitecs";
 import {
   deleteEntity,
+  getName,
   getRelatedEids,
   getWielders,
   removeComponentFromEntities,
@@ -12,8 +13,11 @@ import {
 import { cellToId, idToCell, getNeighborIds } from "./grid";
 import {
   Blocking,
+  Burning,
   Droppable,
   Effects,
+  FireStarter,
+  Flammable,
   InFov,
   Inventory,
   Liquid,
@@ -350,4 +354,19 @@ export const wield = (world, targetEid, itemEid) => {
   );
 
   pipelineFovRender(world);
+};
+
+export const spark = (world, targetEid, itemEid) => {
+  const isFireStarter = hasComponent(world, FireStarter, itemEid);
+  const isFlammable = hasComponent(world, Flammable, targetEid);
+
+  const source = getName(world, itemEid);
+  const target = getName(world, targetEid);
+
+  if (!isFireStarter) return addLog(`${source} not a firestarter`);
+  if (!isFlammable) return addLog(`${target} not flammable`);
+
+  addComponent(world, Burning, targetEid);
+
+  return addLog(`You light the ${target} with ${source}`);
 };

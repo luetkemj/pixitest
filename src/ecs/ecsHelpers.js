@@ -261,3 +261,7 @@ export const removeComponentFromEntities = (world, component, eids) => {
 export const queryAtLoc = (cellOrId, func) => {
   getState().eAtPos[toLocId(cellOrId)].forEach(func);
 };
+
+export const getName = (world, eid) => {
+  return world.meta[eid].name;
+};

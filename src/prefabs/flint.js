@@ -9,6 +9,7 @@ import {
   Pickupable,
   Position,
   Zindex,
+  FireStarter,
 } from "../ecs/components";
 
 import { addSprite } from "../lib/canvas";
@@ -17,6 +18,7 @@ import { createEntity, updatePosition } from "../ecs/ecsHelpers";
 export const createFlint = (world, options) => {
   const eid = createEntity(world);
   addComponent(world, Droppable, eid);
+  addComponent(world, FireStarter, eid);
   addComponent(world, Legendable, eid);
   addComponent(world, Pickupable, eid);
   addComponent(world, Position, eid);

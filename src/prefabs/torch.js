@@ -8,6 +8,7 @@ import {
   Droppable,
   ResistBurning,
   Durability,
+  Flammable,
   Legendable,
   Pickupable,
   Position,
@@ -23,6 +24,7 @@ export const createTorch = (world, options) => {
   addComponent(world, Damage, eid);
   addComponent(world, Droppable, eid);
   addComponent(world, Durability, eid);
+  addComponent(world, Flammable, eid);
   addComponent(world, Legendable, eid);
   addComponent(world, Pickupable, eid);
   addComponent(world, Position, eid);

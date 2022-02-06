@@ -43,8 +43,6 @@ export const initWorld = (loader) => {
   const torchEid = createTorch(world);
   const flintEid = createFlint(world);
 
-  addComponent(world, Burning, torchEid);
-
   [torchEid, flintEid].forEach((eid) => {
     fillFirstEmptySlot({
       component: Inventory,
