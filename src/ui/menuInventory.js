@@ -243,7 +243,7 @@ const renderDescription = (world, pcEid) => {
 const renderInReachList = (world, pcEid) => {
   const { inventory } = getState();
   const currentLocId = `${Position.x[pcEid]},${Position.y[pcEid]},${Position.z[pcEid]}`;
-  const entitiesInReach = entitiesInReach(world, currentLocId);
+  const entsInReach = entitiesInReach(world, currentLocId);
   const isCurrentColumn = inventory.columnIndex === 2;
 
   // Render inReach list
@@ -261,7 +261,7 @@ const renderInReachList = (world, pcEid) => {
     y: 1,
   });
 
-  if (!entitiesInReach.length) {
+  if (!entsInReach.length) {
     // clear out selected item
     setState((state) => {
       state.inventory.selectedInReachItemEid = "";
@@ -273,7 +273,7 @@ const renderInReachList = (world, pcEid) => {
     });
   }
 
-  entitiesInReach.forEach((eid, i) => {
+  entsInReach.forEach((eid, i) => {
     if (eid) {
       const itemName = world.meta[eid].name;
       const isSelected = inventory.inReachListIndex === i;
