@@ -3,7 +3,7 @@ import { getState, setState } from "../index";
 import wrapAnsi from "wrap-ansi";
 import { hasComponent } from "bitecs";
 import { printRow, printTemplate } from "../lib/canvas";
-import { getEquipped, gettableEntitiesInReach } from "../ecs/ecsHelpers";
+import { getEquipped, entitiesInReach } from "../ecs/ecsHelpers";
 import * as gfx from "../lib/graphics";
 import {
   BelongsTo,
@@ -243,7 +243,7 @@ const renderDescription = (world, pcEid) => {
 const renderInReachList = (world, pcEid) => {
   const { inventory } = getState();
   const currentLocId = `${Position.x[pcEid]},${Position.y[pcEid]},${Position.z[pcEid]}`;
-  const entitiesInReach = gettableEntitiesInReach(world, currentLocId);
+  const entitiesInReach = entitiesInReach(world, currentLocId);
   const isCurrentColumn = inventory.columnIndex === 2;
 
   // Render inReach list

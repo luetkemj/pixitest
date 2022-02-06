@@ -31,6 +31,7 @@ export const loadSprites = (onLoaded) => {
   loader
     .add("static/fonts/menlo-bold.json")
     .add("static/fonts/menlo-bold-half.json")
+    .add("tile", "static/tile.png")
     .load(onLoaded);
   return loader;
 };
@@ -47,12 +48,17 @@ export const getAsciTexture = ({ char }) => {
   ];
 };
 
+const getTileTexture = () => {
+  return loader.resources.tile.texture;
+};
+
 const containers = {};
 const containerNames = [
   "legend",
   "build",
   "fps",
   "map",
+  "withinReachBelow",
   "withinReach",
   "ambiance",
   "adventureLog",
@@ -94,6 +100,7 @@ const uiSpriteContainerNames = [
   "menu",
   "overlay",
   "withinReach",
+  "withinReachBelow",
 ];
 uiSpriteContainerNames.forEach((name) => {
   // create array structure for storing uiSprites for later use
@@ -137,7 +144,9 @@ export const addSprite = ({
     const y = Position.y[eid];
     const z = Position.z[eid];
     const pos = `${x},${y},${z}`;
-    getState().eAtPos[pos].forEach((e) => console.log(getEntityData(world, e)));
+    getState().eAtPos[pos].forEach((e) =>
+      console.log({ entity: getEntityData(world, e), state: getState() })
+    );
   });
 
   containers[container].addChild(world.sprites[eid]);
@@ -156,6 +165,18 @@ export const printCell = ({
   uiSprites[container][y][x].alpha = alpha;
   const func = halfWidth ? getFontTexture : getAsciTexture;
   uiSprites[container][y][x].texture = func({ char });
+};
+
+export const printTile = ({
+  container,
+  x = 0,
+  y = 0,
+  color = 0xcccccc,
+  alpha = 1,
+}) => {
+  uiSprites[container][y][x].tint = color;
+  uiSprites[container][y][x].alpha = alpha;
+  uiSprites[container][y][x].texture = getTileTexture();
 };
 
 export const printRow = ({
@@ -225,7 +246,7 @@ export const initUi = () => {
 
   uiSpriteContainerNames.forEach((name) => {
     _.times(grid[name].height, (i) => {
-      if (["overlay", "withinReach"].includes(name)) {
+      if (["overlay", "withinReach", "withinReachBelow"].includes(name)) {
         initUiRow({ container: name, row: i, halfWidth: false });
       } else {
         initUiRow({ container: name, row: i });

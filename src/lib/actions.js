@@ -159,11 +159,11 @@ export const descend = (world, eid) => {
 
 export const get = (world, eid, itemEid) => {
   if (!hasComponent(world, Inventory, eid)) {
-    return console.log(`Cannot pickup - ${eid} has no Inventory`);
+    return console.log(`Cannot pick up - ${eid} has no Inventory`);
   }
 
   if (!hasComponent(world, Position, eid)) {
-    return console.log(`Cannot Pickup - ${eid} has no Position`);
+    return console.log(`Cannot pick up - ${eid} has no Position`);
   }
 
   // get entity locId
@@ -177,29 +177,35 @@ export const get = (world, eid, itemEid) => {
     );
 
   if (!pickupEid) {
-    addLog("There is nothing to pickup.");
-  } else {
-    // find first open inventory slot and add the pickup eid
-    const inventory = Inventory.slots[eid];
-    const openSlot = _.findIndex(inventory, (slot) => slot === 0);
-    if (openSlot > -1) {
-      Inventory.slots[eid][openSlot] = pickupEid;
-      removeComponent(world, InFov, pickupEid);
-      updatePosition({
-        world,
-        oldPos: {
-          x: Position.x[pickupEid],
-          y: Position.y[pickupEid],
-          z: Position.z[pickupEid],
-        },
-        eid: pickupEid,
-        remove: true,
-      });
+    return addLog("There is nothing to pick up.");
+  }
 
-      addLog(`You pickup ${world.meta[pickupEid].name}.`);
-    } else {
-      addLog("Your inventory is full.");
-    }
+  if (!hasComponent(world, Pickupable, pickupEid)) {
+    const { name } = world.meta[pickupEid];
+
+    return addLog(`You cannot pick up the ${name}`);
+  }
+
+  // find first open inventory slot and add the pickup eid
+  const inventory = Inventory.slots[eid];
+  const openSlot = _.findIndex(inventory, (slot) => slot === 0);
+  if (openSlot > -1) {
+    Inventory.slots[eid][openSlot] = pickupEid;
+    removeComponent(world, InFov, pickupEid);
+    updatePosition({
+      world,
+      oldPos: {
+        x: Position.x[pickupEid],
+        y: Position.y[pickupEid],
+        z: Position.z[pickupEid],
+      },
+      eid: pickupEid,
+      remove: true,
+    });
+
+    addLog(`You pickup ${world.meta[pickupEid].name}.`);
+  } else {
+    addLog("Your inventory is full.");
   }
 };
 

@@ -200,12 +200,12 @@ export const getEntityData = (world, eid) => {
   };
 };
 
-export const gettableEntitiesInReach = (world, locId) => {
+export const entitiesInReach = (world, locId) => {
   const neighbors = [...getNeighborIds(locId, "ALL"), locId];
   return _.flatMap(
     neighbors.map((lId) => {
       const eAtLoc = [...getState().eAtPos[lId]];
-      return eAtLoc.filter((eid) => hasComponent(world, Pickupable, eid));
+      return eAtLoc;
     })
   );
 };

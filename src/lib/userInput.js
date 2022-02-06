@@ -2,11 +2,12 @@ import { getState, setState } from "../index";
 import { Inventory, Position } from "../ecs/components";
 import {
   getWielder,
-  gettableEntitiesInReach,
+  entitiesInReach,
   walkInventoryTree,
 } from "../ecs/ecsHelpers";
 import { drop, get, quaff, unwield, wield } from "./actions";
 import { grid } from "./grid";
+import { pipelineFovRender } from "../ecs/pipelines";
 
 const gameplayControls = [
   "ArrowUp",
@@ -57,6 +58,7 @@ export const processUserInput = (world) => {
   // if you don't the game will hang and never process user input
   if (key === "Escape") {
     setState((state) => {
+      state.inventory.selectedInReachItemEid = "";
       state.mode = "GAME";
     });
   }
@@ -122,7 +124,7 @@ export const processUserInput = (world) => {
       });
       // count gettableEntitiesWithinReach
       const currentLocId = `${Position.x[pcEid]},${Position.y[pcEid]},${Position.z[pcEid]}`;
-      const entitiesInReach = gettableEntitiesInReach(world, currentLocId);
+      const entsInReach = entitiesInReach(world, currentLocId);
       const { inventory } = getState();
 
       if (key === "ArrowUp") {
@@ -141,7 +143,7 @@ export const processUserInput = (world) => {
         if (inventory.columnIndex === 2) {
           if (inventory.inReachListIndex === 0) {
             setState((state) => {
-              state.inventory.inReachListIndex = entitiesInReach.length - 1;
+              state.inventory.inReachListIndex = entsInReach.length - 1;
             });
           } else {
             setState((state) => {
@@ -165,7 +167,7 @@ export const processUserInput = (world) => {
         }
 
         if (inventory.columnIndex === 2) {
-          if (inventory.inReachListIndex === entitiesInReach.length - 1) {
+          if (inventory.inReachListIndex === entsInReach.length - 1) {
             setState((state) => {
               state.inventory.inReachListIndex = 0;
             });
@@ -245,6 +247,8 @@ export const processUserInput = (world) => {
           get(world, pcEid, inventory.selectedInReachItemEid);
         }
       }
+
+      pipelineFovRender(world);
     }
   }
 

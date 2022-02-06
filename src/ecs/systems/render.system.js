@@ -194,7 +194,6 @@ export const renderSystem = (world) => {
   renderAmbiance(world);
   renderAdventureLog(world);
   renderLegend(world, pcEid, legendEnts);
-  renderWithinReach();
 
   // hide menu and overlay
   hideContainer("menu");
@@ -247,6 +246,8 @@ export const renderSystem = (world) => {
         break;
     }
   }
+
+  renderWithinReach(world, pcEid);
 
   return world;
 };
