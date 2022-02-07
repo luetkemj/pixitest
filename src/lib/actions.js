@@ -368,5 +368,7 @@ export const spark = (world, targetEid, itemEid) => {
 
   addComponent(world, Burning, targetEid);
 
-  return addLog(`You light the ${target} with ${source}`);
+  addLog(`You light the ${target} with ${source}`);
+
+  pipelineFovRender(world);
 };

@@ -38,6 +38,7 @@ const state = {
     inReachListIndex: 0,
     selectedInventoryItemEid: "",
     selectedInReachItemEid: "",
+    selectedApplierItemEid: "",
   },
   log: {
     log: [],

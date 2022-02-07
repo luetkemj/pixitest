@@ -1,11 +1,12 @@
-import { getState, setState } from "../index";
+import { addLog, getState, setState } from "../index";
 import { Inventory, Position } from "../ecs/components";
 import {
+  getName,
   getWielder,
   entitiesInReach,
   walkInventoryTree,
 } from "../ecs/ecsHelpers";
-import { drop, get, quaff, unwield, wield } from "./actions";
+import { drop, get, quaff, spark, unwield, wield } from "./actions";
 import { grid } from "./grid";
 import { pipelineFovRender } from "../ecs/pipelines";
 
@@ -30,6 +31,7 @@ const inventoryControls = [
   "ArrowRight",
   "ArrowDown",
   "ArrowLeft",
+  "a", // apply
   "d", // drop
   "g", // get
   "q", // quaff
@@ -245,6 +247,45 @@ export const processUserInput = (world) => {
         // possible actions from the WithinReach column
         if (inventory.columnIndex === 2) {
           get(world, pcEid, inventory.selectedInReachItemEid);
+        }
+      }
+
+      if (key === "a") {
+        const { selectedApplierItemEid } = inventory;
+        // if no selectedApplierItemEid set it
+        if (!selectedApplierItemEid) {
+          if (inventory.columnIndex === 0) {
+            setState((state) => {
+              state.inventory.selectedApplierItemEid =
+                state.inventory.selectedInventoryItemEid;
+            });
+
+            console.log("prepare to apply from col1");
+          }
+          if (inventory.columnIndex === 2) {
+            setState((state) => {
+              state.inventory.selectedApplierItemEid =
+                state.inventory.selectedInReachItemEid;
+            });
+
+            console.log("prepare to apply from col2");
+          }
+        }
+        // if selectedApplierItemEid apply it
+        if (selectedApplierItemEid) {
+          const {
+            selectedInReachItemEid,
+            selectedInventoryItemEid,
+          } = inventory;
+
+          if (inventory.columnIndex === 0) {
+            spark(world, selectedInventoryItemEid, selectedApplierItemEid);
+            console.log("try to apply to col1");
+          }
+          if (inventory.columnIndex === 2) {
+            spark(world, selectedInReachItemEid, selectedApplierItemEid);
+            console.log("try to apply to col2");
+          }
         }
       }
 
