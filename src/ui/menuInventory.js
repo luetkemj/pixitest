@@ -2,12 +2,15 @@ import _ from "lodash";
 import { getState, setState } from "../index";
 import wrapAnsi from "wrap-ansi";
 import { hasComponent } from "bitecs";
-import { printRow } from "../lib/canvas";
-import { getEquipped, gettableEntitiesInReach } from "../ecs/ecsHelpers";
-import { getNeighborIds } from "../lib/grid";
+import { printRow, printTemplate } from "../lib/canvas";
+import { getEquipped, entitiesInReach } from "../ecs/ecsHelpers";
+import * as gfx from "../lib/graphics";
 import {
   BelongsTo,
+  Broken,
+  Burning,
   Droppable,
+  Durability,
   Liquid,
   Pickupable,
   Inventory,
@@ -15,16 +18,33 @@ import {
   Wieldable,
 } from "../ecs/components";
 
+const equipTypeToSymbol = {
+  Wielding: "w",
+};
+
+const equipperNameToSymbol = {
+  Torso: "T",
+  Head: "H",
+  "Left Arm": "LA",
+  "Right Arm": "RA",
+  "Left Leg": "LL",
+  "Right Leg": "RL",
+  "Left Hand": "LH",
+  "Right Hand": "RH",
+  "Left Foot": "LF",
+  "Right Foot": "RF",
+};
+
 const renderInventoryList = (world, pcEid) => {
   const { inventory } = getState();
   const isCurrentColumn = inventory.columnIndex === 0;
   // Render inventory list
   const width = 57;
-  const color = isCurrentColumn ? undefined : 0x666666;
+  const alpha = isCurrentColumn ? 1 : 0.5;
   const options = {
     container: "menu",
     width,
-    color,
+    alpha,
   };
 
   printRow({
@@ -62,19 +82,28 @@ const renderInventoryList = (world, pcEid) => {
       const equipped = equippedItems.find((x) => x[0] === eid);
       const isEquipped = !!equipped;
 
-      let str = isSelected ? "  * " : "    ";
-      str = `${str}${itemName}`;
+      const template = [];
+      template.push({ str: isSelected ? "  * " : "    " });
+      template.push({ str: `${itemName} ` });
 
       if (isEquipped) {
         const equipName = world.meta[equipped[1]].name;
         const equipType = equipped[2];
-        str = `${str} (${equipName}) ${equipType}`;
+        template.push({
+          str: `${equipTypeToSymbol[equipType]}-${equipperNameToSymbol[equipName]} `,
+          color: gfx.colors.uiStatus,
+        });
       }
 
-      printRow({
+      if (hasComponent(world, Burning, eid)) {
+        template.push({ str: `^ `, color: gfx.colors.fire });
+      }
+
+      printTemplate({
         ...options,
         y: i + 3,
-        str,
+        template,
+        alpha,
       });
     }
   });
@@ -104,10 +133,22 @@ const renderDescription = (world, pcEid) => {
     belongsTo = `A ${world.meta[belongsToEid].name}'s `;
   }
 
+  let durability = "";
+  if (hasComponent(world, Durability, itemEid)) {
+    const max = Durability.max[itemEid];
+    const cur = Durability.current[itemEid];
+    durability = ` [${cur}/${max}] `;
+  }
+
+  let broken = "";
+  if (hasComponent(world, Broken, itemEid)) {
+    broken = "broken ";
+  }
+
   const width = 59;
   let y = 1;
 
-  const header = ` -- ${belongsTo}${itemName}`;
+  const header = ` -- ${belongsTo}${itemName}${durability}${broken}`;
 
   const content = wrapAnsi(itemDesc, width - 4).split("\n");
 
@@ -125,6 +166,41 @@ const renderDescription = (world, pcEid) => {
     y = y + i;
     printRow({ ...options, y, str: `    ${row}` });
   });
+
+  // status
+  const statusTemplate = [{ str: "    " }];
+  const equipped = equippedItems.find((x) => x[0] === itemEid);
+  const isEquipped = !!equipped;
+  const alpha = 0.5;
+
+  if (isEquipped) {
+    const equipName = world.meta[equipped[1]].name;
+    const equipType = equipped[2];
+    statusTemplate.push({
+      str: `${equipTypeToSymbol[equipType]}`,
+      color: gfx.colors.uiStatus,
+    });
+    statusTemplate.push({ str: `(${equipType})`, alpha });
+    statusTemplate.push({
+      str: `-${equipperNameToSymbol[equipName]}`,
+      color: gfx.colors.uiStatus,
+    });
+    statusTemplate.push({ str: `(${equipName}) `, alpha });
+  }
+
+  if (hasComponent(world, Burning, itemEid)) {
+    statusTemplate.push({ str: `^`, color: gfx.colors.fire });
+    statusTemplate.push({ str: `(Burning) `, alpha });
+  }
+
+  if (statusTemplate.length > 1) {
+    y += 2;
+    printTemplate({
+      ...options,
+      y,
+      template: statusTemplate,
+    });
+  }
 
   // available actions for items in inventory
   let availableActions = "    ";
@@ -167,7 +243,7 @@ const renderDescription = (world, pcEid) => {
 const renderInReachList = (world, pcEid) => {
   const { inventory } = getState();
   const currentLocId = `${Position.x[pcEid]},${Position.y[pcEid]},${Position.z[pcEid]}`;
-  const entitiesInReach = gettableEntitiesInReach(world, currentLocId);
+  const entsInReach = entitiesInReach(world, currentLocId);
   const isCurrentColumn = inventory.columnIndex === 2;
 
   // Render inReach list
@@ -185,7 +261,7 @@ const renderInReachList = (world, pcEid) => {
     y: 1,
   });
 
-  if (!entitiesInReach.length) {
+  if (!entsInReach.length) {
     // clear out selected item
     setState((state) => {
       state.inventory.selectedInReachItemEid = "";
@@ -197,7 +273,7 @@ const renderInReachList = (world, pcEid) => {
     });
   }
 
-  entitiesInReach.forEach((eid, i) => {
+  entsInReach.forEach((eid, i) => {
     if (eid) {
       const itemName = world.meta[eid].name;
       const isSelected = inventory.inReachListIndex === i;

@@ -1,4 +1,4 @@
-import { sample } from "lodash";
+import _ from "lodash";
 
 export const grid = {
   width: 100,
@@ -32,6 +32,20 @@ export const grid = {
     y: 3,
   },
 
+  withinReach: {
+    width: 3,
+    height: 3,
+    x: 97,
+    y: 0,
+  },
+
+  withinReachBelow: {
+    width: 3,
+    height: 3,
+    x: 97,
+    y: 0,
+  },
+
   overlay: {
     width: 87,
     height: 40,
@@ -40,7 +54,7 @@ export const grid = {
   },
 
   adventureLog: {
-    width: 87,
+    width: 84,
     height: 3,
     x: 13,
     y: 0,
@@ -250,7 +264,7 @@ export const isNeighbor = (cell1, cell2) => {
 
 export const randomNeighbor = (cellOrId) => {
   const cell = toCell(cellOrId);
-  const direction = sample(CARDINAL);
+  const direction = _.sample(CARDINAL);
   const x = cell.x + direction.x;
   const y = cell.y + direction.y;
   return { x, y, z: cell.z };
@@ -276,12 +290,19 @@ export const getDirection = (a, b) => {
 
   let dir;
 
-  if (ax - bx === 1 && ay - by === 0) dir = "→";
-  if (ax - bx === 0 && ay - by === -1) dir = "↑";
-  if (ax - bx === -1 && ay - by === 0) dir = "←";
-  if (ax - bx === 0 && ay - by === 1) dir = "↓";
+  if (ax - bx === -1 && ay - by === -1) dir = "NW";
+  if (ax - bx === 1 && ay - by === -1) dir = "NE";
+  if (ax - bx === 1 && ay - by === 1) dir = "SE";
+  if (ax - bx === -1 && ay - by === 1) dir = "SW";
 
-  return dir;
+  if (ax - bx === 1 && ay - by === 0) dir = "E";
+  if (ax - bx === 0 && ay - by === -1) dir = "N";
+  if (ax - bx === -1 && ay - by === 0) dir = "W";
+  if (ax - bx === 0 && ay - by === 1) dir = "S";
+
+  if (ax - bx === 0 && ay - by === 0) dir = "X";
+
+  return { dir, x: ax - bx, y: ay - by };
 };
 
 export const getVelocity = (a, b) => {

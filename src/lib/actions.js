@@ -4,6 +4,7 @@ import { pipelineFovRender } from "../ecs/pipelines";
 import { addComponent, removeComponent, hasComponent } from "bitecs";
 import {
   deleteEntity,
+  getName,
   getRelatedEids,
   getWielders,
   removeComponentFromEntities,
@@ -12,8 +13,11 @@ import {
 import { cellToId, idToCell, getNeighborIds } from "./grid";
 import {
   Blocking,
+  Burning,
   Droppable,
   Effects,
+  FireStarter,
+  Flammable,
   InFov,
   Inventory,
   Liquid,
@@ -80,11 +84,26 @@ const useStairs = (world, eid, dir) => {
 
   // create new map if needed
   if (floors[newZ]) {
+    const oldPos = idToCell(locId);
+    const newPos = idToCell(floors[newZ][stairs]);
+
     updatePosition({
       world,
       eid,
-      oldPos: idToCell(locId),
-      newPos: idToCell(floors[newZ][stairs]),
+      oldPos,
+      newPos,
+    });
+
+    // update position of items wielded
+    const wielders = getWielders(world, eid);
+    wielders.forEach((w) => {
+      const wieldedEid = w[1];
+      if (wieldedEid) {
+        addComponent(world, Position, wieldedEid);
+        Position.x[wieldedEid] = newPos.x;
+        Position.y[wieldedEid] = newPos.y;
+        Position.z[wieldedEid] = newPos.z;
+      }
     });
   } else {
     const { floor } = generateDungeonFloor({
@@ -93,11 +112,27 @@ const useStairs = (world, eid, dir) => {
       stairsUp: true,
       stairsDown: true,
     });
+
+    const oldPos = idToCell(locId);
+    const newPos = idToCell(floor[stairs]);
+
     updatePosition({
       world,
       eid,
-      oldPos: idToCell(locId),
-      newPos: idToCell(floor[stairs]),
+      oldPos,
+      newPos,
+    });
+
+    // update position of items wielded
+    const wielders = getWielders(world, eid);
+    wielders.forEach((w) => {
+      const wieldedEid = w[1];
+      if (wieldedEid) {
+        addComponent(world, Position, wieldedEid);
+        Position.x[wieldedEid] = newPos.x;
+        Position.y[wieldedEid] = newPos.y;
+        Position.z[wieldedEid] = newPos.z;
+      }
     });
   }
 
@@ -115,7 +150,6 @@ const useStairs = (world, eid, dir) => {
   });
 
   // update z in state
-  // !!todo: don't read z from state here - do it from the current mapId (don't store this is multiple places)
   setState((state) => (state.z = newZ));
 };
 
@@ -129,11 +163,11 @@ export const descend = (world, eid) => {
 
 export const get = (world, eid, itemEid) => {
   if (!hasComponent(world, Inventory, eid)) {
-    return console.log(`Cannot pickup - ${eid} has no Inventory`);
+    return console.log(`Cannot pick up - ${eid} has no Inventory`);
   }
 
   if (!hasComponent(world, Position, eid)) {
-    return console.log(`Cannot Pickup - ${eid} has no Position`);
+    return console.log(`Cannot pick up - ${eid} has no Position`);
   }
 
   // get entity locId
@@ -147,29 +181,35 @@ export const get = (world, eid, itemEid) => {
     );
 
   if (!pickupEid) {
-    addLog("There is nothing to pickup.");
-  } else {
-    // find first open inventory slot and add the pickup eid
-    const inventory = Inventory.slots[eid];
-    const openSlot = _.findIndex(inventory, (slot) => slot === 0);
-    if (openSlot > -1) {
-      Inventory.slots[eid][openSlot] = pickupEid;
-      removeComponent(world, InFov, pickupEid);
-      updatePosition({
-        world,
-        oldPos: {
-          x: Position.x[pickupEid],
-          y: Position.y[pickupEid],
-          z: Position.z[pickupEid],
-        },
-        eid: pickupEid,
-        remove: true,
-      });
+    return addLog("There is nothing to pick up.");
+  }
 
-      addLog(`You pickup ${world.meta[pickupEid].name}.`);
-    } else {
-      addLog("Your inventory is full.");
-    }
+  if (!hasComponent(world, Pickupable, pickupEid)) {
+    const { name } = world.meta[pickupEid];
+
+    return addLog(`You cannot pick up the ${name}`);
+  }
+
+  // find first open inventory slot and add the pickup eid
+  const inventory = Inventory.slots[eid];
+  const openSlot = _.findIndex(inventory, (slot) => slot === 0);
+  if (openSlot > -1) {
+    Inventory.slots[eid][openSlot] = pickupEid;
+    removeComponent(world, InFov, pickupEid);
+    updatePosition({
+      world,
+      oldPos: {
+        x: Position.x[pickupEid],
+        y: Position.y[pickupEid],
+        z: Position.z[pickupEid],
+      },
+      eid: pickupEid,
+      remove: true,
+    });
+
+    addLog(`You pickup ${world.meta[pickupEid].name}.`);
+  } else {
+    addLog("Your inventory is full.");
   }
 };
 
@@ -266,7 +306,15 @@ export const quaff = (world, targetEid, itemEid) => {
 
 export const unwield = (world, wielderEid) => {
   if (hasComponent(world, Wielding, wielderEid)) {
+    // wielded items get have a position that tracks with the wielder
+    // it should be removed on unwield
+    const wieldedEid = Wielding.slot[wielderEid];
+    removeComponent(world, Position, wieldedEid);
+
+    // actually remove the wielded item
     Wielding.slot[wielderEid] = 0;
+
+    pipelineFovRender(world);
   }
 };
 
@@ -293,9 +341,34 @@ export const wield = (world, targetEid, itemEid) => {
   const freeWielder = _.find(wielders, (wielder) => wielder.length < 2);
   const wielderEid = freeWielder[0];
 
+  // wielded items have a position that tracks with the wielder
+  // add it here to kick off the position tracking
+  addComponent(world, Position, itemEid);
+  Position.x[itemEid] = Position.x[targetEid];
+  Position.y[itemEid] = Position.y[targetEid];
+  Position.z[itemEid] = Position.z[targetEid];
+
   Wielding.slot[wielderEid] = itemEid;
-  // addComponent(world, Wielding, targetEid);
-  return addLog(
+  addLog(
     `You are wielding a ${world.meta[itemEid].name} in your ${world.meta[wielderEid].name}!`
   );
+
+  pipelineFovRender(world);
+};
+
+export const spark = (world, targetEid, itemEid) => {
+  const isFireStarter = hasComponent(world, FireStarter, itemEid);
+  const isFlammable = hasComponent(world, Flammable, targetEid);
+
+  const source = getName(world, itemEid);
+  const target = getName(world, targetEid);
+
+  if (!isFireStarter) return addLog(`${source} not a firestarter`);
+  if (!isFlammable) return addLog(`${target} not flammable`);
+
+  addComponent(world, Burning, targetEid);
+
+  addLog(`You light the ${target} with ${source}`);
+
+  pipelineFovRender(world);
 };

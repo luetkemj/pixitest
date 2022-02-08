@@ -38,6 +38,7 @@ const state = {
     inReachListIndex: 0,
     selectedInventoryItemEid: "",
     selectedInReachItemEid: "",
+    selectedApplierItemEid: "",
   },
   log: {
     log: [],
@@ -55,6 +56,7 @@ const state = {
   tick: 0,
   turn: "",
   userInput: "",
+  withinReachPreview: [[], [], []],
   world: {},
   z: 0,
   RESETTING_DEBUG: true,

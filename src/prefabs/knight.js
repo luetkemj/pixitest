@@ -14,6 +14,7 @@ import {
   Position,
   Strength,
   Zindex,
+  Revealed,
 } from "../ecs/components";
 import { createHumanoidBody } from "./bodies/createHumanoidBody";
 import { addSprite } from "../lib/canvas";
@@ -34,8 +35,10 @@ export const createKnight = (world, options) => {
   addComponent(world, Legendable, eid);
   addComponent(world, Strength, eid);
   addComponent(world, Zindex, eid);
+  addComponent(world, Revealed, eid);
 
-  FovRange.dist[eid] = 10;
+  // range is full width of map
+  FovRange.dist[eid] = 87;
   Health.max[eid] = 1000;
   Health.current[eid] = 1000;
   Intelligence.max[eid] = 10;

@@ -1,4 +1,8 @@
 export const meta = {
+  flint: {
+    name: "Flint",
+    description: "Use it spark a fire.",
+  },
   floor: {
     name: "floor",
     description: "The flagstone floor is covered in detritus.",
@@ -36,5 +40,10 @@ export const meta = {
   stairsDown: {
     name: "stairs down",
     description: "Steps leading down",
+  },
+
+  torch: {
+    name: "torch",
+    description: "A torch",
   },
 };

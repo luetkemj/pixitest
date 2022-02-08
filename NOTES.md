@@ -40,3 +40,83 @@ V2:
 - Getting items from backpack requires in game time where the game ticks on - can be interrupted. So not useful to try and grab something during a fight - should look instead to your belt
 - Money has weight
 - Will need to find a way to get vast sums of gold back to civilization where you can actually make use of it...
+
+## LIGHTING
+
+Lighting...
+give entities a light component.
+do a first pass lighting of all light sources on map
+only recalc for lightsources that have moved
+player has full map fov but only things that are lit should be visible.
+what to do about discovered tiles...
+lighting should play a part in if a player is spotted by a monster or not.
+remembered tiles can be navigated in pitchblack
+undiscovered can be navigated but you won't discover new things
+
+Lumens component
+a number that describes the output of a lightsources
+
+Lux component
+a number that describes the ambient light of a location
+
+store lighting in a locId map
+locId: { sources: [eid...], lux: n }
+
+just do the damn thing and worry about perfing later.
+
+Fuckit. Just light the whole damn map every damn time. Only calculating the alpha. See how that goes. perf later.
+
+## EFFECTS
+
+effects array in meta that stores eids and their relevant components.
+
+```
+[
+  {
+    eid: torchEid
+    components: ['Lighting']
+  }
+]
+```
+
+on addEffect
+Add the component with params
+
+on removeEffect
+Remove component
+
+AFFECT / EFFECT
+Affects and Effects map one to one. Every entity has the same list of Effects (unless they are immune to something) but affects are the things an entity does to another.
+
+Affects on an entity denote what it can do to another Entity
+Effects on an entity denote what
+
+Looks to Effects array and
+
+```
+Affects: {
+  affectName: {
+    duration: 1 // n turns that effect takes place
+    componentName: { ...props }
+  }
+}
+
+Effects: {
+  effectName: {
+    duration: 1 // n turns that effect takes place
+  }
+}
+```
+
+burning
+
+resistance: burning
+
+durability: 100
+
+entropy system
+
+- check for burning items (reduce durability)
+- check for decaying items
+- check age of food items etc
+- check age of player etc

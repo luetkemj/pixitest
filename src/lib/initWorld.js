@@ -1,10 +1,13 @@
 import _ from "lodash";
 import { addComponent, createWorld } from "bitecs";
-import { PC } from "../ecs/components";
+import { Burning, Inventory, PC } from "../ecs/components";
 import { addLog, getState, setState } from "../index";
 import { createKnight } from "../prefabs/knight";
+import { createTorch } from "../prefabs/torch";
+import { createFlint } from "../prefabs/flint";
 import { generateDungeonFloor } from "./generators/dungeonfloor";
 import { idToCell } from "./grid";
+import { fillFirstEmptySlot } from "../ecs/ecsHelpers";
 
 export const initWorld = (loader) => {
   const { z } = getState();
@@ -35,6 +38,19 @@ export const initWorld = (loader) => {
     y: idToCell(floor.stairsDown).y,
     z,
   });
+
+  // create starting inventory
+  const torchEid = createTorch(world);
+  const flintEid = createFlint(world);
+
+  [torchEid, flintEid].forEach((eid) => {
+    fillFirstEmptySlot({
+      component: Inventory,
+      containerEid: knightEid,
+      itemEid: eid,
+    });
+  });
+
   // player is the knight
   addComponent(world, PC, knightEid);
 

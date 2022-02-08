@@ -35,6 +35,14 @@ export const fillFirstEmptySlot = ({ component, containerEid, itemEid }) => {
   }
 };
 
+export const getPosition = (eid) => {
+  const x = Position.x[eid];
+  const y = Position.y[eid];
+  const z = Position.z[eid];
+
+  return { x, y, z, locId: toLocId({ x, y, z }) };
+};
+
 export const updatePosition = ({
   world,
   oldPos = {},
@@ -156,6 +164,17 @@ export const getEntityAnatomy = (world, eid) => {
   return anatomy.map((partEid) => getEntityData(world, partEid));
 };
 
+export const getEntityInventory = (world, eid) => {
+  if (!hasComponent(world, Inventory, eid)) return;
+  const inventory = [];
+
+  // recursivley build inventory
+  walkInventoryTree(world, eid, Inventory, (currentEid) => {
+    inventory.push(currentEid);
+  });
+  return inventory.map((partEid) => getEntityData(world, partEid));
+};
+
 export const getEntityData = (world, eid) => {
   const components = Object.keys(Components).reduce((acc, key) => {
     const component = Components[key];
@@ -176,16 +195,17 @@ export const getEntityData = (world, eid) => {
     components,
     sprite: world.sprites[eid],
     body: getEntityAnatomy(world, eid),
+    inventory: getEntityInventory(world, eid),
     meta: world.meta[eid],
   };
 };
 
-export const gettableEntitiesInReach = (world, locId) => {
+export const entitiesInReach = (world, locId) => {
   const neighbors = [...getNeighborIds(locId, "ALL"), locId];
   return _.flatMap(
     neighbors.map((lId) => {
       const eAtLoc = [...getState().eAtPos[lId]];
-      return eAtLoc.filter((eid) => hasComponent(world, Pickupable, eid));
+      return eAtLoc;
     })
   );
 };
@@ -240,4 +260,8 @@ export const removeComponentFromEntities = (world, component, eids) => {
 
 export const queryAtLoc = (cellOrId, func) => {
   getState().eAtPos[toLocId(cellOrId)].forEach(func);
+};
+
+export const getName = (world, eid) => {
+  return world.meta[eid].name;
 };

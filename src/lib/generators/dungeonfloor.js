@@ -5,6 +5,7 @@ import { createFloor } from "../../prefabs/floor";
 import { createGoblin } from "../../prefabs/goblin";
 import { createHealthPotion } from "../../prefabs/healthPotion";
 import { createSword } from "../../prefabs/sword";
+import { createTorch } from "../../prefabs/torch";
 import { createWall } from "../../prefabs/wall";
 import { createStairs } from "../../prefabs/stairs";
 
@@ -33,7 +34,7 @@ export const generateDungeonFloor = ({ world, z, stairsUp, stairsDown }) => {
   const openTiles = _.filter(dungeon.tiles, (tile) => tile.sprite === "FLOOR");
 
   // spawn weapons
-  _.times(10, () => {
+  _.times(5, () => {
     const { x, y } = _.sample(openTiles);
     createSword(world, { x, y, z });
   });
@@ -48,6 +49,12 @@ export const generateDungeonFloor = ({ world, z, stairsUp, stairsDown }) => {
   _.times(10, () => {
     const { x, y } = _.sample(openTiles);
     createGoblin(world, { x, y, z });
+  });
+
+  // spawn torches
+  _.times(10, () => {
+    const { x, y } = _.sample(openTiles);
+    createTorch(world, { x, y, z });
   });
 
   const floor = { z };

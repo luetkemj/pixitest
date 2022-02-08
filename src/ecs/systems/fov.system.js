@@ -1,8 +1,9 @@
-import { addComponent, removeComponent } from "bitecs";
+import { addComponent, hasComponent, removeComponent } from "bitecs";
 import {
   FovDistance,
   FovRange,
   InFov,
+  Lux,
   Position,
   Revealed,
 } from "../components";
@@ -39,7 +40,7 @@ export const fovSystem = (world) => {
     radius,
   });
 
-  // clear out stale fov
+  // clear out and unrender stale fov
   const inFovEnts = inFovQuery(world);
   for (let i = 0; i < inFovEnts.length; i++) {
     const eid = inFovEnts[i];
@@ -53,7 +54,9 @@ export const fovSystem = (world) => {
       eAtPos.forEach((eidAtPos) => {
         addComponent(world, FovDistance, eidAtPos);
         addComponent(world, InFov, eidAtPos);
-        addComponent(world, Revealed, eidAtPos);
+        if (hasComponent(world, Lux, eidAtPos)) {
+          addComponent(world, Revealed, eidAtPos);
+        }
         FovDistance.dist[eidAtPos] = FOV.distance[locId];
       });
     }
